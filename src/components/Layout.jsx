@@ -48,6 +48,9 @@ function Footer() {
       <div className="container footer-inner">
         <span>© {new Date().getFullYear()} Ankit. Designed & built with care.</span>
         <div className="footer-social">
+          <a href="/resume.pdf" target="_blank" rel="noreferrer">
+            Resume
+          </a>
           <a href="https://www.behance.net/" target="_blank" rel="noreferrer">
             Behance
           </a>

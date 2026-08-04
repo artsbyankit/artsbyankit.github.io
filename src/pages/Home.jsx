@@ -25,6 +25,9 @@ export default function Home() {
             <Link to="/work" className="btn btn-primary">
               View my work
             </Link>
+            <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn">
+              Download resume ↓
+            </a>
             <Link to="/contact" className="btn">
               Get in touch
             </Link>

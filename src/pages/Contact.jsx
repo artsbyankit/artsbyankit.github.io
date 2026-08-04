@@ -11,11 +11,14 @@ export default function Contact() {
           to talk design — my inbox is open. I reply to every message within 48 hours.
         </p>
         <div className="contact-actions">
-          <a className="btn btn-primary" href="mailto:hello@ankit.design">
-            ✉️ hello@ankit.design
+          <a className="btn btn-primary" href="mailto:artsbyankit@duck.com">
+            ✉️ artsbyankit@duck.com
           </a>
-          <a className="btn" href="mailto:hello@ankit.design?subject=Freelance%20inquiry">
+          <a className="btn" href="mailto:artsbyankit@duck.com?subject=Freelance%20inquiry">
             Start a project
+          </a>
+          <a className="btn" href="/resume.pdf" target="_blank" rel="noreferrer">
+            Download resume ↓
           </a>
         </div>
       </section>
