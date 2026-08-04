@@ -8,13 +8,20 @@
       name="description"
       content="Ankit — UI/UX designer creating clear, beautiful digital products. Explore case studies across mobile apps, web platforms, and design systems."
     />
-    <title>Ankit · UI/UX Designer & Case Studies</title>
+    <title>Ankit Patel - UI/UX Designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      ;(function () {
+        var saved = localStorage.getItem('theme')
+        var dark = saved ? saved === 'dark' : true
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

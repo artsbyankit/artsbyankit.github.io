@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function ProjectCard({ project }) {
   return (
-    <Link to={`/work/${project.slug}`} className="card">
+    <Link to={`/work/${project.slug}`} className="card reveal">
       <div className="card-cover" style={{ background: project.gradient }}>
         <span className="cover-emoji">{project.emoji}</span>
         <span className="cover-title">{project.title}</span>

@@ -14,9 +14,6 @@ export default function Contact() {
           <a className="btn btn-primary" href="mailto:artsbyankit@duck.com">
             ✉️ artsbyankit@duck.com
           </a>
-          <a className="btn" href="mailto:artsbyankit@duck.com?subject=Freelance%20inquiry">
-            Start a project
-          </a>
           <a className="btn" href="/resume.pdf" target="_blank" rel="noreferrer">
             Download resume ↓
           </a>
@@ -25,16 +22,19 @@ export default function Contact() {
 
       <div className="container">
         <div className="social-big">
-          <a href="https://www.behance.net/" target="_blank" rel="noreferrer">
-            Behance
-          </a>
-          <a href="https://dribbble.com/" target="_blank" rel="noreferrer">
-            Dribbble
-          </a>
-          <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
+          <a href="https://www.linkedin.com/in/artsbyankit" target="_blank" rel="noreferrer">
             LinkedIn
           </a>
-          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+          <a href="https://t.me/MadeByAnkit" target="_blank" rel="noreferrer">
+            Telegram
+          </a>
+          <a href="https://web.whatsapp.com/send?phone=918758789018" target="_blank" rel="noreferrer">
+            WhatsApp
+          </a>
+          <a href="https://www.behance.net/ArtByAnkit" target="_blank" rel="noreferrer">
+            Behance
+          </a>
+          <a href="https://www.instagram.com/artsbyankit" target="_blank" rel="noreferrer">
             Instagram
           </a>
           <a href="https://github.com/artsbyankit" target="_blank" rel="noreferrer">

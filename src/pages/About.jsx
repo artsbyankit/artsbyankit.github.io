@@ -43,27 +43,27 @@ export default function About() {
             </div>
           </div>
           <div className="skill-list">
-            <div className="skill-box">
+            <div className="skill-box reveal">
               <h4>UX Research</h4>
               <p>Interviews, usability testing, journey mapping, and heuristic audits to ground every decision in evidence.</p>
             </div>
-            <div className="skill-box">
+            <div className="skill-box reveal">
               <h4>UI Design</h4>
               <p>High-fidelity interfaces, visual systems, and prototypes in Figma that are pixel-perfect and developer-ready.</p>
             </div>
-            <div className="skill-box">
+            <div className="skill-box reveal">
               <h4>Design Systems</h4>
               <p>Token-based libraries, component documentation, and governance models that scale across teams.</p>
             </div>
-            <div className="skill-box">
+            <div className="skill-box reveal">
               <h4>Interaction Design</h4>
               <p>Micro-interactions, motion, and state design that make products feel alive and responsive.</p>
             </div>
-            <div className="skill-box">
+            <div className="skill-box reveal">
               <h4>Prototyping</h4>
               <p>Interactive prototypes for testing and stakeholder buy-in, from lo-fi wireframes to polished flows.</p>
             </div>
-            <div className="skill-box">
+            <div className="skill-box reveal">
               <h4>Accessibility</h4>
               <p>WCAG-aware design, inclusive patterns, and color systems tested for all vision types.</p>
             </div>
