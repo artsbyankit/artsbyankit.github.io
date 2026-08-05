@@ -22,10 +22,7 @@ export default function Home() {
             and always refining the process to balance usability with clarity.
           </p>
           <div className="hero-actions">
-            <Link to="/work" className="btn btn-primary">
-              View my work
-            </Link>
-            <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn">
+            <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn btn-primary">
               Download resume ↓
             </a>
             <Link to="/contact" className="btn">
