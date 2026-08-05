@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
-import FerroDock from './FerroDock'
 import Background from './Background'
 
 function Navbar() {
   const [open, setOpen] = useState(false)
-  const glassRef = useRef(null)
 
   const close = () => setOpen(false)
 
@@ -29,8 +27,7 @@ function Navbar() {
 
   return (
     <header className="dock">
-      <FerroDock targetRef={glassRef} />
-      <div className="dock-glass" ref={glassRef}>
+      <div className="dock-glass">
         <Link to="/" className="logo" onClick={close} title="Ankit Patel — UI/UX Designer">
           <span className="logo-dot"></span>
           Ankit Patel

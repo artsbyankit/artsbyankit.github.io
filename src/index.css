@@ -523,15 +523,6 @@ p {
   backdrop-filter: blur(22px) saturate(170%);
 }
 
-.dock-fluid {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 0;
-  pointer-events: none;
-}
-
 .logo {
   font-family: var(--font-display);
   font-weight: 700;
@@ -1474,9 +1465,8 @@ p {
   }
 }
 
-/* The dock sits over the always-animating FerroDock canvas + parallax bg;
-   backdrop-filter re-blurring that backdrop every frame flickers on Chromium,
-   so the dock glass relies on translucency instead of live blur. */
+/* The dock sits over the parallax bg; live backdrop-filter blur on it caused
+   flicker on Chromium, so the dock glass relies on translucency instead. */
 .dock-glass,
 .nav-toggle,
 .nav-links a,
