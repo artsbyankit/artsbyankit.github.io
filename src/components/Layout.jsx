@@ -101,7 +101,7 @@ function LayoutEffects() {
   useEffect(() => {
     let raf = null
     const targets = () =>
-      document.querySelectorAll('.card, .btn, .skill-box, .social-big a, .nav-links a')
+      document.querySelectorAll('.card-body, .skill-box, .btn, .social-big a, .nav-links a')
 
     const onMove = (e) => {
       if (raf) return

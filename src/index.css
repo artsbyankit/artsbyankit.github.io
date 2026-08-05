@@ -159,8 +159,8 @@ p {
   overflow: hidden;
 }
 
-.card::after,
-.skill-box::after {
+.skill-box::after,
+.card-body::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -175,7 +175,7 @@ p {
   );
 }
 
-.card:hover::after,
+.card:hover .card-body::after,
 .skill-box:hover::after {
   opacity: 1;
 }
@@ -843,6 +843,7 @@ p {
 }
 
 .card-body {
+  position: relative;
   padding: 24px;
 }
 
