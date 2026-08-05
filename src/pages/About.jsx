@@ -173,7 +173,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section section-flush">
         <div className="container">
           <div className="section-head">
             <div>

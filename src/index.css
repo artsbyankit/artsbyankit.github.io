@@ -107,6 +107,8 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: translate3d(var(--bgx, 0px), var(--bgy, 0px), 0) scale(1.12);
+  will-change: transform;
 }
 
 .bg-video-yt {
@@ -323,7 +325,7 @@ p {
 }
 
 ::selection {
-  background: var(--accent);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
   color: #fff;
 }
 
@@ -1107,8 +1109,12 @@ p {
   display: grid;
   grid-template-columns: 150px 1fr;
   gap: 24px;
-  padding: 24px 0;
+  padding: 20px 0;
   border-top: 1px solid var(--line);
+}
+
+.section-flush {
+  padding-bottom: 0;
 }
 
 .tl-item .year {
