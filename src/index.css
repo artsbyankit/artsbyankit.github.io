@@ -519,8 +519,8 @@ p {
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     var(--glass-shadow);
-  -webkit-backdrop-filter: blur(22px) saturate(170%);
-  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
 }
 
 .logo {
@@ -1463,14 +1463,4 @@ p {
   .hero {
     padding-top: 110px;
   }
-}
-
-/* The dock sits over the parallax bg; live backdrop-filter blur on it caused
-   flicker on Chromium, so the dock glass relies on translucency instead. */
-.dock-glass,
-.nav-toggle,
-.nav-links a,
-.nav-links-mobile {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
 }
