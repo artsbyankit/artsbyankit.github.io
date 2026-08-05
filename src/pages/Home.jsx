@@ -14,12 +14,12 @@ export default function Home() {
             Available for freelance projects
           </div>
           <h1>
-            I craft digital products people <span className="gradient-text">love to use</span>
+            Turning complex ideas into <span className="gradient-text">intuitive experiences</span>
           </h1>
           <p className="lead">
-            I'm Ankit, a UI/UX designer turning complex problems into clear, beautiful
-            experiences. I design apps, websites, and design systems from first sketch to
-            shipped product.
+            I'm Ankit Patel, a UI/UX designer passionate about solving user problems through
+            clean, functional design — translating complex ideas into intuitive experiences,
+            and always refining the process to balance usability with clarity.
           </p>
           <div className="hero-actions">
             <Link to="/work" className="btn btn-primary">
@@ -34,13 +34,13 @@ export default function Home() {
           </div>
           <div className="hero-meta">
             <span>
-              <strong>6+</strong> years designing
+              <strong>7+</strong> years designing
             </span>
             <span>
-              <strong>40+</strong> projects shipped
+              <strong>4</strong> companies &amp; studios
             </span>
             <span>
-              <strong>12</strong> happy clients
+              <strong>3</strong> languages spoken
             </span>
           </div>
         </div>
@@ -49,19 +49,19 @@ export default function Home() {
       <div className="tools-strip">
         <div className="container">
           <div className="tools-strip-inner">
-            <span>Figma</span>
+            <span>User Research</span>
             <span>·</span>
-            <span>UI Design</span>
-            <span>·</span>
-            <span>UX Research</span>
+            <span>Wireframing</span>
             <span>·</span>
             <span>Prototyping</span>
+            <span>·</span>
+            <span>User Flows &amp; IA</span>
             <span>·</span>
             <span>Design Systems</span>
             <span>·</span>
             <span>Usability Testing</span>
             <span>·</span>
-            <span>Interaction Design</span>
+            <span>Motion Design</span>
           </div>
         </div>
       </div>
@@ -91,29 +91,29 @@ export default function Home() {
             <div className="portrait">👨‍🎨</div>
             <div className="about-text">
               <div className="eyebrow">About me</div>
-              <h2>Design with empathy, shipped with precision</h2>
+              <h2>Design that balances usability with clarity</h2>
               <p>
-                I believe great design starts with understanding people — their goals,
-                their frustrations, the small moments that matter. For the past six years
-                I've partnered with startups and product teams to research, design, and
-                ship interfaces that feel obvious.
+                I'm passionate about solving user problems through clean, functional design —
+                from wireframes and user flows to high-fidelity interfaces, and the motion
+                that makes them feel alive.
               </p>
               <p>
-                When I'm not in Figma, I'm studying design systems, mentoring junior
-                designers, or testing my latest side project.
+                I've worked with product teams across startups, studios, and a global company
+                like Cimpress — as a UI/UX designer and, before that, as a motion designer at
+                Azrael Services. I'm always learning, always refining.
               </p>
               <div className="stat-row">
                 <div className="stat">
-                  <strong>40+</strong>
-                  <span>Projects delivered</span>
+                  <strong>2018</strong>
+                  <span>B.Tech (IT) · DA-IICT</span>
                 </div>
                 <div className="stat">
-                  <strong>98%</strong>
-                  <span>Client satisfaction</span>
+                  <strong>7+</strong>
+                  <span>Years in design</span>
                 </div>
                 <div className="stat">
-                  <strong>6</strong>
-                  <span>Design awards</span>
+                  <strong>3</strong>
+                  <span>Languages spoken</span>
                 </div>
               </div>
             </div>
@@ -127,8 +127,8 @@ export default function Home() {
             Have an idea? Let's make it <span className="gradient-text">beautiful</span>
           </h2>
           <p>
-            I'm currently accepting new projects for freelance and full-time roles. Tell
-            me about your product and I'll get back to you within 48 hours.
+            Whether you have a product idea, a project in need of a designer, or just want
+            to talk design — my inbox is open. I reply to every message within 48 hours.
           </p>
           <Link to="/contact" className="btn btn-primary">
             Start a conversation

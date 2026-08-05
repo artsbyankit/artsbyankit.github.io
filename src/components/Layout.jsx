@@ -1,29 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import CursorSpotlight from './CursorSpotlight'
+import FerroDock from './FerroDock'
+import Background from './Background'
 
 function Navbar() {
   const [open, setOpen] = useState(false)
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('theme')
-    return saved || 'dark'
-  })
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
-  }, [theme])
+  const glassRef = useRef(null)
 
   const close = () => setOpen(false)
-  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
 
   return (
-    <header className="navbar">
-      <div className="container nav-inner">
-        <Link to="/" className="logo" onClick={close}>
+    <header className="dock">
+      <FerroDock targetRef={glassRef} />
+      <div className="dock-glass" ref={glassRef}>
+        <Link to="/" className="logo" onClick={close} title="Ankit Patel — UI/UX Designer">
           <span className="logo-dot"></span>
-          ankit<span className="gradient-text">.design</span>
+          Ankit Patel
         </Link>
+
+        <span className="nav-divider" aria-hidden="true"></span>
 
         <nav className={`nav-links ${open ? 'open' : ''}`}>
           <NavLink to="/" end onClick={close}>
@@ -42,20 +38,20 @@ function Navbar() {
 
         <button
           type="button"
-          className="theme-toggle"
-          aria-label="Toggle dark or light theme"
-          onClick={toggleTheme}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-
-        <button
-          type="button"
           className="nav-toggle"
-          aria-label="Toggle menu"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? '✕' : '☰'}
+          {open ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
         </button>
       </div>
     </header>
@@ -66,7 +62,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <span>© {new Date().getFullYear()} Ankit. Designed & built with care.</span>
+        <span>© {new Date().getFullYear()} Ankit · Made with ♥ and paws</span>
         <div className="footer-social">
           <a href="/resume.pdf" target="_blank" rel="noreferrer">
             Resume
@@ -140,21 +136,79 @@ function LayoutEffects() {
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
+  useEffect(() => {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+    const vg = () => document.querySelector('.vignette')
+    let targetX = 50
+    let targetY = 50
+    let curX = 50
+    let curY = 50
+    let raf = null
+
+    const tick = () => {
+      curX += (targetX - curX) * 0.09
+      curY += (targetY - curY) * 0.09
+      const el = vg()
+      if (el) {
+        el.style.setProperty('--vx', `${curX}%`)
+        el.style.setProperty('--vy', `${curY}%`)
+      }
+      if (Math.abs(targetX - curX) < 0.05 && Math.abs(targetY - curY) < 0.05) {
+        raf = null
+        return
+      }
+      raf = requestAnimationFrame(tick)
+    }
+
+    const onMove = (e) => {
+      targetX = (e.clientX / window.innerWidth) * 100
+      targetY = (e.clientY / window.innerHeight) * 100
+      if (!raf) raf = requestAnimationFrame(tick)
+    }
+
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+
   return null
 }
 
 export default function Layout() {
   return (
     <>
-      <div className="bg-orbs" aria-hidden="true">
-        <i></i>
-        <i></i>
-        <i></i>
-      </div>
-      <div className="vignette" aria-hidden="true"></div>
+      <Background />
       <CursorSpotlight />
+      <svg className="lg-filters" width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
+        <defs>
+          <filter id="lg-ca" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+            <feColorMatrix
+              in="SourceGraphic"
+              type="matrix"
+              values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
+              result="red"
+            />
+            <feColorMatrix
+              in="SourceGraphic"
+              type="matrix"
+              values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
+              result="cyan"
+            />
+            <feOffset in="red" dx="-2" dy="0" result="redS" />
+            <feOffset in="cyan" dx="2" dy="0" result="cyanS" />
+            <feBlend in="redS" in2="cyanS" mode="screen" />
+          </filter>
+        </defs>
+      </svg>
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <Navbar />
-      <main>
+      <main id="main-content">
         <Outlet />
       </main>
       <Footer />
