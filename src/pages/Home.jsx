@@ -49,19 +49,22 @@ export default function Home() {
       <div className="tools-strip">
         <div className="container">
           <div className="tools-strip-inner">
-            <span>User Research</span>
-            <span>·</span>
-            <span>Wireframing</span>
-            <span>·</span>
-            <span>Prototyping</span>
-            <span>·</span>
-            <span>User Flows &amp; IA</span>
-            <span>·</span>
-            <span>Design Systems</span>
-            <span>·</span>
-            <span>Usability Testing</span>
-            <span>·</span>
-            <span>Motion Design</span>
+            <div className="tools-row">
+              <span>User Research</span>
+              <span>·</span>
+              <span>Wireframing</span>
+              <span>·</span>
+              <span>Prototyping</span>
+              <span>·</span>
+              <span>User Flows &amp; IA</span>
+            </div>
+            <div className="tools-row">
+              <span>Design Systems</span>
+              <span>·</span>
+              <span>Usability Testing</span>
+              <span>·</span>
+              <span>Motion Design</span>
+            </div>
           </div>
         </div>
       </div>
