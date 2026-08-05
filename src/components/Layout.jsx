@@ -63,29 +63,6 @@ function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <span>© {new Date().getFullYear()} Ankit · Made with ♥ and paws</span>
-        <div className="footer-social">
-          <a href="/resume.pdf" target="_blank" rel="noreferrer">
-            Resume
-          </a>
-          <a href="https://www.linkedin.com/in/artsbyankit" target="_blank" rel="noreferrer">
-            LinkedIn
-          </a>
-          <a href="https://t.me/MadeByAnkit" target="_blank" rel="noreferrer">
-            Telegram
-          </a>
-          <a href="https://web.whatsapp.com/send?phone=918758789018" target="_blank" rel="noreferrer">
-            WhatsApp
-          </a>
-          <a href="https://www.behance.net/ArtByAnkit" target="_blank" rel="noreferrer">
-            Behance
-          </a>
-          <a href="https://www.instagram.com/artsbyankit" target="_blank" rel="noreferrer">
-            Instagram
-          </a>
-          <a href="https://github.com/artsbyankit" target="_blank" rel="noreferrer">
-            GitHub
-          </a>
-        </div>
       </div>
     </footer>
   )
@@ -118,7 +95,7 @@ function LayoutEffects() {
   useEffect(() => {
     let raf = null
     const targets = () =>
-      document.querySelectorAll('.card, .btn, .skill-box, .social-big a, .footer-social a')
+      document.querySelectorAll('.card, .btn, .skill-box, .social-big a')
 
     const onMove = (e) => {
       if (raf) return

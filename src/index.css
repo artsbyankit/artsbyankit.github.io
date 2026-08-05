@@ -172,7 +172,6 @@ p {
 .btn,
 .skill-box,
 .social-big a,
-.footer-social a,
 .hero-tag,
 .nav-toggle,
 .nav-links a {
@@ -205,7 +204,6 @@ p {
 .btn::before,
 .hero-tag::before,
 .social-big a::before,
-.footer-social a::before,
 .nav-toggle::before {
   content: '';
   position: absolute;
@@ -260,8 +258,7 @@ p {
   .btn-primary:active,
   .nav-links a:active,
   .nav-toggle:active,
-  .social-big a:active,
-  .footer-social a:active {
+  .social-big a:active {
     transform: none;
   }
 }
@@ -429,8 +426,7 @@ p {
 
 .nav-links a:active,
 .nav-toggle:active,
-.social-big a:active,
-.footer-social a:active {
+.social-big a:active {
   transform: scale(0.96);
 }
 
@@ -554,7 +550,7 @@ p {
 
 /* ---------- Hero ---------- */
 .hero {
-  padding: 120px 0 80px;
+  padding: 120px 0 64px;
 }
 
 .hero-tag {
@@ -600,23 +596,27 @@ p {
 .hero-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  margin-top: 64px;
-  padding-top: 32px;
+  justify-content: center;
+  align-items: baseline;
+  gap: 16px 48px;
+  margin-top: 48px;
+  padding-top: 24px;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 15px;
+  text-align: center;
 }
 
 .hero-meta span strong {
   color: var(--text);
   font-weight: 600;
+  margin-right: 6px;
 }
 
 /* ---------- Marquee / tools ---------- */
 .tools-strip {
   position: relative;
-  padding: 28px 0;
+  padding: 24px 0;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -855,33 +855,6 @@ p {
   color: var(--muted);
   font-size: 15px;
   text-align: center;
-}
-
-.footer-social {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.footer-social a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.footer-social a:hover {
-  color: var(--text);
-  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 /* ---------- Case study ---------- */
@@ -1177,7 +1150,6 @@ p {
 .btn:not(.btn-primary),
 .hero-tag,
 .social-big a,
-.footer-social a,
 .nav-toggle,
 .nav-links a {
   background: var(--glass-bg);
@@ -1189,7 +1161,6 @@ p {
 .btn:not(.btn-primary),
 .hero-tag,
 .social-big a,
-.footer-social a,
 .nav-toggle {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
@@ -1219,7 +1190,6 @@ p {
 .btn::after,
 .hero-tag::after,
 .social-big a::after,
-.footer-social a::after,
 .nav-toggle::after,
 .nav-links a::after {
   content: '';
