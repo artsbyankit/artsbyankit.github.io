@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import Background from './Background'
@@ -170,7 +170,9 @@ export default function Layout() {
       </a>
       <Navbar />
       <main id="main-content">
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
       <LayoutEffects />
