@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
-import CursorSpotlight from './CursorSpotlight'
 import FerroDock from './FerroDock'
 import Background from './Background'
 
@@ -169,28 +168,6 @@ export default function Layout() {
   return (
     <>
       <Background />
-      <CursorSpotlight />
-      <svg className="lg-filters" width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
-        <defs>
-          <filter id="lg-ca" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-            <feColorMatrix
-              in="SourceGraphic"
-              type="matrix"
-              values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
-              result="red"
-            />
-            <feColorMatrix
-              in="SourceGraphic"
-              type="matrix"
-              values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-              result="cyan"
-            />
-            <feOffset in="red" dx="-2" dy="0" result="redS" />
-            <feOffset in="cyan" dx="2" dy="0" result="cyanS" />
-            <feBlend in="redS" in2="cyanS" mode="screen" />
-          </filter>
-        </defs>
-      </svg>
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
