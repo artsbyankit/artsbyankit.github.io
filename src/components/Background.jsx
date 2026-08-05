@@ -1,6 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export default function Background() {
+  const imgRef = useRef(null)
+
   useEffect(() => {
     let raf = 0
     let mx = 0
@@ -9,9 +11,6 @@ export default function Background() {
     let tx = 0
     let ty = 0
     let baseBeta = null
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduceMotion) return undefined
 
     const coarse = window.matchMedia('(pointer: coarse)').matches
 
@@ -33,10 +32,12 @@ export default function Background() {
     }
 
     const tick = () => {
-      tx += (mx * 30 - tx) * 0.05
-      ty += (my * 22 + sy * 50 - ty) * 0.05
-      document.documentElement.style.setProperty('--bgx', `${tx.toFixed(2)}px`)
-      document.documentElement.style.setProperty('--bgy', `${ty.toFixed(2)}px`)
+      tx += (mx * 90 - tx) * 0.06
+      ty += (my * 70 + sy * 90 - ty) * 0.06
+      const el = imgRef.current
+      if (el) {
+        el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(1.35)`
+      }
       raf = requestAnimationFrame(tick)
     }
 
@@ -76,7 +77,14 @@ export default function Background() {
   return (
     <>
       <div className="bg-fallback" aria-hidden="true"></div>
-      <img className="bg-layer bg-video-file" src="/background.jpg" alt="" aria-hidden="true" draggable="false" />
+      <img
+        ref={imgRef}
+        className="bg-layer bg-video-file"
+        src="/background.jpg"
+        alt=""
+        aria-hidden="true"
+        draggable="false"
+      />
       <div className="bg-tint" aria-hidden="true"></div>
       <div className="vignette" aria-hidden="true"></div>
     </>
