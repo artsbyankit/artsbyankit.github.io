@@ -78,7 +78,11 @@ export default function Background() {
     <>
       <div className="bg-fallback" aria-hidden="true"></div>
       <picture>
-        <source type="image/webp" srcSet="/background.webp" />
+        <source
+          type="image/webp"
+          srcSet="/background-1280.webp 1280w, /background.webp 1920w"
+          sizes="100vw"
+        />
         <img
           ref={imgRef}
           className="bg-layer bg-video-file"
