@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local background video (too large for GH Pages)
+public/bg.mp4

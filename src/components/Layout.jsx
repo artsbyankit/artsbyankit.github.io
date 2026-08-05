@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import CursorSpotlight from './CursorSpotlight'
 import FerroDock from './FerroDock'
@@ -9,6 +10,23 @@ function Navbar() {
   const glassRef = useRef(null)
 
   const close = () => setOpen(false)
+
+  const links = (
+    <>
+      <NavLink to="/" end onClick={close}>
+        Home
+      </NavLink>
+      <NavLink to="/work" onClick={close}>
+        Work
+      </NavLink>
+      <NavLink to="/about" onClick={close}>
+        About
+      </NavLink>
+      <NavLink to="/contact" className="nav-cta" onClick={close}>
+        Let's talk
+      </NavLink>
+    </>
+  )
 
   return (
     <header className="dock">
@@ -21,20 +39,7 @@ function Navbar() {
 
         <span className="nav-divider" aria-hidden="true"></span>
 
-        <nav className={`nav-links ${open ? 'open' : ''}`}>
-          <NavLink to="/" end onClick={close}>
-            Home
-          </NavLink>
-          <NavLink to="/work" onClick={close}>
-            Work
-          </NavLink>
-          <NavLink to="/about" onClick={close}>
-            About
-          </NavLink>
-          <NavLink to="/contact" className="nav-cta" onClick={close}>
-            Let's talk
-          </NavLink>
-        </nav>
+        <nav className="nav-links">{links}</nav>
 
         <button
           type="button"
@@ -54,6 +59,11 @@ function Navbar() {
           )}
         </button>
       </div>
+      {open &&
+        createPortal(
+          <nav className="nav-links nav-links-mobile">{links}</nav>,
+          document.body,
+        )}
     </header>
   )
 }

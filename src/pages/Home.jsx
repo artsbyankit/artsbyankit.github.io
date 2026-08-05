@@ -76,7 +76,7 @@ export default function Home() {
               <div className="eyebrow">Selected work</div>
               <h2 className="section-title">Featured projects</h2>
             </div>
-            <Link to="/work" className="btn">
+            <Link to="/work" className="btn all-projects-head">
               All projects <span>→</span>
             </Link>
           </div>
@@ -85,6 +85,9 @@ export default function Home() {
               <ProjectCard key={p.slug} project={p} />
             ))}
           </div>
+          <Link to="/work" className="btn all-projects-mobile">
+            All projects <span>→</span>
+          </Link>
         </div>
       </section>
 
