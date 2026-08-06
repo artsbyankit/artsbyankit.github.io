@@ -544,7 +544,7 @@ p {
 .nav-divider {
   align-self: stretch;
   width: 1px;
-  margin: 7px 10px 7px 20px;
+  margin: 7px 10px;
   background: linear-gradient(
     to bottom,
     transparent,
