@@ -106,17 +106,7 @@ p {
     radial-gradient(55% 50% at 62% 88%, rgba(255, 255, 255, 0.07), transparent 62%);
 }
 
-@keyframes aurora {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  to {
-    transform: translate3d(30px, -20px, 0) scale(1.12);
-  }
-}
-
-.bg-tint {
-  position: fixed;
+.bg-tint {  position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;

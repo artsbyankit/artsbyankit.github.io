@@ -100,7 +100,6 @@ export default function Background() {
           alt=""
           aria-hidden="true"
           draggable="false"
-          decoding="async"
           fetchPriority="high"
         />
       </picture>
