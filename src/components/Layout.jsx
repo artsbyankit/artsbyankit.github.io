@@ -100,14 +100,22 @@ function LayoutEffects() {
 
   useEffect(() => {
     let raf = null
+    let scrollT = null
+    // Cached rects avoid forced reflows (getBoundingClientRect) every frame;
+    // they only refresh on scroll/resize instead of every mousemove.
+    const rects = new Map()
     const targets = () =>
       document.querySelectorAll('.card-body, .skill-box, .btn, .social-big a, .nav-links a')
+    const measure = () => {
+      rects.clear()
+      targets().forEach((el) => rects.set(el, el.getBoundingClientRect()))
+    }
+    measure()
 
     const onMove = (e) => {
       if (raf) return
       raf = requestAnimationFrame(() => {
-        targets().forEach((el) => {
-          const r = el.getBoundingClientRect()
+        rects.forEach((r, el) => {
           el.style.setProperty('--mx', `${e.clientX - r.left}px`)
           el.style.setProperty('--my', `${e.clientY - r.top}px`)
         })
@@ -115,8 +123,21 @@ function LayoutEffects() {
       })
     }
 
+    const onScroll = () => {
+      clearTimeout(scrollT)
+      scrollT = setTimeout(measure, 150)
+    }
+
     window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      clearTimeout(scrollT)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   useEffect(() => {
@@ -170,10 +191,14 @@ function LayoutEffects() {
     }
 
     // Dock swells dynamically: height AND side padding grow together, so the
-    // green dot sits further from the left edge the bigger the dock gets.
+    // green dot sits further from the left edge the bigger the dock gets. The
+    // logo (dot + name) scales via --logo-scale so it grows in layout, pushing
+    // the divider/Home rightward instead of overlapping them, and the pill
+    // width expands to fit.
     const setDock = (h) => {
       dock.style.height = `${h}px`
       dock.style.setProperty('--dock-grow', `${h - BASE_H}px`)
+      dock.style.setProperty('--logo-scale', (h / BASE_H).toFixed(4))
     }
 
     // Railway track: the green runs from "Let's talk" toward the hovered item,
@@ -286,6 +311,7 @@ function LayoutEffects() {
       })
       dock.style.height = ''
       dock.style.removeProperty('--dock-grow')
+      dock.style.removeProperty('--logo-scale')
     }
   }, [])
 

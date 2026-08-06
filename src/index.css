@@ -73,8 +73,8 @@ p {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.1;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  background-image: url('/noise.png');
 }
 
 /* ---------- Background layers (video + fallback) ---------- */
@@ -90,7 +90,7 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(3px);
+  filter: blur(2px);
   transform: translate3d(0, 0, 0) scale(1.2);
   will-change: transform;
 }
@@ -104,7 +104,6 @@ p {
     radial-gradient(60% 45% at 18% 18%, rgba(255, 255, 255, 0.08), transparent 62%),
     radial-gradient(50% 42% at 84% 28%, rgba(255, 255, 255, 0.05), transparent 62%),
     radial-gradient(55% 50% at 62% 88%, rgba(255, 255, 255, 0.07), transparent 62%);
-  animation: aurora 18s ease-in-out infinite alternate;
 }
 
 @keyframes aurora {
@@ -455,8 +454,8 @@ p {
   border: 1px solid var(--accent) !important;
   color: var(--accent) !important;
   box-shadow: none;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
 }
 
 .btn-primary:hover,
@@ -511,8 +510,8 @@ p {
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     var(--glass-shadow);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
   transition:
     height 0.3s cubic-bezier(0.87, 0, 0.13, 1),
     padding 0.3s cubic-bezier(0.87, 0, 0.13, 1);
@@ -522,19 +521,26 @@ p {
   align-self: center;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 20px;
+  /* Green dot + name swell with the dock's expansion (JS sets --logo-scale). */
+  font-size: calc(20px * var(--logo-scale, 1));
   letter-spacing: -0.02em;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: calc(12px * var(--logo-scale, 1));
+  transition:
+    font-size 0.3s cubic-bezier(0.87, 0, 0.13, 1),
+    gap 0.3s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 .logo-dot {
-  width: 10px;
-  height: 10px;
+  width: calc(10px * var(--logo-scale, 1));
+  height: calc(10px * var(--logo-scale, 1));
   border-radius: 50%;
   background: var(--green);
   animation: dot-live 1.6s ease-out infinite;
+  transition:
+    width 0.3s cubic-bezier(0.87, 0, 0.13, 1),
+    height 0.3s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 @keyframes dot-live {
@@ -784,7 +790,10 @@ p {
 }
 
 .logo {
-  transition: opacity 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    font-size 0.3s cubic-bezier(0.87, 0, 0.13, 1),
+    gap 0.3s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 .logo:hover {
@@ -855,8 +864,8 @@ p {
   border: 1px solid var(--panel-border);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   overflow: hidden;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1182,8 +1191,8 @@ p {
   border-radius: var(--radius-sm);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   padding: 22px;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
 }
 
 .skill-box h4 {
@@ -1212,8 +1221,8 @@ p {
   border: 1px solid var(--panel-border);
   border-radius: 999px;
   padding: 6px 12px;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
 }
 
 .timeline {
@@ -1345,8 +1354,8 @@ p {
 .nav-links a {
   background: var(--glass-bg);
   border-color: var(--glass-border);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
 }
 
 .btn:not(.btn-primary),
@@ -1446,8 +1455,8 @@ p {
     width: 100%;
     height: auto;
     padding: 10px;
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
     background: var(--panel-bg);
   }
   .nav-toggle {
@@ -1470,8 +1479,8 @@ p {
     align-items: stretch;
     gap: 12px;
     background: var(--panel-bg);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
     border: 1px solid var(--panel-border);
     border-radius: 20px;
     box-shadow: var(--panel-highlight), var(--glass-shadow);

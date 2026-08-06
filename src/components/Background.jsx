@@ -17,6 +17,7 @@ export default function Background() {
     const onMove = (e) => {
       mx = (e.clientX / window.innerWidth - 0.5) * 2
       my = (e.clientY / window.innerHeight - 0.5) * 2
+      start()
     }
 
     const onOrient = (e) => {
@@ -24,11 +25,19 @@ export default function Background() {
       if (baseBeta === null) baseBeta = e.beta || 0
       mx = Math.max(-1, Math.min(1, (e.gamma || 0) / 25))
       my = Math.max(-1, Math.min(1, ((e.beta || 0) - baseBeta) / 25))
+      start()
     }
 
     const onScroll = () => {
       const h = document.documentElement.scrollHeight - window.innerHeight
       sy = h > 0 ? window.scrollY / h : 0
+      start()
+    }
+
+    // The rAF loop only runs while the mouse/scroll is actually moving and
+    // stops once the position settles — no continuous 60fps work when idle.
+    const start = () => {
+      if (!raf) raf = requestAnimationFrame(tick)
     }
 
     const tick = () => {
@@ -36,9 +45,11 @@ export default function Background() {
       ty += (my * 35 + sy * 45 - ty) * 0.06
       const el = imgRef.current
       if (el) {
-        el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(1.35)`
+        el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(1.2)`
       }
-      raf = requestAnimationFrame(tick)
+      const settled =
+        Math.abs(mx * 45 - tx) < 0.05 && Math.abs(my * 35 + sy * 45 - ty) < 0.05
+      raf = settled ? 0 : requestAnimationFrame(tick)
     }
 
     if (coarse) {
@@ -61,7 +72,6 @@ export default function Background() {
 
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
-    raf = requestAnimationFrame(tick)
 
     return () => {
       cancelAnimationFrame(raf)
