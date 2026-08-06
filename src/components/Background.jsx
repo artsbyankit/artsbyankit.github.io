@@ -32,8 +32,8 @@ export default function Background() {
     }
 
     const tick = () => {
-      tx += (mx * 90 - tx) * 0.06
-      ty += (my * 70 + sy * 90 - ty) * 0.06
+      tx += (mx * 45 - tx) * 0.06
+      ty += (my * 35 + sy * 45 - ty) * 0.06
       const el = imgRef.current
       if (el) {
         el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(1.35)`
