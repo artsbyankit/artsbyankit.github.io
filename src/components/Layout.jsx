@@ -68,7 +68,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <span>© {new Date().getFullYear()} Ankit · Made with ♥ and paws</span>
+        <span>🤍 Built with treats, tail wags &amp; a little bit of magic ✨🐾</span>
       </div>
     </footer>
   )
