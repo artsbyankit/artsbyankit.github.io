@@ -2,17 +2,12 @@ import { Suspense, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
 import Background from './Background'
+import Cat from './Cat'
 
 function Navbar() {
   const [open, setOpen] = useState(false)
 
   const close = () => setOpen(false)
-
-  // Secret: double-click the green dot in the dock toggles the video
-  // background. The custom event is picked up by <Background>.
-  const toggleVideo = () => {
-    window.dispatchEvent(new CustomEvent('portfolio:toggle-video'))
-  }
 
   const links = (
     <>
@@ -35,12 +30,9 @@ function Navbar() {
     <header className="dock">
       <div className="dock-glass">
         <Link to="/" className="logo" onClick={close} title="Ankit Patel — UI/UX Designer">
-          <span
-            className="logo-dot"
-            onDoubleClick={toggleVideo}
-            onClick={(e) => e.preventDefault()}
-            aria-hidden="true"
-          ></span>
+          <span className="logo-cat-trigger">
+            <Cat />
+          </span>
           Ankit Patel
         </Link>
 

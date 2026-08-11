@@ -1,18 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
-
-const VIDEO_ID = 'ipf7ifVSeDU'
-const START_SECONDS = 60
+import { useEffect, useRef } from 'react'
 
 export default function Background() {
-  const wrapRef = useRef(null)
-  const playerRef = useRef(null)
-  const [videoOn, setVideoOn] = useState(false)
-
-  useEffect(() => {
-    const onToggle = () => setVideoOn((v) => !v)
-    window.addEventListener('portfolio:toggle-video', onToggle)
-    return () => window.removeEventListener('portfolio:toggle-video', onToggle)
-  }, [])
+  const imgRef = useRef(null)
 
   useEffect(() => {
     let raf = 0
@@ -52,7 +41,7 @@ export default function Background() {
     const tick = () => {
       tx += (mx * 4.5 - tx) * 0.06
       ty += (my * 3.5 + sy * 4.5 - ty) * 0.06
-      const el = wrapRef.current
+      const el = imgRef.current
       if (el) {
         el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(1.2)`
       }
@@ -93,63 +82,11 @@ export default function Background() {
     }
   }, [])
 
-  // Create the player once on the first toggle; after that it stays mounted
-  // and we only swap visibility via CSS (see render below). Tearing the node
-  // down would desync React from the iframe the YT API injected.
-  useEffect(() => {
-    if (!videoOn || playerRef.current) return
-    let cancelled = false
-
-    const startPlayer = () => {
-      if (cancelled) return
-      playerRef.current = new window.YT.Player('yt-bg', {
-        videoId: VIDEO_ID,
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          iv_load_policy: 3,
-          modestbranding: 1,
-          playsinline: 1,
-          rel: 0,
-          showinfo: 0,
-        },
-        events: {
-          onReady: (e) => {
-            e.target.mute()
-            e.target.seekTo(START_SECONDS, true)
-            e.target.playVideo()
-          },
-          onStateChange: (e) => {
-            if (e.data === window.YT.PlayerState.ENDED) {
-              e.target.seekTo(START_SECONDS, true)
-              e.target.playVideo()
-            }
-          },
-        },
-      })
-    }
-
-    if (window.YT && window.YT.Player) {
-      startPlayer()
-    } else {
-      window.onYouTubeIframeAPIReady = startPlayer
-      const tag = document.createElement('script')
-      tag.src = 'https://www.youtube.com/iframe_api'
-      document.head.appendChild(tag)
-    }
-
-    return () => {
-      cancelled = true
-    }
-  }, [videoOn])
-
   return (
     <>
       <div className="bg-fallback" aria-hidden="true"></div>
-      <div ref={wrapRef} className="bg-layer bg-video-file" aria-hidden="true">
-        <picture className={videoOn ? 'bg-hidden' : 'bg-pic-wrap'}>
+      <div ref={imgRef} className="bg-layer bg-video-file" aria-hidden="true">
+        <picture className="bg-pic-wrap">
           <source
             type="image/webp"
             srcSet="/background-1280.webp 1280w, /background.webp 1920w"
@@ -163,7 +100,6 @@ export default function Background() {
             fetchPriority="high"
           />
         </picture>
-        <div id="yt-bg" className={videoOn ? '' : 'bg-hidden'}></div>
       </div>
       <div className="bg-tint" aria-hidden="true"></div>
       <div className="vignette" aria-hidden="true"></div>
