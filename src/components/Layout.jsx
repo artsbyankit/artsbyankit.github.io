@@ -55,11 +55,16 @@ function Navbar() {
           )}
         </button>
       </div>
-      {open &&
-        createPortal(
-          <nav className="nav-links nav-links-mobile">{links}</nav>,
-          document.body,
-        )}
+      {createPortal(
+        <nav
+          className={`nav-links nav-links-mobile${open ? ' open' : ''}`}
+          aria-hidden={!open}
+          inert={!open}
+        >
+          {links}
+        </nav>,
+        document.body,
+      )}
     </header>
   )
 }
