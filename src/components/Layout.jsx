@@ -8,6 +8,12 @@ function Navbar() {
 
   const close = () => setOpen(false)
 
+  // Secret: double-click the green dot in the dock toggles the video
+  // background. The custom event is picked up by <Background>.
+  const toggleVideo = () => {
+    window.dispatchEvent(new CustomEvent('portfolio:toggle-video'))
+  }
+
   const links = (
     <>
       <NavLink to="/" end onClick={close}>
@@ -29,7 +35,12 @@ function Navbar() {
     <header className="dock">
       <div className="dock-glass">
         <Link to="/" className="logo" onClick={close} title="Ankit Patel — UI/UX Designer">
-          <span className="logo-dot"></span>
+          <span
+            className="logo-dot"
+            onDoubleClick={toggleVideo}
+            onClick={(e) => e.preventDefault()}
+            aria-hidden="true"
+          ></span>
           Ankit Patel
         </Link>
 
