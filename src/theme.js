@@ -9,7 +9,7 @@
 /* ---------- ACCENT — none. Monochrome ink, like the text ----------
    Everything that used to be "accent colored" now wears the same
    near-black as body text. Clean, editorial, zero color noise. */
-export const accent = '#12233a';
+export const accent = '#EDEBDD';
 
 /* ---------- BACKGROUND (fluted-glass ramp) ---------- */
 export const bgPalette = {
