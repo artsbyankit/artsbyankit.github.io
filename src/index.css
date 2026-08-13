@@ -26,8 +26,8 @@
   --panel-highlight:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-  --accent: #00ff88;
-  --green: #00ff88;
+  --accent: #F7ECAC;
+  --green: #F7ECAC;
   --radius: 20px;
   --radius-sm: 12px;
   --maxw: 1120px;
@@ -528,13 +528,14 @@ p {
 }
 
 .cat-logo-dot {
+  --dot: #00ff88;
   position: absolute;
   inset: 0;
   margin: auto;
   width: calc(10px * var(--logo-scale, 1));
   height: calc(10px * var(--logo-scale, 1));
   border-radius: 50%;
-  background: var(--green);
+  background: var(--dot);
   animation: dot-live 1.6s ease-out infinite;
   transition:
     opacity 0.25s ease,
@@ -1247,10 +1248,10 @@ p {
 
 @keyframes dot-live {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 35%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot, var(--green)) 35%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 14px color-mix(in srgb, var(--green) 0%, transparent);
+    box-shadow: 0 0 0 14px color-mix(in srgb, var(--dot, var(--green)) 0%, transparent);
   }
 }
 
