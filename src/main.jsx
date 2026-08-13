@@ -18,3 +18,9 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {})
   })
 }
+
+// The AIDesigner runtime injects its "Made in AIDesigner" badge into <body>;
+// remove it as soon as it appears so it never lingers on the page.
+new MutationObserver(() => {
+  document.querySelectorAll('[data-aifx-wm]').forEach((el) => el.remove())
+}).observe(document.documentElement, { childList: true, subtree: true })
