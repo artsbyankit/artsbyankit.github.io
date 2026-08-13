@@ -26,8 +26,8 @@
   --panel-highlight:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-  --accent: #F7ECAC;
-  --green: #F7ECAC;
+  --accent: #F5C45D;
+  --green: #F5C45D;
   --radius: 20px;
   --radius-sm: 12px;
   --maxw: 1120px;
