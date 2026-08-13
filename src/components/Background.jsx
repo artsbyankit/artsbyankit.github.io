@@ -3,7 +3,7 @@ export default function Background() {
     <div className="bg-host" aria-hidden="true">
       <div
         data-aifx="fluted-glass"
-        data-aifx-colors="#540d07,#1c0a0a,#b81202,#f7ecac"
+        data-aifx-colors="#540d07,#1c0a0a,#7b1103,#b81202"
         data-aifx-bg="#1c0a0a"
         data-aifx-flutes="32"
         data-aifx-highlight="2"
