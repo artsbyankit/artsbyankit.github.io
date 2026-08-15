@@ -93,6 +93,10 @@ p {
   pointer-events: none;
 }
 
+.bg-effect-mobile {
+  display: none;
+}
+
 .vignette {
   position: absolute;
   inset: 0;
@@ -1528,28 +1532,6 @@ p {
   position: relative;
   padding: 20px 0;
   overflow: hidden;
-  white-space: nowrap;
-}
-
-.tools-strip::before,
-.tools-strip::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 48px);
-  max-width: calc(var(--maxw) - 48px);
-  height: 1px;
-  background: var(--line);
-  pointer-events: none;
-}
-
-.tools-strip::before {
-  top: 0;
-}
-
-.tools-strip::after {
-  bottom: 0;
 }
 
 .tools-row {
@@ -1557,13 +1539,7 @@ p {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px 28px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-size: 16px;
+  gap: 10px;
 }
 
 /* ---------- Work grid ---------- */.work-grid {
@@ -1675,23 +1651,33 @@ p {
 /* ---------- About teaser ---------- */
 .split {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: minmax(0, 340px) 1fr;
   gap: 56px;
   align-items: center;
 }
+
 .portrait {
   width: 100%;
   aspect-ratio: 4 / 5;
   border-radius: var(--radius);
-  background:
-    linear-gradient(160deg, color-mix(in srgb, var(--accent) 30%, transparent), color-mix(in srgb, var(--accent) 14%, transparent)),
-    var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--glass-shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 96px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
+  padding: 0;
+  overflow: hidden;
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: calc(var(--radius) - 1px);
+  display: block;
+  transform: scale(1.2);
+  transform-origin: top center;
 }
 
 .about-text h2 {
@@ -2836,6 +2822,14 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 }
 
 @media (max-width: 900px) {
+  .bg-effect-web {
+    display: none;
+  }
+
+  .bg-effect-mobile {
+    display: block;
+  }
+
   .section {
     padding: 64px 0;
   }

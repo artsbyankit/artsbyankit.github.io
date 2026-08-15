@@ -16,7 +16,9 @@ export default function About() {
       <section className="section">
         <div className="container">
           <div className="split">
-            <div className="portrait">🧑‍💻</div>
+            <div className="portrait">
+              <img src="/about-me.png" alt="Ankit Patel — UI/UX Designer" />
+            </div>
             <div className="about-text">
               <p>
                 For the past seven years I've worked across product teams, studios, and
