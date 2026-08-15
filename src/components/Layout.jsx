@@ -48,11 +48,11 @@ function Navbar() {
           onClick={() => setOpen((v) => !v)}
         >
           {open ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
           ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
               <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           )}
@@ -190,7 +190,14 @@ function LayoutEffects() {
     const grow = (el) => {
       const g = (SCALE - 1) * el.offsetWidth
       el.style.marginRight = `${g}px`
-      el.style.transform = `scale(${SCALE})`
+      // The last item ("Let's talk") has no sibling to push, so its trailing
+      // margin keeps a 19px right gap while the scaled pill's top/bottom gap
+      // drops to ~9px. Shift it right by half the extra vertical growth so all
+      // three gaps stay equal.
+      const isLast = el === items().at(-1)
+      el.style.transform = isLast
+        ? `translateX(${((SCALE - 1) * el.offsetHeight) / 2}px) scale(${SCALE})`
+        : `scale(${SCALE})`
     }
 
     const shrink = (el) => {
@@ -359,6 +366,53 @@ function LayoutEffects() {
     return () => {
       window.removeEventListener('mousemove', onMove)
       if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  useEffect(() => {
+    // macOS workaround: backdrop-filter can go stale after the window is
+    // occluded (e.g. switching apps), leaving frosted glass looking clear.
+    // On refocus, nudge every frosted element so the browser re-samples the
+    // backdrop behind the WebGL background.
+    const GLASS = [
+      '.dock-glass',
+      '.nav-links a',
+      '.nav-links-mobile',
+      '.nav-toggle',
+      '.hero-tag',
+      '.social-big a',
+      '.btn',
+      '.btn-primary',
+      '.card',
+      '.skill-box',
+      '.cs-gallery .frame',
+      '.cs-progress',
+      '.cs-note',
+      '.cs-next-card',
+      '.fc-title',
+      '.status-item',
+      '.metrics-table',
+      '.metrics-row',
+      '.tool-list li'
+    ].join(', ')
+    const kick = () => {
+      document.querySelectorAll(GLASS).forEach((el) => {
+        el.style.webkitBackdropFilter = 'blur(11px) saturate(130%)'
+        el.style.backdropFilter = 'blur(11px) saturate(130%)'
+        requestAnimationFrame(() => {
+          el.style.webkitBackdropFilter = ''
+          el.style.backdropFilter = ''
+        })
+      })
+    }
+    const onVis = () => {
+      if (!document.hidden) kick()
+    }
+    document.addEventListener('visibilitychange', onVis)
+    window.addEventListener('focus', kick)
+    return () => {
+      document.removeEventListener('visibilitychange', onVis)
+      window.removeEventListener('focus', kick)
     }
   }, [])
 

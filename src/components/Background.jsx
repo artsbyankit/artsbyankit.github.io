@@ -3,8 +3,8 @@ export default function Background() {
     <div className="bg-host" aria-hidden="true">
       <div
         data-aifx="fluted-glass"
-        data-aifx-colors="#0c1319,#28487b,#4569a7,#6d94cf,#baceef"
-        data-aifx-bg="#0c1319"
+        data-aifx-colors="#0c1419,#4569a6"
+        data-aifx-bg="#000000"
         className="bg-effect"
       />
       <div className="vignette" />

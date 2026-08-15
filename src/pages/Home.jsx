@@ -23,7 +23,7 @@ export default function Home() {
           </p>
           <div className="hero-actions">
             <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn btn-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <path d="m7 10 5 5 5-5" />
                 <path d="M12 15V3" />
@@ -50,23 +50,20 @@ export default function Home() {
 
       <div className="tools-strip">
         <div className="container">
-          <div className="tools-strip-inner">
-            <div className="tools-row">
-              <span>User Research</span>
-              <span>·</span>
-              <span>Wireframing</span>
-              <span>·</span>
-              <span>Prototyping</span>
-              <span>·</span>
-              <span>User Flows &amp; IA</span>
-            </div>
-            <div className="tools-row">
-              <span>Design Systems</span>
-              <span>·</span>
-              <span>Usability Testing</span>
-              <span>·</span>
-              <span>Motion Design</span>
-            </div>
+          <div className="tools-row">
+            <span>User Research</span>
+            <span>·</span>
+            <span>Wireframing</span>
+            <span>·</span>
+            <span>Prototyping</span>
+            <span>·</span>
+            <span>User Flows &amp; IA</span>
+            <span>·</span>
+            <span>Design Systems</span>
+            <span>·</span>
+            <span>Usability Testing</span>
+            <span>·</span>
+            <span>Motion Design</span>
           </div>
         </div>
       </div>
