@@ -2822,14 +2822,6 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 }
 
 @media (max-width: 900px) {
-  .bg-effect-web {
-    display: none;
-  }
-
-  .bg-effect-mobile {
-    display: block;
-  }
-
   .section {
     padding: 64px 0;
   }
@@ -2976,6 +2968,14 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 
 /* Phone-only: hamburger menu replaces the pill nav */
 @media (max-width: 640px) {
+  .bg-effect-web {
+    display: none;
+  }
+
+  .bg-effect-mobile {
+    display: block;
+  }
+
   .dock {
     top: 10px;
     width: calc(100% - 20px);
