@@ -87,7 +87,19 @@ export default function Home() {
       <section className="section">
         <div className="container">
           <div className="split">
-            <div className="portrait">👨‍🎨</div>
+            <div className="portrait">
+              <picture>
+                <source srcSet="/about-me.avif" type="image/avif" />
+                <source srcSet="/about-me.webp" type="image/webp" />
+                <img
+                  src="/about-me.webp"
+                  alt="Ankit Patel — UI/UX Designer"
+                  width="640"
+                  height="640"
+                  decoding="async"
+                />
+              </picture>
+            </div>
             <div className="about-text">
               <div className="eyebrow">About me</div>
               <h2>Design that balances usability with clarity</h2>

@@ -428,7 +428,17 @@ export default function Layout() {
       </a>
       <Navbar />
       <main id="main-content">
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div className="page-skeleton" aria-hidden="true">
+              <div className="skeleton-title"></div>
+              <div className="skeleton-line"></div>
+              <div className="skeleton-line short"></div>
+              <div className="skeleton-block"></div>
+              <div className="skeleton-block"></div>
+            </div>
+          }
+        >
           <Outlet />
         </Suspense>
       </main>

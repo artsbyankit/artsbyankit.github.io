@@ -7,7 +7,7 @@
    - Hygiene: a "last active" timestamp is written on every visit; if the
      site goes unused for STALE_DAYS the SW wipes its own caches so nothing
      lingers on the user's device after they stop coming back. */
-const VERSION = 'v3'
+const VERSION = 'v4'
 const CACHE = `artsbyankit-${VERSION}`
 const FONT_CACHE = `${CACHE}-fonts`
 const META_CACHE = 'artsbyankit-meta'

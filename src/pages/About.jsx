@@ -17,7 +17,18 @@ export default function About() {
         <div className="container">
           <div className="split">
             <div className="portrait">
-              <img src="/about-me.png" alt="Ankit Patel — UI/UX Designer" />
+              <picture>
+                <source srcSet="/about-me.avif" type="image/avif" />
+                <source srcSet="/about-me.webp" type="image/webp" />
+                <img
+                  src="/about-me.webp"
+                  alt="Ankit Patel — UI/UX Designer"
+                  width="640"
+                  height="640"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <div className="about-text">
               <p>
