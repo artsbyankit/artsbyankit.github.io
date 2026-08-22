@@ -1457,27 +1457,21 @@ p {
   background: var(--green);
 }
 
-/* Freelance availability — same unified glass button, green live dot */
+/* Freelance availability — same unified glass button.
+   The green dot is treated as an ICON: fixed box, never shrinks,
+   explicit spacing so hover transforms can't squeeze it into the text. */
 .freelance-pill {
   margin-bottom: 32px;
 }
 
 .freelance-pill .pulse {
-  width: 8px;
-  height: 8px;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
   border-radius: 50%;
   background: var(--green);
-  animation: pill-pulse 2s ease-in-out infinite;
-}
-
-@keyframes pill-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 45%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 6px transparent;
-  }
 }
 
 .hero h1 {
