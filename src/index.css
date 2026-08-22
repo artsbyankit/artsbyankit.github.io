@@ -3244,11 +3244,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   }
 }
 
-/* Small screens — glass diet for low-end CPUs:
-   TRUE blur only on big surfaces where frost is noticeable (dock, cards).
-   Tiny chips get a denser translucent fill instead — visually the same at
-   phone distance, but the compositor stops re-blurring a dozen layers
-   every frame while the canvas animates underneath. */
+/* Small screens — uniform real glass, slightly lighter radius than
+   desktop so compositing stays cheap while the canvas animates. */
 @media (max-width: 640px) {
   .dock-glass,
   .nav-links-mobile,
@@ -3257,11 +3254,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   .card,
   .portrait,
   .cs-note,
-  .cs-next-card {
-    -webkit-backdrop-filter: blur(8px) saturate(125%);
-    backdrop-filter: blur(8px) saturate(125%);
-  }
-
+  .cs-next-card,
   .hero-tag,
   .social-big a,
   .nav-toggle,
@@ -3271,9 +3264,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   .fc-title,
   .cs-progress,
   .metrics-table {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    background: var(--panel-bg);
+    -webkit-backdrop-filter: blur(8px) saturate(125%);
+    backdrop-filter: blur(8px) saturate(125%);
   }
 
   /* Skip render work for sections scrolled far off-screen */
