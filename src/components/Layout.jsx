@@ -204,46 +204,39 @@ function LayoutEffects() {
     // (expanded dock height − scaled pill height) / 2
     const GAP = (EXPAND_H - 44 * SCALE) / 2
 
-    // macOS-dock-style growth WITHOUT resizing the dock: the hovered pill
-    // scales from its center while neighbors slide away via transforms.
-    // Layout never changes, so the dock keeps its width — nothing extends.
-    const nudge = (list, idx, half) => {
-      list.forEach((it, j) => {
-        if (j < idx) it.style.transform = `translateX(${-half}px)`
-        else if (j > idx) it.style.transform = `translateX(${half}px)`
-      })
-    }
-
+    // Stable macOS-dock growth: the hovered pill scales from its CENTER and
+    // makes room with its OWN margins — its box never moves, neighbors are
+    // only ever pushed AWAY from the cursor, so hover can't oscillate.
+    // The last item skips marginRight (nothing beyond it to push) — that
+    // duplicate margin was bloating the dock's width.
     const grow = (el) => {
-      const list = items()
-      const idx = list.indexOf(el)
       const g = (SCALE - 1) * el.offsetWidth
+      const isLast = el === items().at(-1)
       if (anchorTimer) {
         clearTimeout(anchorTimer)
         anchorTimer = null
       }
       el.style.transformOrigin = 'center'
+      el.style.marginLeft = `${g / 2}px`
+      if (!isLast) el.style.marginRight = `${g / 2}px`
+      else dock.style.paddingRight = `${GAP + g / 2}px`
       el.style.transform = `scale(${SCALE})`
-      nudge(list, idx, g / 2)
-      // Edge pills: their outer half would cross the dock's rim — open the
-      // padding just enough that the outer gap still equals top/bottom.
-      const overhang = Math.max(0, g / 2 - 10)
-      if (idx === list.length - 1) dock.style.paddingRight = `${GAP + overhang}px`
-      if (idx === 0) dock.style.paddingLeft = `${GAP + overhang}px`
     }
 
     let anchorTimer = null
 
     const shrink = (el) => {
-      items().forEach((it) => {
-        if (it !== el) it.style.transform = ''
-      })
+      el.style.marginLeft = '0px'
+      el.style.marginRight = '0px'
       el.style.transform = 'scale(1)'
-      if (anchorTimer) clearTimeout(anchorTimer)
-      anchorTimer = setTimeout(() => {
+      if (el === items().at(-1)) {
+        if (anchorTimer) clearTimeout(anchorTimer)
+        anchorTimer = setTimeout(() => {
+          dock.style.paddingRight = ''
+        }, 320)
+      } else {
         dock.style.paddingRight = ''
-        dock.style.paddingLeft = ''
-      }, 320)
+      }
     }
 
     // Dock swells dynamically: height AND side padding grow together, so the
@@ -362,8 +355,9 @@ function LayoutEffects() {
       items().forEach((it) => {
         it.style.transform = ''
         it.style.transformOrigin = ''
+        it.style.marginLeft = ''
+        it.style.marginRight = ''
         dock.style.paddingRight = ''
-        dock.style.paddingLeft = ''
         dock.style.paddingRight = ''
         it.classList.remove('nav-green')
         it.classList.remove('nav-flash')
