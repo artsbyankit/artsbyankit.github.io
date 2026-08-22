@@ -479,7 +479,9 @@ p {
 }
 
 .gradient-text {
-  color: var(--accent);
+  color: var(--accent-bright);
+  /* soft ink halo keeps pure-white readable over pale bg patches */
+  text-shadow: 0 1px 14px rgba(31, 56, 88, 0.35);
 }
 
 .btn {
