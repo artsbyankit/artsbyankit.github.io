@@ -6,10 +6,10 @@
    everywhere it's applied (buttons, text, bg, badges…).
    ============================================================ */
 
-/* ---------- ACCENT — literally one color for everything ----------
-   Text, borders, rings, glows, eyebrows, highlights, hover — all
-   use this exact same color. No variants. Change this hex, done. */
-export const accent = '#f2b8cf';
+/* ---------- ACCENT — none. Monochrome ink, like the text ----------
+   Everything that used to be "accent colored" now wears the same
+   near-black as body text. Clean, editorial, zero color noise. */
+export const accent = '#12233a';
 
 /* ---------- BACKGROUND (fluted-glass ramp) ---------- */
 export const bgPalette = {
