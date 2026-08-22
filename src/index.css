@@ -1458,10 +1458,12 @@ p {
 }
 
 /* Freelance availability — same unified glass button.
-   The green dot is treated as an ICON: fixed box, never shrinks,
-   explicit spacing so hover transforms can't squeeze it into the text. */
+   Dot = icon: fixed box, gap-driven spacing (no margins to collapse),
+   and the dot+label group is optically centered inside the pill. */
 .freelance-pill {
   margin-bottom: 32px;
+  justify-content: center;
+  gap: 9px;
 }
 
 .freelance-pill .pulse {
@@ -1469,9 +1471,18 @@ p {
   flex: 0 0 auto;
   width: 9px;
   height: 9px;
-  margin-right: 6px;
+  margin: 0;
   border-radius: 50%;
   background: var(--green);
+  /* uppercase tracking adds a phantom space after the last glyph —
+     shave it off so the pair sits truly centered */
+  transform: translateZ(0);
+}
+
+.freelance-pill .freelance-label {
+  letter-spacing: 0.08em;
+  margin-right: -0.08em;
+  line-height: 1;
 }
 
 .hero h1 {

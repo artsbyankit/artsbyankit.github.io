@@ -11,7 +11,7 @@ export default function Home() {
         <div className="container">
           <Link to="/freelance" className="btn freelance-pill">
             <span className="pulse" aria-hidden="true"></span>
-            Available for freelance projects
+            <span className="freelance-label">Available for freelance projects</span>
           </Link>
           <h1>
             Turning complex ideas into <span className="gradient-text">intuitive experiences</span>
