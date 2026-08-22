@@ -10,9 +10,9 @@
 
 /* ---------- ACCENT (the hero color family) ---------- */
 const accent = {
-  deep: '#b45579', // readable rose — button borders/text on light bg
-  strong: '#93415f', // pressed/hover depth
-  bright: '#eeb3c9', // dusty pink — highlights, eyebrows, bullets
+  deep: '#bd6d8c', // readable petal rose — button borders/text on light bg
+  strong: '#a25575', // pressed/hover depth
+  bright: '#f1c6d9', // rose petal — highlights, eyebrows, bullets
 };
 
 /* ---------- BACKGROUND (fluted-glass ramp) ---------- */
