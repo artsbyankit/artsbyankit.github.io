@@ -3212,7 +3212,7 @@ main section {
   content-visibility: auto;
 }
 
-/* ---- Meet the cats ---- */
+/* ---- Meet the cats — framed collector cards ---- */
 .cat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -3220,68 +3220,132 @@ main section {
 }
 
 .cat-card {
+  position: relative;
+  padding: 14px 14px 20px;
   border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--surface);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 42%),
+    var(--surface);
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .cat-card:hover {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--text) 30%, transparent);
-  box-shadow: 0 18px 44px rgba(31, 56, 88, 0.22);
+  transform: translateY(-5px) scale(1.012);
+  border-color: color-mix(in srgb, var(--text) 32%, transparent);
+  box-shadow: 0 22px 48px rgba(31, 56, 88, 0.26);
 }
 
 .cat-portrait {
+  position: relative;
   aspect-ratio: 4 / 3;
   display: grid;
   place-items: center;
+  border-radius: 14px;
+  border: 1px solid var(--border);
   background:
-    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 60%),
-    linear-gradient(160deg, rgba(18, 35, 58, 0.05), rgba(18, 35, 58, 0.12));
-  border-bottom: 1px solid var(--border);
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
+    linear-gradient(160deg, rgba(18, 35, 58, 0.06), rgba(18, 35, 58, 0.13));
   color: color-mix(in srgb, var(--text) 62%, transparent);
+  overflow: hidden;
+}
+
+.cat-portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+.cat-portrait img,
+.cat-portrait svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cat-portrait svg {
   width: 46%;
   max-width: 150px;
+  height: auto;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.cat-body {
-  padding: 20px 22px 22px;
-}
-
-.cat-body h3 {
-  font-size: 21px;
-  letter-spacing: -0.01em;
-}
-
-.cat-meta {
-  margin-top: 4px;
-  font-size: 13.5px;
-  color: var(--muted);
+.cat-card:hover .cat-portrait svg {
+  color: var(--text);
+  transform: scale(1.06);
 }
 
 .cat-role {
-  margin-top: 12px;
-  font-size: 13px;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  justify-content: center;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 6px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--text);
+  white-space: nowrap;
+}
+
+.cat-body {
+  padding: 16px 6px 0;
+}
+
+.cat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cat-head h3 {
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.cat-age {
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cat-meta {
+  margin-top: 5px;
+  font-size: 13.5px;
+  color: var(--muted);
 }
 
 .cat-bio {
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 15px;
   line-height: 1.55;
   color: var(--muted);
 }
 
 .cat-base {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   margin-top: 14px;
   padding: 5px 12px;
   border: 1px solid var(--border);
@@ -3290,6 +3354,14 @@ main section {
   font-size: 12px;
   letter-spacing: 0.05em;
   color: var(--muted);
+}
+
+.cat-base::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
 }
 
 @media (max-width: 900px) {

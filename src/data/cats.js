@@ -13,7 +13,7 @@ const cats = [
     photo: null,
   },
   {
-    name: 'Madam Tortie',
+    name: 'Masala',
     meta: '7 · female · tortoiseshell, short hair',
     base: 'The farm',
     role: 'Chief of Staff (she runs the place)',

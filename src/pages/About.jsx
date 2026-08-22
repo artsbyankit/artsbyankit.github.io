@@ -204,11 +204,14 @@ export default function About() {
                   ) : (
                     <CatSilhouette pose={cat.pose} />
                   )}
+                  <span className="cat-role">{cat.role}</span>
                 </div>
                 <div className="cat-body">
-                  <h3>{cat.name}</h3>
-                  <p className="cat-meta">{cat.meta}</p>
-                  <p className="cat-role">{cat.role}</p>
+                  <div className="cat-head">
+                    <h3>{cat.name}</h3>
+                    <span className="cat-age">{cat.meta.split(' · ')[0]}</span>
+                  </div>
+                  <p className="cat-meta">{cat.meta.split(' · ').slice(1).join(' · ')}</p>
                   <p className="cat-bio">{cat.bio}</p>
                   <span className="cat-base">{cat.base}</span>
                 </div>
