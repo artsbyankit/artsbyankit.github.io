@@ -479,7 +479,7 @@ p {
 }
 
 .gradient-text {
-  color: var(--accent-bright);
+  color: var(--accent);
   /* soft ink halo keeps pure-white readable over pale bg patches */
   text-shadow: 0 1px 14px rgba(31, 56, 88, 0.35);
 }
@@ -519,7 +519,7 @@ p {
   border: 1px solid var(--accent) !important;
   color: var(--accent) !important;
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent-bright) 60%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--accent) 60%, transparent),
     0 0 26px color-mix(in srgb, var(--shine) 0%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
@@ -538,12 +538,12 @@ p {
 .btn-primary:hover,
 .btn-primary:active {
   background: var(--glass-bg);
-  border-color: var(--accent-strong) !important;
-  color: var(--accent-strong) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
   transform: translateY(-2px);
   transition-duration: 0.3s;
   box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent-bright) 75%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--accent) 75%, transparent),
     0 0 26px color-mix(in srgb, var(--shine) 70%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
@@ -2865,7 +2865,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent-bright) 60%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--accent) 60%, transparent),
     0 0 26px color-mix(in srgb, var(--shine) 0%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
@@ -2880,11 +2880,11 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 .nav-cta:hover,
 .nav-cta.active {
   background: var(--glass-bg);
-  border-color: var(--accent-strong) !important;
-  color: var(--accent-strong) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
   transition-duration: 0.3s;
   box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent-bright) 75%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--accent) 75%, transparent),
     0 0 26px color-mix(in srgb, var(--shine) 70%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
