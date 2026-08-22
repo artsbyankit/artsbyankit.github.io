@@ -1,3 +1,4 @@
+import cats from '../data/cats'
 export default function About() {
   return (
     <>
@@ -186,7 +187,38 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section section-flush">
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">The real bosses</div>
+              <h2 className="section-title">Meet the cats</h2>
+            </div>
+          </div>
+          <div className="cat-grid">
+            {cats.map((cat) => (
+              <article key={cat.name} className="cat-card reveal">
+                <div className={`cat-portrait pose-${cat.pose}`}>
+                  {cat.photo ? (
+                    <img src={cat.photo} alt={cat.name} loading="lazy" />
+                  ) : (
+                    <CatSilhouette pose={cat.pose} />
+                  )}
+                </div>
+                <div className="cat-body">
+                  <h3>{cat.name}</h3>
+                  <p className="cat-meta">{cat.meta}</p>
+                  <p className="cat-role">{cat.role}</p>
+                  <p className="cat-bio">{cat.bio}</p>
+                  <span className="cat-base">{cat.base}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
         <div className="container">
           <div className="section-head">
             <div>
@@ -213,5 +245,19 @@ export default function About() {
         </div>
       </section>
     </>
+  )
+}
+
+function CatSilhouette({ pose }) {
+  const paths = {
+    alert: 'M20 78 C14 60 16 42 26 34 L30 22 38 30 C44 27 52 27 58 30 L66 22 70 34 C80 42 82 62 76 78 M40 40 A2.5 2.5 0 1 0 40.01 40 M56 40 A2.5 2.5 0 1 0 56.01 40 M44 50 Q48 54 52 50 M8 74 C4 64 10 58 18 62',
+    regal: 'M24 80 C18 58 22 38 32 32 L36 20 43 28 C47 26 53 26 57 28 L64 20 68 32 C78 40 80 62 74 80 M41 41 A2.5 2.5 0 1 0 41.01 41 M55 41 A2.5 2.5 0 1 0 55.01 41 M46 51 Q49 55 53 51 M88 76 C94 66 88 58 80 62 C92 70 84 80 72 79',
+    loaf: 'M18 74 C12 60 18 46 30 42 L34 32 42 39 C48 37 54 37 60 39 L68 32 72 42 C82 48 86 62 80 74 Z M40 47 A2.2 2.2 0 1 0 40.01 47 M54 47 A2.2 2.2 0 1 0 54.01 47 M45 54 Q48 57 51 54',
+  }
+  return (
+    <svg viewBox="0 0 96 96" fill="none" stroke="currentColor" strokeWidth="2.5"
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={paths[pose] || paths.alert} />
+    </svg>
   )
 }
