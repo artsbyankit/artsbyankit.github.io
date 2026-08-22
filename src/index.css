@@ -3252,10 +3252,22 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   :root {
     --frost: blur(8px) saturate(125%);
   }
+}
 
-/* Skip render work for sections scrolled far off-screen */
-  main section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 720px;
-  }
+/* ---------- Game-style culling (all devices) ----------
+   Like frustum culling in a game engine: sections far off-screen skip
+   layout+paint entirely; the browser renders only what's in/near view.
+   contain-intrinsic-size gives the scrollbar a stable estimate so
+   nothing jumps as sections stream in. */
+main section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
+/* Long grids/lists get the same treatment */
+.work-grid > *,
+.persona-blocks > *,
+.metrics-table,
+.tool-list {
+  content-visibility: auto;
 }

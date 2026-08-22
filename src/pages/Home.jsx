@@ -96,6 +96,7 @@ export default function Home() {
                   alt="Ankit Patel — UI/UX Designer"
                   width="640"
                   height="640"
+                  loading="lazy"
                   decoding="async"
                 />
               </picture>
