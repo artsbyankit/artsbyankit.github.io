@@ -8,7 +8,7 @@
 // palette whenever the canvas can't be read.
 import { setLiveAccent } from './theme.js'
 
-const SAMPLE_MS = 200
+const SAMPLE_MS = 300 // imperceptible lag, halves GPU readback cost
 const EASE = 0.06 // per-tick lerp factor — lower = dreamier
 
 let cur = null // current { h, s, l } triple for deep/bright, eased

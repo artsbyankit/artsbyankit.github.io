@@ -3202,31 +3202,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   }
 }
 
-/* ---------- Touch devices (iOS/Android): drop backdrop-filter ----------
-   Safari flickers when many backdrop-filter layers sample a fixed,
-   animating WebGL canvas while scrolling. On phones/tablets the glass
-   panels switch to translucent dark surfaces — the same frosted look with
-   zero compositing churn and better battery life. Desktops keep the full
-   blur-based glass. */
-@media (hover: none) and (pointer: coarse) {
-  .dock-glass,
-  .nav-links-mobile,
-  .nav-toggle,
-  .btn:not(.btn-primary),
-  .card,
-  .skill-box,
-  .hero-tag,
-  .social-big a,
-  .portrait,
-  .cs-progress,
-  .cs-note,
-  .cs-next-card,
-  .fc-title,
-  .status-item,
-  .metrics-table,
-  .tool-list li {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    background: var(--panel-bg);
-  }
-}
+/* ---------- Touch devices ----------
+   Full glass everywhere now — modern phones composite backdrop-filter
+   fine (verified on Pixel 9a), and cards already proved it. The old
+   blur-stripping hack is gone so phones match desktop exactly. */

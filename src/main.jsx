@@ -43,15 +43,14 @@ setTimeout(() => {
 }, 3000)
 
 // Firefox Android doesn't always composite backdrop-filter until a full
-// repaint — that's why frost "appears" only after switching apps. Nudge it.
-const nudgeRepaint = () => {
-  const el = document.documentElement
-  el.style.transform = 'translateZ(0)'
-  requestAnimationFrame(() => {
-    el.style.transform = ''
-  })
-}
-window.addEventListener('load', () => setTimeout(nudgeRepaint, 400))
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) setTimeout(nudgeRepaint, 150)
+// repaint — that's why frost "appears" only after switching apps. Nudge ONCE
+// after load; repeated toggling does more harm than good.
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const el = document.documentElement
+    el.style.transform = 'translateZ(0)'
+    requestAnimationFrame(() => {
+      el.style.transform = ''
+    })
+  }, 400)
 })
