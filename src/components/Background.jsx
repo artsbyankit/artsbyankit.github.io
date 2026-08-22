@@ -21,22 +21,31 @@ export default function Background() {
         if (++tries < 40) setTimeout(boot, 250) // ~10s watchdog
         return
       }
-      fx = window.VANTA.FOG({
-        el,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200,
-        minWidth: 200,
-        blurFactor: 0.54,
-        speed: 0.9,
-        zoom: 0.9,
-        // user-picked ramp — light base, deep highlights
-        highlightColor: hex(bgPalette.base), // #82a7cd
-        midtoneColor: hex(bgPalette.colors[1]), // #bce2f7
-        lowlightColor: hex(bgPalette.colors[2]), // #a3c2de
-        baseColor: hex(bgPalette.colors[3]), // #e2e6e9,
-      })
+      try {
+        fx = window.VANTA.FOG({
+          el,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200,
+          minWidth: 200,
+          // exact shape of the vantajs.com fog preset
+          backgroundAlpha: 1,
+          blurFactor: 0.53,
+          speed: 1,
+          zoom: 0.9,
+          scale: 2,
+          scaleMobile: 4,
+          // our blues — light body, deep blue highlights
+          highlightColor: hex(bgPalette.base), // #82a7cd
+          midtoneColor: hex(bgPalette.colors[1]), // #bce2f7
+          lowlightColor: hex(bgPalette.colors[2]), // #a3c2de
+          baseColor: hex(bgPalette.colors[3]), // #e2e6e9
+        })
+        console.info('[bg] Vanta.FOG ready')
+      } catch (err) {
+        console.error('[bg] Vanta.FOG failed:', err)
+      }
     }
 
     let cancelled = false
