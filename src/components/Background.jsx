@@ -31,11 +31,11 @@ export default function Background() {
         blurFactor: 0.54,
         speed: 0.9,
         zoom: 0.9,
-        // brand ramp — same family as bgPalette
-        highlightColor: hex(bgPalette.colors[3]),
-        midtoneColor: hex(bgPalette.colors[2]),
-        lowlightColor: hex(bgPalette.base),
-        baseColor: hex(bgPalette.base),
+        // user-picked ramp — light base, deep highlights
+        highlightColor: hex(bgPalette.base), // #82a7cd
+        midtoneColor: hex(bgPalette.colors[1]), // #bce2f7
+        lowlightColor: hex(bgPalette.colors[2]), // #a3c2de
+        baseColor: hex(bgPalette.colors[3]), // #e2e6e9,
       })
     }
 
