@@ -29,7 +29,11 @@ function useFluteCounts() {
       for (const tier of Object.keys(TARGET_SPACING)) {
         const n = Math.max(3, Math.round(cw / TARGET_SPACING[tier]))
         const rhythm = cw / n
-        next[tier] = Math.max(4, Math.round(vw / rhythm))
+        let count = Math.max(4, Math.round(vw / rhythm))
+        // Phone: keep it single-digit — wide-spaced flutes read calmer on
+        // a small screen than a dense picket fence.
+        if (tier === 'mobile') count = Math.min(9, count)
+        next[tier] = count
       }
       setCounts((prev) =>
         prev.desktop === next.desktop && prev.tablet === next.tablet && prev.mobile === next.mobile
