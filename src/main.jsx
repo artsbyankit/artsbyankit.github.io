@@ -27,3 +27,31 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 new MutationObserver(() => {
   document.querySelectorAll('[data-aifx-wm]').forEach((el) => el.remove())
 }).observe(document.documentElement, { childList: true, subtree: true })
+
+// Watchdog: if the effect runtime loaded but never materialized a canvas in
+// the visible bg tier (happens on some Firefox/Android builds), retry it once.
+setTimeout(() => {
+  const tier = [...document.querySelectorAll('.bg-effect')].find(
+    (el) => getComputedStyle(el).display !== 'none',
+  )
+  if (tier && !tier.querySelector('canvas')) {
+    const retry = document.createElement('script')
+    retry.src = 'https://cdn.aidesigner.ai/effects/runtime/v1.js'
+    retry.async = true
+    document.body.appendChild(retry)
+  }
+}, 3000)
+
+// Firefox Android doesn't always composite backdrop-filter until a full
+// repaint — that's why frost "appears" only after switching apps. Nudge it.
+const nudgeRepaint = () => {
+  const el = document.documentElement
+  el.style.transform = 'translateZ(0)'
+  requestAnimationFrame(() => {
+    el.style.transform = ''
+  })
+}
+window.addEventListener('load', () => setTimeout(nudgeRepaint, 400))
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) setTimeout(nudgeRepaint, 150)
+})

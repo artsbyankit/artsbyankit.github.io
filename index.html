@@ -15,26 +15,6 @@
     />
     <meta name="theme-color" content="#82a7cd" />
     <meta name="color-scheme" content="light" />
-    <script>
-      /* Cap ALL requestAnimationFrame work (bg effect, samplers, etc.) to
-         24fps on phones — big GPU/battery win, visually smooth enough. */
-      (function () {
-        if (!window.matchMedia('(max-width: 640px)').matches) return
-        var native = window.requestAnimationFrame.bind(window)
-        var MIN_DT = 1000 / 24 - 1
-        var last = 0
-        window.requestAnimationFrame = function (cb) {
-          return native(function f(t) {
-            if (t - last >= MIN_DT) {
-              last = t
-              cb(t)
-            } else {
-              native(f)
-            }
-          })
-        }
-      })()
-    </script>
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Ankit Patel - UI/UX Designer" />
     <meta property="og:title" content="Ankit Patel - UI/UX Designer" />

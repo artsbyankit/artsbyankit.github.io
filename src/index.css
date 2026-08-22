@@ -82,6 +82,23 @@ p {
   pointer-events: none;
 }
 
+/* Static ramp painted UNDER the WebGL glass — shows instantly on load and
+   remains as the fallback on browsers where the effect can't init
+   (e.g. Firefox Android). Keep colors in sync with theme.js bgPalette. */
+.bg-host::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    160deg,
+    #82a7cd 0%,
+    #bce2f7 35%,
+    #a3c2de 65%,
+    #e2e6e9 100%
+  );
+}
+
 .bg-effect {
   position: absolute;
   inset: 0;
