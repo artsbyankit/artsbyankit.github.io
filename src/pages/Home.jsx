@@ -9,10 +9,10 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="container">
-          <div className="hero-tag">
-            <span className="pulse"></span>
+          <Link to="/freelance" className="btn freelance-pill">
+            <span className="pulse" aria-hidden="true"></span>
             Available for freelance projects
-          </div>
+          </Link>
           <h1>
             Turning complex ideas into <span className="gradient-text">intuitive experiences</span>
           </h1>
