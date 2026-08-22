@@ -10,9 +10,9 @@
 
 /* ---------- ACCENT — THE one pink, tuned for the steel-blue bg ---------- */
 const accent = {
-  deep: '#de7ca5', // raspberry petal, lifted — text, borders, eyebrows
-  strong: '#c25f88', // deeper twin for hover/press feedback
-  bright: '#de7ca5', // one color everywhere
+  deep: '#e095b2', // soft petal — desaturated, airy
+  strong: '#c97a99', // deeper twin for hover/press feedback
+  bright: '#e095b2', // one color everywhere
 };
 
 /* ============================================================
