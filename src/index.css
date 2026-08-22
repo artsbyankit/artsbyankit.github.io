@@ -2198,7 +2198,7 @@ a.stat-source:hover {
 
 .flow-path {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.55);
+  stroke: rgba(18, 35, 58, 0.6);
   stroke-width: 2;
   stroke-linecap: round;
 }
@@ -2208,8 +2208,8 @@ a.stat-source:hover {
 }
 
 .flow-arrow {
-  fill: rgba(255, 255, 255, 0.95);
-  stroke: rgba(255, 255, 255, 0.95);
+  fill: var(--text);
+  stroke: var(--text);
   stroke-width: 1;
 }
 
@@ -2262,7 +2262,7 @@ a.stat-source:hover {
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   -webkit-backdrop-filter: var(--frost);
   backdrop-filter: var(--frost);
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -2905,7 +2905,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
     top: calc(100% + 13px);
     transform: translateX(-50%);
     z-index: 1;
-    color: var(--muted);
+    color: var(--text);
     font-size: 19px;
     font-weight: 700;
     line-height: 1;
