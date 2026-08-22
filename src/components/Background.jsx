@@ -36,11 +36,13 @@ export default function Background() {
           zoom: 0.9,
           scale: 2,
           scaleMobile: 4,
-          // our blues — light body, deep blue highlights
-          highlightColor: hex(bgPalette.base), // #82a7cd
-          midtoneColor: hex(bgPalette.colors[1]), // #bce2f7
-          lowlightColor: hex(bgPalette.colors[2]), // #a3c2de
-          baseColor: hex(bgPalette.colors[3]), // #e2e6e9
+          // our blues — demo-style mapping: the DEEPEST blue sits in the
+          // lowlight slot (that's what gives the vantajs demo its punch),
+          // light gray stays as the cloud body
+          highlightColor: hex(bgPalette.colors[1]), // #bce2f7 bright crests
+          midtoneColor: hex(bgPalette.colors[2]), // #a3c2de mid clouds
+          lowlightColor: hex(bgPalette.base), // #82a7cd deep shadows
+          baseColor: hex(bgPalette.colors[3]), // #e2e6e9 sky body
         })
         console.info('[bg] Vanta.FOG ready')
       } catch (err) {
