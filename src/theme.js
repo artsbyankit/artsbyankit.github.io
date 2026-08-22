@@ -10,9 +10,9 @@
 
 /* ---------- ACCENT — THE one pink, tuned for the steel-blue bg ---------- */
 const accent = {
-  deep: '#2e5fe0', // saturated cobalt — text, borders, eyebrows
-  strong: '#2148b8', // deeper twin for hover/press
-  bright: '#4a80ee', // luminous cobalt — rings, glows, highlights
+  deep: '#bd6f0e', // orange-tinted gold — text, borders, eyebrows
+  strong: '#96560b', // deeper twin for hover/press
+  bright: '#efa63d', // luminous amber-gold — rings, glows, highlights
 };
 
 /* ============================================================
