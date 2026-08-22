@@ -8,11 +8,11 @@
    once, every object using it updates automatically.
    ============================================================ */
 
-/* ---------- ACCENT (the hero color family) ---------- */
+/* ---------- ACCENT — THE one pink, tuned for the steel-blue bg ---------- */
 const accent = {
-  deep: '#bd6d8c', // readable petal rose — button borders/text on light bg
-  strong: '#a25575', // pressed/hover depth
-  bright: '#f1c6d9', // rose petal — highlights, eyebrows, bullets
+  deep: '#d16a94', // raspberry petal — text, borders, eyebrows, highlights
+  strong: '#b4547a', // same soul, deeper for hover/press feedback
+  bright: '#d16a94', // one color everywhere
 };
 
 /* ============================================================
