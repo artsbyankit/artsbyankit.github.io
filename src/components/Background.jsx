@@ -31,18 +31,18 @@ export default function Background() {
           minWidth: 200,
           // exact shape of the vantajs.com fog preset
           backgroundAlpha: 1,
-          blurFactor: 0.53,
+          blurFactor: 0.62,
           speed: 1,
           zoom: 0.9,
           scale: 2,
           scaleMobile: 4,
-          // our blues — demo-style mapping: the DEEPEST blue sits in the
-          // lowlight slot (that's what gives the vantajs demo its punch),
-          // light gray stays as the cloud body
-          highlightColor: hex(bgPalette.colors[1]), // #bce2f7 bright crests
-          midtoneColor: hex(bgPalette.colors[2]), // #a3c2de mid clouds
-          lowlightColor: hex(bgPalette.base), // #82a7cd deep shadows
-          baseColor: hex(bgPalette.colors[3]), // #e2e6e9 sky body
+          // our blues — blue owns the canvas: pale-blue cloud BODY, deep
+          // #82a7cd for shadow depth, near-white demoted to sparse crests.
+          // Extra blur stretches each blue patch over more area (same saturation).
+          highlightColor: hex(bgPalette.colors[3]), // #e2e6e9 wispy crests
+          midtoneColor: hex(bgPalette.colors[1]), // #bce2f7 soft spread
+          lowlightColor: hex(bgPalette.base), // #82a7cd depth
+          baseColor: hex(bgPalette.colors[2]), // #a3c2de blue body
         })
         console.info('[bg] Vanta.FOG ready')
       } catch (err) {
