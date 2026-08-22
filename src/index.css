@@ -1469,13 +1469,19 @@ p {
   gap: 9px;
 }
 
-/* Status pill, not a push-button: skip the lift/scale/dim theatrics.
-   Feedback comes from the border + cursor spotlight only, so the label
-   never appears to shrink or bounce. */
-.freelance-pill,
-.freelance-pill:hover,
+/* Status pill joins the family grow-from-center language — but keeps its
+   own gentle press (no brightness dim, which read as cartoonish here) */
+.freelance-pill {
+  filter: none;
+}
+
+.freelance-pill:hover {
+  transform: scale(1.045);
+  transform-origin: center;
+}
+
 .freelance-pill:active {
-  transform: none;
+  transform: scale(0.985);
   filter: none;
 }
 
