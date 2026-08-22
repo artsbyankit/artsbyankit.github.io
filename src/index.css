@@ -1480,8 +1480,9 @@ p {
 }
 
 /* The generic ".btn:hover > span" icon-nudge must not touch this pill's
-   dot or label — that was the rightward drift */
-.freelance-pill:hover > span {
+   dot or label — that was the rightward drift. Doubled class beats the
+   later-defined generic rule at equal specificity. */
+.freelance-pill.freelance-pill:hover > span {
   transform: none;
 }
 
