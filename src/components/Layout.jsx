@@ -204,23 +204,22 @@ function LayoutEffects() {
     // (expanded dock height − scaled pill height) / 2
     const GAP = (EXPAND_H - 44 * SCALE) / 2
 
-    // Grow only the hovered item. Middle items scale from their left edge and
-    // push neighbors apart with a margin. "Let's talk" (last item) scales from
-    // its RIGHT edge instead: the extra width folds into space made on its
-    // left (marginLeft), and the dock's right padding shrinks to GAP so the
-    // right gap equals top/bottom — no overflow, no leftward jump.
+    // macOS-dock-style growth: every pill scales from its CENTER, so extra
+    // width spreads evenly both ways into room made by its own margins.
+    // Nothing can ever poke outside the dock, in any hover direction.
     const grow = (el) => {
       const g = (SCALE - 1) * el.offsetWidth
       if (anchorTimer) {
         clearTimeout(anchorTimer)
         anchorTimer = null
       }
+      el.style.transformOrigin = 'center'
+      el.style.marginLeft = `${g / 2}px`
+      el.style.marginRight = `${g / 2}px`
+      // "Let's talk" is last: its right half extends past the layout box,
+      // so pad the dock just enough that the right gap equals top/bottom.
       if (el === items().at(-1)) {
-        el.style.marginLeft = `${g}px`
-        el.style.transformOrigin = 'right center'
-        dock.style.paddingRight = `${GAP}px`
-      } else {
-        el.style.marginRight = `${g}px`
+        dock.style.paddingRight = `${GAP + g / 2}px`
       }
       el.style.transform = `scale(${SCALE})`
     }
@@ -228,17 +227,14 @@ function LayoutEffects() {
     let anchorTimer = null
 
     const shrink = (el) => {
+      el.style.marginLeft = '0px'
       el.style.marginRight = '0px'
-      el.style.marginLeft = ''
       el.style.transform = 'scale(1)'
       if (el === items().at(-1)) {
-        // Keep the right anchor (and the tight right padding) until the
-        // 0.28s scale-down finishes — switching the anchor early makes the
-        // still-scaled pill swing outside the dock's right edge.
-        el.style.transformOrigin = 'right center'
+        // Hold the wider right padding until the scale-down finishes so the
+        // contracting pill never crosses the dock's right edge.
         if (anchorTimer) clearTimeout(anchorTimer)
         anchorTimer = setTimeout(() => {
-          el.style.transformOrigin = ''
           dock.style.paddingRight = ''
         }, 320)
       } else {
