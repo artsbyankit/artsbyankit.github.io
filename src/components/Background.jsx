@@ -23,7 +23,6 @@ export default function Background() {
         data-aifx-flutes="8"
         className="bg-effect bg-effect-mobile"
       />
-      <div className="vignette" />
     </div>
   )
 }

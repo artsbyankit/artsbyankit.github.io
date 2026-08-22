@@ -114,19 +114,6 @@ p {
   display: none;
 }
 
-.vignette {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 110% 110% at var(--vx, 50%) var(--vy, 50%),
-    transparent 45%,
-    rgba(0, 0, 0, 0.1) 70%,
-    rgba(0, 0, 0, 0.25) 100%
-  );
-}
-
 @media (prefers-reduced-motion: reduce) {
   .cat-logo-dot,
   .hero-tag,
@@ -200,18 +187,6 @@ p {
   opacity: 1;
 }
 
-/* Highlighted buttons glow neon green instead of warm white */
-.btn-primary:hover::before {
-  background:
-    radial-gradient(
-      230px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in srgb, var(--accent) 30%, transparent),
-      transparent 70%
-    ),
-    var(--glass-sheen);
-  opacity: 1;
-}
-
 .nav-links a::before,
 .nav-cta::before {
   content: '';
@@ -227,15 +202,6 @@ p {
     transparent 70%
   );
   z-index: -1;
-}
-
-/* The highlighted "Let's talk" pill glows neon green */
-.nav-cta::before {
-  background: radial-gradient(
-    230px circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in srgb, var(--accent) 26%, transparent),
-    transparent 70%
-  );
 }
 
 .nav-links a:hover::before,
@@ -310,8 +276,7 @@ p {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 22%, transparent);
-  color: #fff;
+  background: color-mix(in srgb, var(--text) 18%, transparent);
 }
 
 a {
@@ -458,7 +423,7 @@ p {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--muted);
   margin-bottom: 16px;
 }
 
@@ -466,7 +431,7 @@ p {
   content: '';
   width: 18px;
   height: 2px;
-  background: var(--accent);
+  background: var(--muted);
   border-radius: 2px;
 }
 
@@ -479,9 +444,7 @@ p {
 }
 
 .gradient-text {
-  color: var(--accent);
-  /* soft ink halo keeps pure-white readable over pale bg patches */
-  text-shadow: 0 1px 14px rgba(31, 56, 88, 0.35);
+  color: var(--text);
 }
 
 .btn {
@@ -509,45 +472,6 @@ p {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.55),
     0 12px 36px rgba(0, 0, 0, 0.5);
-}
-
-/* Primary CTA — same liquid glass as .btn, wrapped in an accent ring */
-.btn-primary {
-  padding: 9px 18px !important;
-  font-weight: 600;
-  background: var(--glass-bg);
-  border: 1px solid var(--accent) !important;
-  color: var(--accent) !important;
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent) 60%, transparent),
-    0 0 26px color-mix(in srgb, var(--shine) 0%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    var(--glass-shadow);
-  -webkit-backdrop-filter: var(--frost);
-  backdrop-filter: var(--frost);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.55s ease,
-    border-color 0.25s ease,
-    color 0.25s ease,
-    filter 0.25s ease;
-}
-
-/* Glow fades in fast-ish, fades out slower — no popping */
-.btn-primary:hover,
-.btn-primary:active {
-  background: var(--glass-bg);
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
-  transform: translateY(-2px);
-  transition-duration: 0.3s;
-  box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent) 75%, transparent),
-    0 0 26px color-mix(in srgb, var(--shine) 70%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 30px color-mix(in srgb, var(--shine) 28%, transparent);
 }
 
 .btn:active,
@@ -1418,46 +1342,7 @@ p {
   color: var(--text);
 }
 
-/* The green highlight on the hovered (target) item — matches "Let's talk":
-   green label + edge ring + glow, with a fast sweep arriving from the right. */
-.nav-links a.nav-green {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent),
-    0 0 14px color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-.nav-links a.nav-green::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent 10%,
-    color-mix(in srgb, var(--accent) 12%, transparent) 60%,
-    color-mix(in srgb, var(--accent) 22%, transparent) 100%
-  );
-  transform-origin: right center;
-  transform: scaleX(0);
-  animation: nav-sweep 0.3s cubic-bezier(0.87, 0, 0.13, 1) forwards;
-}
-
-@keyframes nav-sweep {
-  to {
-    transform: scaleX(1);
-  }
-}
-
 /* Passing stations (Work, About) flash only their edges — label untouched. */
-.nav-links a.nav-flash {
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
-    0 0 10px color-mix(in srgb, var(--accent) 16%, transparent);
-}
-
 .nav-links a.active {
   color: var(--text);
   background: rgba(255, 255, 255, 0.1);
@@ -1732,7 +1617,7 @@ p {
   margin-top: 16px;
   font-size: 16px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--muted);
 }
 
 .card:hover .card-more span {
@@ -1913,7 +1798,7 @@ p {
   font-size: 16px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--muted);
 }
 
 .cs-section .body p {
@@ -2020,9 +1905,9 @@ p {
   z-index: 2;
   padding: 5px 10px;
   border-radius: 999px;
-  border: 1px dashed var(--accent);
+  border: 1px dashed var(--border);
   background: rgba(0, 0, 0, 0.55);
-  color: var(--accent);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -2071,7 +1956,7 @@ p {
 }
 
 a.stat-source {
-  color: var(--accent);
+  color: var(--muted);
 }
 
 a.stat-source:hover {
@@ -2180,7 +2065,7 @@ a.stat-source:hover {
 .persona-quote {
   margin: 0;
   padding: 0 0 0 16px;
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--line);
   color: var(--text);
   font-size: 17px;
   font-style: italic;
@@ -2229,7 +2114,7 @@ a.stat-source:hover {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--muted);
   margin-bottom: 10px;
 }
 
@@ -2346,7 +2231,7 @@ a.stat-source:hover {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--muted);
   display: inline-block;
   margin-right: 6px;
 }
@@ -2371,7 +2256,7 @@ a.stat-source:hover {
 
 .product-for {
   font-size: 14px;
-  color: var(--accent);
+  color: var(--muted);
   font-weight: 600;
   margin-bottom: 16px;
 }
@@ -2400,7 +2285,7 @@ a.stat-source:hover {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--muted);
 }
 
 h4.block-goals + .feature-list li::before { background: var(--persona-goals); }
@@ -2433,7 +2318,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 .cs-quote {
   margin: 0;
   padding: 8px 0 8px 24px;
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--line);
   color: var(--text);
   font-style: italic;
   font-size: 18px;
@@ -2599,7 +2484,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 
 .cs-next-card:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--panel-border));
+  border-color: var(--panel-border);
 }
 
 .cs-next-emoji {
@@ -2620,7 +2505,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 
 .cs-next-arrow {
   margin-left: auto;
-  color: var(--accent);
+  color: var(--muted);
   font-weight: 700;
 }
 
@@ -2737,7 +2622,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 15px;
-  color: var(--accent);
+  color: var(--muted);
   padding-top: 2px;
 }
 
@@ -2816,7 +2701,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 }
 
 .social-big a:hover {
-  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  border-color: color-mix(in srgb, var(--text) 45%, transparent);
   transform: translateY(-2px);
 }
 
@@ -2857,38 +2742,9 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
     var(--glass-shadow);
 }
 
-/* Isolation: the outlined pill stays exclusive to .nav-cta and is immune to
-   any shared .nav-links a glass/hover styling, so it never affects other elements. */
+/* Nav CTA — same normal button as everywhere else */
 .nav-cta {
   background: var(--glass-bg);
-  border: 1px solid var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent) 60%, transparent),
-    0 0 26px color-mix(in srgb, var(--shine) 0%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    var(--glass-shadow);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.55s ease,
-    border-color 0.25s ease,
-    color 0.25s ease;
-}
-
-.nav-cta:hover,
-.nav-cta.active {
-  background: var(--glass-bg);
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
-  transition-duration: 0.3s;
-  box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent) 75%, transparent),
-    0 0 26px color-mix(in srgb, var(--shine) 70%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 30px color-mix(in srgb, var(--shine) 28%, transparent);
 }
 
 .all-projects-mobile {
@@ -3017,7 +2873,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
     top: calc(100% + 13px);
     transform: translateX(-50%);
     z-index: 1;
-    color: var(--accent);
+    color: var(--muted);
     font-size: 19px;
     font-weight: 700;
     line-height: 1;
