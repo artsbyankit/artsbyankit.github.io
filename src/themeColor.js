@@ -69,12 +69,17 @@ function brandWalk(ts) {
   return a.map((v, k) => v + (b[k] - v) * f)
 }
 
+let lastRead = 0
+
 function loop(ts) {
-  if (!document.hidden) {
-    const canvas = visibleEffectCanvas()
-    writeIfChanged(readWebGL(canvas) || brandWalk(ts))
-  }
   requestAnimationFrame(loop)
+  if (document.hidden) return
+  // Throttle GPU reads — readPixels forces a GPU→CPU sync, which is cheap
+  // on desktop but can starve the effect's own render loop on phones.
+  if (ts - lastRead < SAMPLE_MS) return
+  lastRead = ts
+  const canvas = visibleEffectCanvas()
+  writeIfChanged(readWebGL(canvas) || brandWalk(ts))
 }
 
 requestAnimationFrame(loop)

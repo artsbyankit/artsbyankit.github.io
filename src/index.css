@@ -3043,8 +3043,10 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 
 /* Phone-only: hamburger menu replaces the pill nav.
    Theme is light globally (see :root) to contrast with the light
-   fluted-glass background on every device tier. */
-@media (max-width: 640px) {
+   fluted-glass background on every device tier.
+   Exactly ONE bg layer is visible per tier: desktop default,
+   tablet 641–1280px, phone ≤640px. */
+@media (min-width: 641px) and (max-width: 1280px) {
   .bg-effect-desktop {
     display: none;
   }
@@ -3055,7 +3057,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 }
 
 @media (max-width: 640px) {
-  .bg-effect-desktop {
+  .bg-effect-desktop,
+  .bg-effect-tablet {
     display: none;
   }
 
