@@ -4,14 +4,22 @@
 // the effect's own rAF frame, so we read real rendered pixels. If the canvas
 // can't be read (blank drawing buffer, no WebGL, effect not loaded yet) we
 // fall back to a slow walk of the four brand blues — same hue family.
-
+//
+// This is the SINGLE bg sampler for the whole app: other modules subscribe
+// via onBgSample() instead of doing their own readPixels (each call stalls
+// the GPU pipeline — multiple samplers caused visible hitches on phones).
 import { bgPalette } from './theme.js'
 
 const BRAND = [bgPalette.base, bgPalette.colors[2], bgPalette.colors[1]]
-const SAMPLE_MS = 180
+const SAMPLE_MS = 400 // sweet spot: smooth enough, cheap enough for low-end
 const MIN_DELTA = 10
 
 const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
+
+const listeners = new Set()
+export function onBgSample(cb) {
+  listeners.add(cb)
+}
 
 let metaEl = null
 function meta() {
@@ -78,8 +86,9 @@ function loop(ts) {
   // on desktop but can starve the effect's own render loop on phones.
   if (ts - lastRead < SAMPLE_MS) return
   lastRead = ts
-  const canvas = visibleEffectCanvas()
-  writeIfChanged(readWebGL(canvas) || brandWalk(ts))
+  const rgb = readWebGL(visibleEffectCanvas()) || brandWalk(ts)
+  writeIfChanged(rgb)
+  for (const cb of listeners) cb(rgb)
 }
 
 requestAnimationFrame(loop)

@@ -9,6 +9,14 @@ function Navbar() {
 
   const close = () => setOpen(false)
 
+  // Escape closes the mobile menu too
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+
   const links = (
     <>
       <NavLink to="/" end onClick={close}>
@@ -59,13 +67,20 @@ function Navbar() {
         </button>
       </div>
       {createPortal(
-        <nav
-          className={`nav-links nav-links-mobile${open ? ' open' : ''}`}
-          aria-hidden={!open}
-          inert={!open}
-        >
-          {links}
-        </nav>,
+        <>
+          <div
+            className={`menu-backdrop${open ? ' open' : ''}`}
+            aria-hidden="true"
+            onClick={close}
+          />
+          <nav
+            className={`nav-links nav-links-mobile${open ? ' open' : ''}`}
+            aria-hidden={!open}
+            inert={!open}
+          >
+            {links}
+          </nav>
+        </>,
         document.body,
       )}
     </header>

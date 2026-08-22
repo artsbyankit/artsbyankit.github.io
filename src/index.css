@@ -3142,6 +3142,27 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
     pointer-events: auto;
   }
 
+  /* Scrim behind the open menu — tap anywhere outside to close;
+     the menu slides back up with its usual exit animation. */
+  .menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: rgba(18, 35, 58, 0.16);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0.28s;
+  }
+
+  .menu-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
   .nav-links-mobile a {
     min-height: 40px;
     padding: 0 14px;
@@ -3206,3 +3227,66 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
    Full glass everywhere now — modern phones composite backdrop-filter
    fine (verified on Pixel 9a), and cards already proved it. The old
    blur-stripping hack is gone so phones match desktop exactly. */
+
+/* Firefox Android skips painting backdrop-filter unless each glass
+   element owns a compositor layer — this micro-transform forces that.
+   Invisible (0 depth), and :hover/:active transforms outrank it.
+   Scoped to Firefox so Chromium doesn't pay the extra-layer cost. */
+@-moz-document url-prefix() {
+  .dock-glass,
+  .nav-toggle,
+  .btn,
+  .hero-tag,
+  .social-big a,
+  .card,
+  .skill-box,
+  .portrait,
+  .cs-progress,
+  .cs-note,
+  .cs-next-card,
+  .fc-title,
+  .status-item,
+  .metrics-table,
+  .tool-list li {
+    transform: translateZ(0);
+  }
+}
+
+/* Small screens — glass diet for low-end CPUs:
+   TRUE blur only on big surfaces where frost is noticeable (dock, cards).
+   Tiny chips get a denser translucent fill instead — visually the same at
+   phone distance, but the compositor stops re-blurring a dozen layers
+   every frame while the canvas animates underneath. */
+@media (max-width: 640px) {
+  .dock-glass,
+  .nav-links-mobile,
+  .btn,
+  .btn-primary,
+  .card,
+  .portrait,
+  .cs-note,
+  .cs-next-card {
+    -webkit-backdrop-filter: blur(8px) saturate(125%);
+    backdrop-filter: blur(8px) saturate(125%);
+  }
+
+  .hero-tag,
+  .social-big a,
+  .nav-toggle,
+  .skill-box,
+  .tool-list li,
+  .status-item,
+  .fc-title,
+  .cs-progress,
+  .metrics-table {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--panel-bg);
+  }
+
+  /* Skip render work for sections scrolled far off-screen */
+  main section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+}
