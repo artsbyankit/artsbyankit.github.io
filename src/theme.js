@@ -15,6 +15,16 @@ const accent = {
   bright: '#dacae2', // lavender mist — highlights, eyebrows, bullets
 };
 
+/* ============================================================
+   🎛️ BEHAVIOUR SWITCHES
+   ============================================================ */
+
+/* Adaptive accent: samples the animated bg and derives the accent
+   automatically (bg hue + 125° → steel blue always yields pink).
+   Set true to let the background drive accent colors again;
+   while false, whatever you pick above stays untouched. */
+export const ADAPTIVE_ACCENT = false;
+
 /* ---------- BACKGROUND (fluted-glass ramp) ---------- */
 export const bgPalette = {
   base: '#82a7cd',
