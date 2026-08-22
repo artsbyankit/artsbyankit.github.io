@@ -211,6 +211,10 @@ function LayoutEffects() {
     // right gap equals top/bottom — no overflow, no leftward jump.
     const grow = (el) => {
       const g = (SCALE - 1) * el.offsetWidth
+      if (anchorTimer) {
+        clearTimeout(anchorTimer)
+        anchorTimer = null
+      }
       if (el === items().at(-1)) {
         el.style.marginLeft = `${g}px`
         el.style.transformOrigin = 'right center'
@@ -221,12 +225,25 @@ function LayoutEffects() {
       el.style.transform = `scale(${SCALE})`
     }
 
+    let anchorTimer = null
+
     const shrink = (el) => {
       el.style.marginRight = '0px'
       el.style.marginLeft = ''
-      el.style.transformOrigin = ''
       el.style.transform = 'scale(1)'
-      dock.style.paddingRight = ''
+      if (el === items().at(-1)) {
+        // Keep the right anchor (and the tight right padding) until the
+        // 0.28s scale-down finishes — switching the anchor early makes the
+        // still-scaled pill swing outside the dock's right edge.
+        el.style.transformOrigin = 'right center'
+        if (anchorTimer) clearTimeout(anchorTimer)
+        anchorTimer = setTimeout(() => {
+          el.style.transformOrigin = ''
+          dock.style.paddingRight = ''
+        }, 320)
+      } else {
+        dock.style.paddingRight = ''
+      }
     }
 
     // Dock swells dynamically: height AND side padding grow together, so the
