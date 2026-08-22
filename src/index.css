@@ -1479,6 +1479,12 @@ p {
   filter: none;
 }
 
+/* The generic ".btn:hover > span" icon-nudge must not touch this pill's
+   dot or label — that was the rightward drift */
+.freelance-pill:hover > span {
+  transform: none;
+}
+
 .freelance-pill .pulse {
   display: inline-block;
   flex: 0 0 auto;
