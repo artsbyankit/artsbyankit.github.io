@@ -207,9 +207,10 @@ function LayoutEffects() {
     // macOS-dock-style growth WITHOUT resizing the dock: the hovered pill
     // scales from its center while neighbors slide away via transforms.
     // Layout never changes, so the dock keeps its width — nothing extends.
-    const nudge = (list, idx, dx) => {
+    const nudge = (list, idx, half) => {
       list.forEach((it, j) => {
-        if (j !== idx) it.style.transform = `translateX(${dx}px)`
+        if (j < idx) it.style.transform = `translateX(${-half}px)`
+        else if (j > idx) it.style.transform = `translateX(${half}px)`
       })
     }
 
@@ -223,7 +224,7 @@ function LayoutEffects() {
       }
       el.style.transformOrigin = 'center'
       el.style.transform = `scale(${SCALE})`
-      nudge(list, idx, idx < list.length / 2 ? g / 2 : -g / 2)
+      nudge(list, idx, g / 2)
       // Edge pills: their outer half would cross the dock's rim — open the
       // padding just enough that the outer gap still equals top/bottom.
       const overhang = Math.max(0, g / 2 - 10)
