@@ -200,17 +200,33 @@ function LayoutEffects() {
       })
     }
 
-    // Grow only the hovered item, anchored to its left edge so it pushes
-    // neighbors apart with a margin — the 12px gaps flex open (dynamic spaces).
+    // Gap around a hovered pill, matched on all three open sides:
+    // (expanded dock height − scaled pill height) / 2
+    const GAP = (EXPAND_H - 44 * SCALE) / 2
+
+    // Grow only the hovered item. Middle items scale from their left edge and
+    // push neighbors apart with a margin. "Let's talk" (last item) scales from
+    // its RIGHT edge instead: the extra width folds into space made on its
+    // left (marginLeft), and the dock's right padding shrinks to GAP so the
+    // right gap equals top/bottom — no overflow, no leftward jump.
     const grow = (el) => {
       const g = (SCALE - 1) * el.offsetWidth
-      el.style.marginRight = `${g}px`
+      if (el === items().at(-1)) {
+        el.style.marginLeft = `${g}px`
+        el.style.transformOrigin = 'right center'
+        dock.style.paddingRight = `${GAP}px`
+      } else {
+        el.style.marginRight = `${g}px`
+      }
       el.style.transform = `scale(${SCALE})`
     }
 
     const shrink = (el) => {
       el.style.marginRight = '0px'
+      el.style.marginLeft = ''
+      el.style.transformOrigin = ''
       el.style.transform = 'scale(1)'
+      dock.style.paddingRight = ''
     }
 
     // Dock swells dynamically: height AND side padding grow together, so the
@@ -329,6 +345,9 @@ function LayoutEffects() {
       items().forEach((it) => {
         it.style.transform = ''
         it.style.marginRight = ''
+        it.style.marginLeft = ''
+        it.style.transformOrigin = ''
+        dock.style.paddingRight = ''
         it.classList.remove('nav-green')
         it.classList.remove('nav-flash')
       })
