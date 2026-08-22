@@ -212,10 +212,6 @@ function LayoutEffects() {
     const grow = (el) => {
       const g = (SCALE - 1) * el.offsetWidth
       const isLast = el === items().at(-1)
-      if (anchorTimer) {
-        clearTimeout(anchorTimer)
-        anchorTimer = null
-      }
       el.style.transformOrigin = 'center'
       el.style.marginLeft = `${g / 2}px`
       if (!isLast) el.style.marginRight = `${g / 2}px`
@@ -223,20 +219,13 @@ function LayoutEffects() {
       el.style.transform = `scale(${SCALE})`
     }
 
-    let anchorTimer = null
-
     const shrink = (el) => {
       el.style.marginLeft = '0px'
       el.style.marginRight = '0px'
       el.style.transform = 'scale(1)'
-      if (el === items().at(-1)) {
-        if (anchorTimer) clearTimeout(anchorTimer)
-        anchorTimer = setTimeout(() => {
-          dock.style.paddingRight = ''
-        }, 320)
-      } else {
-        dock.style.paddingRight = ''
-      }
+      // Clear immediately — the dock's own 0.3s padding transition glides it
+      // back in sync with the 0.28s scale-down, so it reads as one motion.
+      dock.style.paddingRight = ''
     }
 
     // Dock swells dynamically: height AND side padding grow together, so the
