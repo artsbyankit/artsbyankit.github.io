@@ -46,15 +46,10 @@ export const REACTIVE_SHINE = true;
    You normally never need to touch this part.
    ============================================================ */
 
-const live = { accent, shine: 'hsl(210 45% 96%)' };
-
-export function setLiveAccent(hex) {
-  live.accent = hex;
-  applyTheme();
-}
+let shine = 'hsl(210 45% 96%)';
 
 export function setLiveShine(v) {
-  live.shine = v;
+  shine = v;
   applyTheme();
 }
 
@@ -63,8 +58,8 @@ function applyTheme() {
     --bg: ${bgPalette.base};
     --text: ${ink.text};
     --muted: ${ink.muted};
-    --accent: ${live.accent};
-    --shine: ${live.shine};
+    --accent: ${accent};
+    --shine: ${shine};
     --green: ${semantics.green};
     --persona-goals: ${semantics.goals};
     --persona-pains: ${semantics.pains};

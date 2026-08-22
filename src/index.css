@@ -5,13 +5,8 @@
   --frost: blur(10px) saturate(130%);
   /* Colors (--bg/--accent/...) are defined in src/theme.js — the material editor. */
   --surface: rgba(255, 255, 255, 0.65);
-  --surface-2: rgba(255, 255, 255, 0.85);
   --border: rgba(23, 42, 66, 0.16);
   --line: rgba(23, 42, 66, 0.24);
-  --nav-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.34) 48%, rgba(255, 255, 255, 0.48));
-  --glass-highlight:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    inset 0 -1px 0 rgba(23, 42, 66, 0.06);
   --glass-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 16%, rgba(31, 56, 88, 0.18));
   --glass-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.22) 48%, rgba(255, 255, 255, 0.38));
   --glass-border: rgba(255, 255, 255, 0.55);
