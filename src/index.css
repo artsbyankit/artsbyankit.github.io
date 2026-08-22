@@ -1,5 +1,8 @@
 :root {
   color-scheme: light;
+  /* 🧊 THE FROST NODE — one recipe feeds every glass surface on the site.
+     Change it here and dock, cards, buttons, chips all update together. */
+  --frost: blur(10px) saturate(130%);
   /* Colors (--bg/--accent/...) are defined in src/theme.js — the material editor. */
   --surface: rgba(255, 255, 255, 0.65);
   --surface-2: rgba(255, 255, 255, 0.85);
@@ -519,8 +522,8 @@ p {
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   transition:
     transform 0.25s ease,
     box-shadow 0.55s ease,
@@ -592,8 +595,8 @@ p {
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   transition:
     height 0.3s cubic-bezier(0.87, 0, 0.13, 1),
     padding 0.3s cubic-bezier(0.87, 0, 0.13, 1);
@@ -1645,8 +1648,8 @@ p {
   border: 1px solid var(--panel-border);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   overflow: hidden;
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1753,8 +1756,8 @@ p {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   padding: 0;
   overflow: hidden;
 }
@@ -1943,8 +1946,8 @@ p {
   border: 1px solid var(--panel-border);
   background: var(--panel-bg);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1966,8 +1969,8 @@ p {
   border: 1px solid var(--panel-border);
   background: var(--panel-bg);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   color: var(--text);
   font-size: 15px;
   font-weight: 600;
@@ -2090,8 +2093,8 @@ a.stat-source:hover {
   border-radius: var(--radius-sm);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   padding: 22px;
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
 }
 
 .persona-photo {
@@ -2288,8 +2291,8 @@ a.stat-source:hover {
   border-radius: var(--radius-sm);
   background: var(--panel-bg);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
 }
 
 .fc-title {
@@ -2312,8 +2315,8 @@ a.stat-source:hover {
   background: var(--panel-bg);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   color: rgba(255, 255, 255, 0.78);
   font-size: 12px;
   font-weight: 700;
@@ -2409,8 +2412,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   border: 1px solid var(--panel-border);
   background: var(--panel-bg);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   color: var(--muted);
   font-size: 16px;
   margin-bottom: 24px;
@@ -2522,8 +2525,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   overflow: hidden;
   background: var(--panel-bg);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
 }
 
 .metrics-row {
@@ -2587,8 +2590,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   border: 1px solid var(--panel-border);
   background: var(--panel-bg);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
@@ -2675,8 +2678,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   border-radius: var(--radius-sm);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   padding: 22px;
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
 }
 
 .skill-box h4 {
@@ -2705,8 +2708,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   border: 1px solid var(--panel-border);
   border-radius: 999px;
   padding: 6px 12px;
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
 }
 
 .timeline {
@@ -2838,8 +2841,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 .nav-links a {
   background: var(--glass-bg);
   border-color: var(--glass-border);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
 }
 
 .btn:not(.btn-primary),
@@ -3244,31 +3247,13 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   }
 }
 
-/* Small screens — uniform real glass, slightly lighter radius than
-   desktop so compositing stays cheap while the canvas animates. */
+/* Small screens — retune the ONE frost node; every surface follows */
 @media (max-width: 640px) {
-  .dock-glass,
-  .nav-links-mobile,
-  .btn,
-  .btn-primary,
-  .card,
-  .portrait,
-  .cs-note,
-  .cs-next-card,
-  .hero-tag,
-  .social-big a,
-  .nav-toggle,
-  .skill-box,
-  .tool-list li,
-  .status-item,
-  .fc-title,
-  .cs-progress,
-  .metrics-table {
-    -webkit-backdrop-filter: blur(8px) saturate(125%);
-    backdrop-filter: blur(8px) saturate(125%);
+  :root {
+    --frost: blur(8px) saturate(125%);
   }
 
-  /* Skip render work for sections scrolled far off-screen */
+/* Skip render work for sections scrolled far off-screen */
   main section {
     content-visibility: auto;
     contain-intrinsic-size: auto 720px;
