@@ -478,6 +478,12 @@ p {
     box-shadow 0.15s ease;
 }
 
+/* Let's talk sits on the busy dock — a touch less blur keeps it crisp */
+.nav-cta {
+  -webkit-backdrop-filter: blur(6px) saturate(130%);
+  backdrop-filter: blur(6px) saturate(130%);
+}
+
 .btn:hover,
 .nav-cta:hover {
   transform: translateY(-2px);
