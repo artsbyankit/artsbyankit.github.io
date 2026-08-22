@@ -489,22 +489,16 @@ p {
     0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
-/* Primary CTA — frosted accent glass */
+/* Primary CTA — same frosted glass as .btn, wrapped in an accent ring */
 .btn-primary {
   padding: 9px 18px !important;
-  font-weight: 500;
-  background:
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, var(--accent) 18%, transparent),
-      color-mix(in srgb, var(--accent) 7%, transparent) 48%,
-      color-mix(in srgb, var(--accent) 11%, transparent)
-    ) !important;
+  font-weight: 600;
+  background: var(--surface);
   border: 1px solid var(--accent) !important;
   color: var(--accent) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(23, 42, 66, 0.08),
+    0 0 0 3px color-mix(in srgb, var(--accent-bright) 60%, transparent),
+    var(--glass-highlight),
     var(--glass-shadow);
   -webkit-backdrop-filter: blur(10px) saturate(130%);
   backdrop-filter: blur(10px) saturate(130%);
@@ -512,18 +506,14 @@ p {
 
 .btn-primary:hover,
 .btn-primary:active {
-  background:
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, var(--accent) 26%, transparent),
-      color-mix(in srgb, var(--accent) 11%, transparent) 48%,
-      color-mix(in srgb, var(--accent) 16%, transparent)
-    ) !important;
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
+  background: var(--surface);
+  border-color: var(--accent-strong) !important;
+  color: var(--accent-strong) !important;
   transform: translateY(-2px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 0 0 4px color-mix(in srgb, var(--accent-bright) 75%, transparent),
+    0 0 28px color-mix(in srgb, var(--accent) 45%, transparent),
+    var(--glass-highlight),
     0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
@@ -2837,35 +2827,25 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 /* Isolation: the outlined pill stays exclusive to .nav-cta and is immune to
    any shared .nav-links a glass/hover styling, so it never affects other elements. */
 .nav-cta {
-  background:
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, var(--accent) 18%, transparent),
-      color-mix(in srgb, var(--accent) 7%, transparent) 48%,
-      color-mix(in srgb, var(--accent) 11%, transparent)
-    ) !important;
+  background: var(--surface);
   border: 1px solid var(--accent) !important;
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(23, 42, 66, 0.08),
+    0 0 0 3px color-mix(in srgb, var(--accent-bright) 60%, transparent),
+    var(--glass-highlight),
     var(--glass-shadow);
 }
 
 .nav-cta:hover,
 .nav-cta.active {
-  background:
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, var(--accent) 26%, transparent),
-      color-mix(in srgb, var(--accent) 11%, transparent) 48%,
-      color-mix(in srgb, var(--accent) 16%, transparent)
-    ) !important;
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
+  background: var(--surface);
+  border-color: var(--accent-strong) !important;
+  color: var(--accent-strong) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 0 0 4px color-mix(in srgb, var(--accent-bright) 75%, transparent),
+    0 0 28px color-mix(in srgb, var(--accent) 45%, transparent),
+    var(--glass-highlight),
     var(--glass-shadow);
 }
 
