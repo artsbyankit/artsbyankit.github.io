@@ -10,9 +10,9 @@
 
 /* ---------- ACCENT (the hero color family) ---------- */
 const accent = {
-  deep: '#ffffff', // PURE WHITE everywhere
-  strong: '#eef3f8', // pressed/hover — whisper of ice so hover still reads
-  bright: '#ffffff', // PURE WHITE — rings, glows, eyebrows, bullets
+  deep: '#bd6d8c', // readable petal rose — button borders/text on light bg
+  strong: '#a25575', // pressed/hover depth
+  bright: '#f1c6d9', // rose petal — highlights, eyebrows, bullets
 };
 
 /* ============================================================
