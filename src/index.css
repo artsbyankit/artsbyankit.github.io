@@ -3231,23 +3231,15 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 /* Firefox Android skips painting backdrop-filter unless each glass
    element owns a compositor layer — this micro-transform forces that.
    Invisible (0 depth), and :hover/:active transforms outrank it.
-   Scoped to Firefox so Chromium doesn't pay the extra-layer cost. */
+   Scoped to Firefox AND kept minimal: every forced layer costs
+   compositing time over an animating canvas, so only the surfaces
+   where missing frost is obvious get the treatment. */
 @-moz-document url-prefix() {
   .dock-glass,
-  .nav-toggle,
-  .btn,
-  .hero-tag,
-  .social-big a,
+  .nav-links-mobile,
   .card,
-  .skill-box,
-  .portrait,
-  .cs-progress,
-  .cs-note,
   .cs-next-card,
-  .fc-title,
-  .status-item,
-  .metrics-table,
-  .tool-list li {
+  .btn-primary {
     transform: translateZ(0);
   }
 }
