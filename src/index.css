@@ -3037,8 +3037,35 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   }
 }
 
-/* Phone-only: hamburger menu replaces the pill nav */
-@media (min-width: 641px) and (max-width: 1280px) {
+/* Phone-only: hamburger menu replaces the pill nav.
+   Light theme: the fluted-glass bg is a light steel-blue ramp on phones,
+   so flip the palette to dark-on-light to avoid a black tint. */
+@media (max-width: 640px) {
+  :root {
+    color-scheme: light;
+    --bg: #597b9e;
+    --surface: rgba(255, 255, 255, 0.65);
+    --surface-2: rgba(255, 255, 255, 0.85);
+    --border: rgba(23, 42, 66, 0.16);
+    --line: rgba(23, 42, 66, 0.24);
+    --text: #12233a;
+    --muted: rgba(18, 35, 58, 0.72);
+    --nav-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.34) 48%, rgba(255, 255, 255, 0.48));
+    --glass-highlight:
+      inset 0 1px 0 rgba(255, 255, 255, 0.65),
+      inset 0 -1px 0 rgba(23, 42, 66, 0.06);
+    --glass-shadow: 0 8px 30px rgba(31, 56, 88, 0.22);
+    --glass-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.22) 48%, rgba(255, 255, 255, 0.38));
+    --glass-border: rgba(255, 255, 255, 0.55);
+    --panel-bg: linear-gradient(
+      150deg,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0.28) 48%,
+      rgba(255, 255, 255, 0.45)
+    );
+    --panel-border: rgba(255, 255, 255, 0.6);
+  }
+
   .bg-effect-desktop {
     display: none;
   }
@@ -3201,16 +3228,6 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   .tool-list li {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    background: linear-gradient(
-      150deg,
-      rgba(22, 34, 60, 0.78),
-      rgba(9, 14, 28, 0.84) 48%,
-      rgba(16, 25, 48, 0.8)
-    );
-  }
-
-  .btn-primary {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    background: var(--panel-bg);
   }
 }
