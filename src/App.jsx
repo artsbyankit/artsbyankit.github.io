@@ -1,7 +1,6 @@
 import { lazy, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
-import AccentPicker from './AccentPicker'
 import Home from './pages/Home'
 
 const Projects = lazy(() => import('./pages/Projects'))
@@ -34,8 +33,6 @@ export default function App() {
           <Route path="*" element={<Home />} />
         </Route>
       </Routes>
-      {/* Dev-only live accent picker — renders nothing without ?picker */}
-      <AccentPicker />
     </>
   )
 }
