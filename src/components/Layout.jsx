@@ -205,14 +205,7 @@ function LayoutEffects() {
     const grow = (el) => {
       const g = (SCALE - 1) * el.offsetWidth
       el.style.marginRight = `${g}px`
-      // The last item ("Let's talk") has no sibling to push, so its trailing
-      // margin keeps a 19px right gap while the scaled pill's top/bottom gap
-      // drops to ~9px. Shift it right by half the extra vertical growth so all
-      // three gaps stay equal.
-      const isLast = el === items().at(-1)
-      el.style.transform = isLast
-        ? `translateX(${((SCALE - 1) * el.offsetHeight) / 2}px) scale(${SCALE})`
-        : `scale(${SCALE})`
+      el.style.transform = `scale(${SCALE})`
     }
 
     const shrink = (el) => {
