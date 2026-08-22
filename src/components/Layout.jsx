@@ -101,9 +101,8 @@ function LayoutEffects() {
   const location = useLocation()
 
   useEffect(() => {
-    const els = document.querySelectorAll('.reveal:not(.in)')
     if (!('IntersectionObserver' in window)) {
-      els.forEach((el) => el.classList.add('in'))
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'))
       return
     }
     const io = new IntersectionObserver(
@@ -117,8 +116,24 @@ function LayoutEffects() {
       },
       { threshold: 0.12 },
     )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
+    // Pages are lazy()-loaded, so this effect can run before a route's
+    // content exists. Watch the DOM for late-mounted reveals too.
+    const seen = new WeakSet()
+    const observeAll = () => {
+      document.querySelectorAll('.reveal:not(.in)').forEach((el) => {
+        if (!seen.has(el)) {
+          seen.add(el)
+          io.observe(el)
+        }
+      })
+    }
+    observeAll()
+    const mo = new MutationObserver(observeAll)
+    mo.observe(document.body, { childList: true, subtree: true })
+    return () => {
+      io.disconnect()
+      mo.disconnect()
+    }
   }, [location.pathname])
 
   useEffect(() => {
