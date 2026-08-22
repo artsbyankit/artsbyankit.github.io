@@ -77,18 +77,13 @@ function brandWalk(ts) {
   return a.map((v, k) => v + (b[k] - v) * f)
 }
 
-let lastRead = 0
-
-function loop(ts) {
-  requestAnimationFrame(loop)
+// A slow interval instead of a vsync-locked rAF loop: ~1.7 CPU wakeups per
+// second instead of 60 — measurably lighter on low-end phones, and the tab
+// check below keeps it fully asleep when hidden.
+setInterval(() => {
   if (document.hidden) return
-  // Throttle GPU reads — readPixels forces a GPU→CPU sync, which is cheap
-  // on desktop but can starve the effect's own render loop on phones.
-  if (ts - lastRead < SAMPLE_MS) return
-  lastRead = ts
+  const ts = performance.now()
   const rgb = readWebGL(visibleEffectCanvas()) || brandWalk(ts)
   writeIfChanged(rgb)
   for (const cb of listeners) cb(rgb)
-}
-
-requestAnimationFrame(loop)
+}, SAMPLE_MS)

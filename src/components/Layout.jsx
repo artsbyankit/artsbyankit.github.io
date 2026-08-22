@@ -357,44 +357,6 @@ function LayoutEffects() {
     }
   }, [])
 
-  useEffect(() => {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return
-    }
-    const vg = () => document.querySelector('.vignette')
-    let targetX = 50
-    let targetY = 50
-    let curX = 50
-    let curY = 50
-    let raf = null
-
-    const tick = () => {
-      curX += (targetX - curX) * 0.09
-      curY += (targetY - curY) * 0.09
-      const el = vg()
-      if (el) {
-        el.style.setProperty('--vx', `${curX}%`)
-        el.style.setProperty('--vy', `${curY}%`)
-      }
-      if (Math.abs(targetX - curX) < 0.05 && Math.abs(targetY - curY) < 0.05) {
-        raf = null
-        return
-      }
-      raf = requestAnimationFrame(tick)
-    }
-
-    const onMove = (e) => {
-      targetX = (e.clientX / window.innerWidth) * 100
-      targetY = (e.clientY / window.innerHeight) * 100
-      if (!raf) raf = requestAnimationFrame(tick)
-    }
-
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => {
-      window.removeEventListener('mousemove', onMove)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [])
 
   useEffect(() => {
     // macOS workaround: backdrop-filter can go stale after the window is
