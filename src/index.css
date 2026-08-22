@@ -1354,6 +1354,42 @@ p {
   color: var(--text);
 }
 
+/* Railway track: the highlight departs from wherever it currently sits
+   ("Let's talk" by default), flashes the edges of stations it passes,
+   then lands and stays on the hovered item. Monochrome glass edition. */
+.nav-links a.nav-green {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent),
+    0 0 14px rgba(255, 255, 255, 0.16);
+}
+
+.nav-links a.nav-green::before {
+  background: linear-gradient(
+    90deg,
+    transparent 10%,
+    rgba(255, 255, 255, 0.08) 60%,
+    rgba(255, 255, 255, 0.16) 100%
+  );
+  transform-origin: right center;
+  transform: scaleX(0);
+  animation: nav-sweep 0.3s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+}
+
+@keyframes nav-sweep {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Passing stations (Work, About) flash only their edges — label untouched. */
+.nav-links a.nav-flash {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--text) 30%, transparent),
+    0 0 10px rgba(255, 255, 255, 0.12);
+}
+
 /* Passing stations (Work, About) flash only their edges — label untouched. */
 .nav-links a.active {
   color: var(--text);
