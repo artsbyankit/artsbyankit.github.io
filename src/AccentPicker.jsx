@@ -41,7 +41,6 @@ function derive(hex) {
 export default function AccentPicker() {
   const [enabled, setEnabled] = useState(false)
   const [hex, setHex] = useState('#f2b8cf')
-  const [trio, setTrio] = useState(null)
 
   // Gate: only run when ?picker is in the URL; restore last session's pick
   useEffect(() => {
@@ -55,9 +54,7 @@ export default function AccentPicker() {
   }, [])
 
   function apply(h) {
-    const t = derive(h)
-    setTrio(t)
-    setLiveAccent(t)
+    setLiveAccent(derive(h))
     try {
       localStorage.setItem('accent-pick', h)
     } catch {}
@@ -75,15 +72,9 @@ export default function AccentPicker() {
   }
 
   async function copy() {
-    if (!trio) return
-    const snippet = `const accent = {
-  deep: '${trio.deep}',
-  strong: '${trio.strong}',
-  bright: '${trio.bright}',
-};`
     try {
-      await navigator.clipboard.writeText(snippet)
-      alert('Copied! Paste over the accent block in src/theme.js')
+      await navigator.clipboard.writeText(`export const accent = '${hex}';`)
+      alert('Copied! Paste it as the accent in src/theme.js')
     } catch {}
   }
 
@@ -129,16 +120,15 @@ export default function AccentPicker() {
           color: '#12233a',
         }}
       />
-      {trio && (
-        <div style={{ marginTop: 8, display: 'flex', gap: 6 }}>
-          {Object.entries(trio).map(([k, v]) => (
-            <div key={k} style={{ flex: 1, textAlign: 'center' }}>
-              <div style={{ height: 22, borderRadius: 6, background: v }} />
-              <div style={{ fontSize: 9, color: '#12233a', opacity: 0.7 }}>{k}</div>
-            </div>
-          ))}
-        </div>
-      )}
+      <div
+        style={{
+          marginTop: 8,
+          height: 26,
+          borderRadius: 8,
+          background: hex,
+          border: '1px solid rgba(31,56,88,.2)',
+        }}
+      />
       <button onClick={copy} style={btnStyle}>
         Copy for theme.js
       </button>
