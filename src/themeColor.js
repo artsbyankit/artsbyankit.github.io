@@ -5,7 +5,9 @@
 // can't be read (blank drawing buffer, no WebGL, effect not loaded yet) we
 // fall back to a slow walk of the four brand blues — same hue family.
 
-const BRAND = ['#597b9e', '#a3c2de', '#bce2f7']
+import { bgPalette } from './theme.js'
+
+const BRAND = [bgPalette.base, bgPalette.colors[2], bgPalette.colors[1]]
 const SAMPLE_MS = 180
 const MIN_DELTA = 10
 

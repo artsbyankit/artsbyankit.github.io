@@ -1,12 +1,10 @@
 :root {
   color-scheme: light;
-  --bg: #597b9e;
+  /* Colors (--bg/--accent/...) are defined in src/theme.js — the material editor. */
   --surface: rgba(255, 255, 255, 0.65);
   --surface-2: rgba(255, 255, 255, 0.85);
   --border: rgba(23, 42, 66, 0.16);
   --line: rgba(23, 42, 66, 0.24);
-  --text: #12233a;
-  --muted: rgba(18, 35, 58, 0.72);
   --nav-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.34) 48%, rgba(255, 255, 255, 0.48));
   --glass-highlight:
     inset 0 1px 0 rgba(255, 255, 255, 0.65),
@@ -26,10 +24,6 @@
   --panel-highlight:
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
     inset 0 -1px 0 rgba(23, 42, 66, 0.05);
-  --accent: #b45579;
-  --accent-strong: #93415f;
-  --accent-bright: #eeb3c9;
-  --green: #0a8f4d;
   --radius: 20px;
   --radius-sm: 12px;
   --maxw: 1120px;
@@ -483,14 +477,16 @@ p {
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
   transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn:hover {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--accent) 60%, transparent);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
 /* Primary CTA — frosted accent glass */
@@ -507,8 +503,8 @@ p {
   border: 1px solid var(--accent) !important;
   color: var(--accent) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(23, 42, 66, 0.08),
     var(--glass-shadow);
   -webkit-backdrop-filter: blur(10px) saturate(130%);
   backdrop-filter: blur(10px) saturate(130%);
@@ -526,7 +522,9 @@ p {
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
 .btn:active,
@@ -2212,10 +2210,10 @@ a.stat-source:hover {
   margin-bottom: 10px;
 }
 
-.persona-blocks h4.block-goals { color: #0a8f4d; }
-.persona-blocks h4.block-pains { color: #d64545; }
-.persona-blocks h4.block-jtbd { color: #2273c8; }
-.persona-blocks h4.block-impl { color: #c77f1a; }
+.persona-blocks h4.block-goals { color: var(--persona-goals); }
+.persona-blocks h4.block-pains { color: var(--persona-pains); }
+.persona-blocks h4.block-jtbd { color: var(--persona-jtbd); }
+.persona-blocks h4.block-impl { color: var(--persona-impl); }
 
 /* Process flowchart — standard flowchart: terminals, process boxes, arrowed flow lines */
 .flow {
@@ -2382,9 +2380,9 @@ a.stat-source:hover {
   background: var(--accent);
 }
 
-h4.block-goals + .feature-list li::before { background: #0a8f4d; }
-h4.block-pains + .feature-list li::before { background: #d64545; }
-h4.block-jtbd + .feature-list li::before { background: #2273c8; }
+h4.block-goals + .feature-list li::before { background: var(--persona-goals); }
+h4.block-pains + .feature-list li::before { background: var(--persona-pains); }
+h4.block-jtbd + .feature-list li::before { background: var(--persona-jtbd); }
 h4.block-impl + .feature-list li::before { background: #ffb454; }
 
 .cs-note {
@@ -2850,8 +2848,8 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(23, 42, 66, 0.08),
     var(--glass-shadow);
 }
 
@@ -2866,6 +2864,9 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
     ) !important;
   border-color: var(--accent) !important;
   color: var(--accent) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    var(--glass-shadow);
 }
 
 /* Exactly one button holds the green at a time: while any item is lit,
