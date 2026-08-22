@@ -41,21 +41,31 @@ const semantics = {
    You normally never need to touch this part.
    ============================================================ */
 
-const vars = `
-  --bg: ${bgPalette.base};
-  --text: ${ink.text};
-  --muted: ${ink.muted};
-  --accent: ${accent.deep};
-  --accent-strong: ${accent.strong};
-  --accent-bright: ${accent.bright};
-  --green: ${semantics.green};
-  --persona-goals: ${semantics.goals};
-  --persona-pains: ${semantics.pains};
-  --persona-jtbd: ${semantics.jtbd};
-  --persona-impl: ${semantics.impl};
-`;
+/* Live accent slots — adaptiveAccent.js can override these at
+   runtime so the accent reacts to the animated background. */
+const live = { ...accent };
+
+export function setLiveAccent(next) {
+  if (next.deep) live.deep = next.deep;
+  if (next.strong) live.strong = next.strong;
+  if (next.bright) live.bright = next.bright;
+  applyTheme();
+}
 
 function applyTheme() {
+  const vars = `
+    --bg: ${bgPalette.base};
+    --text: ${ink.text};
+    --muted: ${ink.muted};
+    --accent: ${live.deep};
+    --accent-strong: ${live.strong};
+    --accent-bright: ${live.bright};
+    --green: ${semantics.green};
+    --persona-goals: ${semantics.goals};
+    --persona-pains: ${semantics.pains};
+    --persona-jtbd: ${semantics.jtbd};
+    --persona-impl: ${semantics.impl};
+  `;
   let el = document.getElementById('app-theme-vars');
   if (!el) {
     el = document.createElement('style');

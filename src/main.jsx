@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './theme.js' // 🎨 MATERIAL EDITOR — colors live here
+import './adaptiveAccent.js' // accent reacts to the animated bg
 import './index.css'
 import './themeColor.js'
 import App from './App.jsx'
