@@ -3250,7 +3250,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
 /* Small screens — retune the ONE frost node; every surface follows */
 @media (max-width: 640px) {
   :root {
-    --frost: blur(8px) saturate(125%);
+    --frost: blur(6px) saturate(125%);
   }
 }
 
