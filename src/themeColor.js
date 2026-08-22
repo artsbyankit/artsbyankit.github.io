@@ -5,7 +5,7 @@
 // can't be read (blank drawing buffer, no WebGL, effect not loaded yet) we
 // fall back to a slow walk of the four brand blues — same hue family.
 
-const BRAND = ['#0b2447', '#1e3a8a', '#1e40af', '#2563eb']
+const BRAND = ['#597b9e', '#9b9ee0', '#a3c2de', '#bce2f7']
 const SAMPLE_MS = 180
 const MIN_DELTA = 10
 
