@@ -1,66 +1,76 @@
-// Vanta.FOG background — one instance for every tier (Vanta handles resize
-// itself, so the old desktop/tablet/mobile triple-layer is gone).
-// Scripts load from CDN in index.html; init is retried by a small watchdog
-// until window.VANTA exists. Fallback gradient lives under it in CSS.
-import { useEffect } from 'react'
+// Fluted-glass background — one effect per tier (desktop/tablet/mobile),
+// exactly one visible at any width. Flute count is DYNAMIC: derived from the
+// live width of the page's .container column so the vertical lines keep the
+// same horizontal rhythm as the content (no stray half-flutes at the padding),
+// and re-measured on resize for all three modes.
+import { useEffect, useState } from 'react'
 import { bgPalette } from '../theme.js'
 
-const hex = (h) => parseInt(h.slice(1), 16)
+// Target distance between flute lines inside the content column, per tier.
+const TARGET_SPACING = { desktop: 62, tablet: 48, mobile: 36 }
 
-export default function Background() {
+function useFluteCounts() {
+  const [counts, setCounts] = useState({ desktop: 22, tablet: 17, mobile: 11 })
+
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let timer = null
 
-    let fx = null
-    let tries = 0
-    const el = document.getElementById('bg-fog')
+    const compute = () => {
+      const container = document.querySelector('.container')
+      if (!container) return
+      const cw = container.getBoundingClientRect().width
+      if (!cw) return
+      const vw = window.innerWidth
 
-    const boot = () => {
-      if (cancelled || !el || fx) return
-      if (!window.VANTA || !window.THREE) {
-        if (++tries < 40) setTimeout(boot, 250) // ~10s watchdog
-        return
+      // Lines per tier: fit a whole number of flutes inside the CONTENT
+      // column, then extend the same rhythm across the full viewport so
+      // content edges land ON a line instead of mid-gap.
+      const next = {}
+      for (const tier of Object.keys(TARGET_SPACING)) {
+        const n = Math.max(3, Math.round(cw / TARGET_SPACING[tier]))
+        const rhythm = cw / n
+        next[tier] = Math.max(4, Math.round(vw / rhythm))
       }
-      try {
-        fx = window.VANTA.FOG({
-          el,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200,
-          minWidth: 200,
-          // exact shape of the vantajs.com fog preset
-          backgroundAlpha: 1,
-          blurFactor: 0.62,
-          speed: 1,
-          zoom: 0.9,
-          scale: 2,
-          scaleMobile: 4,
-          // our blues — blue owns the canvas: pale-blue cloud BODY, deep
-          // #82a7cd for shadow depth, near-white demoted to sparse crests.
-          // Extra blur stretches each blue patch over more area (same saturation).
-          highlightColor: hex(bgPalette.colors[3]), // #e2e6e9 wispy crests
-          midtoneColor: hex(bgPalette.colors[1]), // #bce2f7 soft spread
-          lowlightColor: hex(bgPalette.base), // #82a7cd depth
-          baseColor: hex(bgPalette.colors[2]), // #a3c2de blue body
-        })
-        console.info('[bg] Vanta.FOG ready')
-      } catch (err) {
-        console.error('[bg] Vanta.FOG failed:', err)
-      }
+      setCounts((prev) =>
+        prev.desktop === next.desktop && prev.tablet === next.tablet && prev.mobile === next.mobile
+          ? prev
+          : next,
+      )
     }
 
-    let cancelled = false
-    boot()
+    compute()
+    const ro = new ResizeObserver(() => {
+      clearTimeout(timer)
+      timer = setTimeout(compute, 150)
+    })
+    if (document.querySelector('.container')) ro.observe(document.querySelector('.container'))
+    window.addEventListener('resize', () => {
+      clearTimeout(timer)
+      timer = setTimeout(compute, 150)
+    })
     return () => {
-      cancelled = true
-      if (fx) fx.destroy()
+      ro.disconnect()
+      clearTimeout(timer)
     }
   }, [])
 
+  return counts
+}
+
+export default function Background() {
+  const flutes = useFluteCounts()
+  const common = {
+    'data-aifx': 'fluted-glass',
+    'data-aifx-colors': bgPalette.colors.join(','),
+    'data-aifx-bg': bgPalette.base,
+    'data-aifx-flute-angle': '90',
+  }
+
   return (
     <div className="bg-host" aria-hidden="true">
-      <div id="bg-fog" className="bg-effect bg-effect-desktop" />
+      <div {...common} data-aifx-flutes={flutes.desktop} className="bg-effect bg-effect-desktop" />
+      <div {...common} data-aifx-flutes={flutes.tablet} className="bg-effect bg-effect-tablet" />
+      <div {...common} data-aifx-flutes={flutes.mobile} className="bg-effect bg-effect-mobile" />
     </div>
   )
 }

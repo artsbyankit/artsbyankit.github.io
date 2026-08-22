@@ -108,6 +108,11 @@ p {
   pointer-events: none;
 }
 
+.bg-effect-mobile,
+.bg-effect-tablet {
+  display: none;
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   .cat-logo-dot,
@@ -2942,11 +2947,31 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   }
 }
 
+/* Tablet: exactly one bg layer (641–1280px) */
+@media (min-width: 641px) and (max-width: 1280px) {
+  .bg-effect-desktop {
+    display: none;
+  }
+
+  .bg-effect-tablet {
+    display: block;
+  }
+}
+
 /* Phone-only: hamburger menu replaces the pill nav.
    Theme is light globally (see :root) to contrast with the light
    background on every device tier. The single Vanta layer serves
    all widths — no per-tier display toggles anymore. */
 @media (max-width: 640px) {
+  .bg-effect-desktop,
+  .bg-effect-tablet {
+    display: none;
+  }
+
+  .bg-effect-mobile {
+    display: block;
+  }
+
   .dock {
     top: calc(10px + env(safe-area-inset-top, 0px));
     width: calc(100% - 20px);
