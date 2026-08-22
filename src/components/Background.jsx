@@ -5,7 +5,7 @@
 import { useEffect } from 'react'
 import { bgPalette } from '../theme.js'
 
-const hex = (h) => '0x' + h.slice(1)
+const hex = (h) => parseInt(h.slice(1), 16)
 
 export default function Background() {
   useEffect(() => {
