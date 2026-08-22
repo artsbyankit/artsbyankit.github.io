@@ -37,11 +37,15 @@
 html {
   color-scheme: light;
   scroll-behavior: smooth;
+  /* base color lives HERE: html paints first in the stacking order, so the
+     fixed z-index:-1 .bg-host (gradient + WebGL fog) stays visible above it.
+     An opaque body background would bury the whole background layer. */
+  background: var(--bg);
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 21px;
