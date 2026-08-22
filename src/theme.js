@@ -17,8 +17,8 @@ const accent = {
 
 /* ---------- BACKGROUND (fluted-glass ramp) ---------- */
 export const bgPalette = {
-  base: '#597b9e',
-  colors: ['#597b9e', '#bce2f7', '#a3c2de', '#e2e6e9'],
+  base: '#82a7cd',
+  colors: ['#82a7cd', '#bce2f7', '#a3c2de', '#e2e6e9'],
 };
 
 /* ---------- INK & PAPER ---------- */
