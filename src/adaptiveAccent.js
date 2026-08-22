@@ -5,7 +5,7 @@
 // zone). Values ease toward the target each tick, so the accent *glides*
 // with the flowing glass instead of jittering. Falls back to the static
 // theme.js palette whenever sampling fails.
-import { setLiveAccent, ADAPTIVE_ACCENT } from './theme.js'
+import { setLiveAccent, setLiveShine, ADAPTIVE_ACCENT, REACTIVE_SHINE } from './theme.js'
 import { onBgSample } from './themeColor.js'
 
 const EASE = 0.05 // per-sample lerp factor — lower = dreamier
@@ -49,6 +49,12 @@ const hsl = ({ h, s, l }) =>
   `hsl(${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`
 
 onBgSample((rgb) => {
+  // White shine always rides the bg — it's accent-agnostic by design
+  if (REACTIVE_SHINE && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const [h] = rgbToHsl(rgb[0], rgb[1], rgb[2])
+    setLiveShine(`hsl(${Math.round(h)} 45% 96%)`)
+  }
+
   if (!ADAPTIVE_ACCENT) return // manual palette wins — don't overwrite it
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 

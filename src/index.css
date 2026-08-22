@@ -12,7 +12,7 @@
   --glass-highlight:
     inset 0 1px 0 rgba(255, 255, 255, 0.65),
     inset 0 -1px 0 rgba(23, 42, 66, 0.06);
-  --glass-shadow: 0 8px 30px rgba(31, 56, 88, 0.22);
+  --glass-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 16%, rgba(31, 56, 88, 0.18));
   --glass-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.22) 48%, rgba(255, 255, 255, 0.38));
   --glass-border: rgba(255, 255, 255, 0.55);
   --glass-sheen: linear-gradient(115deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.15) 32%, transparent 62%);
@@ -518,7 +518,7 @@ p {
   color: var(--accent) !important;
   box-shadow:
     0 0 0 3px color-mix(in srgb, var(--accent-bright) 60%, transparent),
-    0 0 26px color-mix(in srgb, var(--accent) 0%, transparent),
+    0 0 26px color-mix(in srgb, var(--shine) 0%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     var(--glass-shadow);
@@ -542,10 +542,10 @@ p {
   transition-duration: 0.3s;
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--accent-bright) 75%, transparent),
-    0 0 24px color-mix(in srgb, var(--accent) 20%, transparent),
+    0 0 26px color-mix(in srgb, var(--shine) 70%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 30px color-mix(in srgb, var(--accent) 18%, transparent);
+    0 12px 30px color-mix(in srgb, var(--shine) 28%, transparent);
 }
 
 .btn:active,
@@ -2864,7 +2864,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   color: var(--accent) !important;
   box-shadow:
     0 0 0 3px color-mix(in srgb, var(--accent-bright) 60%, transparent),
-    0 0 26px color-mix(in srgb, var(--accent) 0%, transparent),
+    0 0 26px color-mix(in srgb, var(--shine) 0%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     var(--glass-shadow);
@@ -2883,10 +2883,10 @@ h4.block-impl + .feature-list li::before { background: #ffb454; }
   transition-duration: 0.3s;
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--accent-bright) 75%, transparent),
-    0 0 24px color-mix(in srgb, var(--accent) 20%, transparent),
+    0 0 26px color-mix(in srgb, var(--shine) 70%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 30px color-mix(in srgb, var(--accent) 18%, transparent);
+    0 12px 30px color-mix(in srgb, var(--shine) 28%, transparent);
 }
 
 /* Exactly one button holds the green at a time: while any item is lit,

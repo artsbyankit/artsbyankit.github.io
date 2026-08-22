@@ -10,9 +10,9 @@
 
 /* ---------- ACCENT (the hero color family) ---------- */
 const accent = {
-  deep: '#7e5f93', // readable plum-lavender — button borders/text on light bg
-  strong: '#6b4d80', // pressed/hover depth
-  bright: '#dacae2', // lavender mist — highlights, eyebrows, bullets
+  deep: '#46648a', // slate — readable text/borders on light glass
+  strong: '#35506f', // pressed/hover depth
+  bright: '#ffffff', // PURE WHITE — rings, glows, eyebrows, bullets
 };
 
 /* ============================================================
@@ -24,6 +24,11 @@ const accent = {
    Set true to let the background drive accent colors again;
    while false, whatever you pick above stays untouched. */
 export const ADAPTIVE_ACCENT = false;
+
+/* Reactive shine: the white specular glow on CTAs keeps a faint tint of
+   whatever the background is doing — pure white core, bg-aware soul.
+   Works with ANY accent since the shine never borrows accent hue. */
+export const REACTIVE_SHINE = true;
 
 /* ---------- BACKGROUND (fluted-glass ramp) ---------- */
 export const bgPalette = {
@@ -53,12 +58,17 @@ const semantics = {
 
 /* Live accent slots — adaptiveAccent.js can override these at
    runtime so the accent reacts to the animated background. */
-const live = { ...accent };
+const live = { ...accent, shine: 'hsl(210 45% 96%)' };
 
 export function setLiveAccent(next) {
   if (next.deep) live.deep = next.deep;
   if (next.strong) live.strong = next.strong;
   if (next.bright) live.bright = next.bright;
+  applyTheme();
+}
+
+export function setLiveShine(v) {
+  live.shine = v;
   applyTheme();
 }
 
@@ -70,6 +80,7 @@ function applyTheme() {
     --accent: ${live.deep};
     --accent-strong: ${live.strong};
     --accent-bright: ${live.bright};
+    --shine: ${live.shine};
     --green: ${semantics.green};
     --persona-goals: ${semantics.goals};
     --persona-pains: ${semantics.pains};
