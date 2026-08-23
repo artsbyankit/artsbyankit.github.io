@@ -221,9 +221,12 @@ function StatCallout({ stat }) {
       <span className="stat-value">{stat.value}</span>
       <span className="stat-label">{stat.label}</span>
       {stat.url ? (
-        <a className="stat-source" href={stat.url} target="_blank" rel="noreferrer">
-          Source: {stat.source} ↗
-        </a>
+        <span className="stat-source">
+          Source:{' '}
+          <a className="stat-link" href={stat.url} target="_blank" rel="noreferrer">
+            {stat.source} ↗
+          </a>
+        </span>
       ) : (
         <span className="stat-source">Source: {stat.source}</span>
       )}

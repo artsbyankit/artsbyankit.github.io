@@ -2072,12 +2072,12 @@ p {
   transition: color 0.15s ease;
 }
 
-a.stat-source {
+.stat-link {
   color: var(--muted);
 }
 
 /* Hyperlink affordance: blue on hover, color-only (matches edu-link) */
-a.stat-source:hover {
+.stat-link:hover {
   color: #2f6fed;
 }
 
