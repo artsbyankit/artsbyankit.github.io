@@ -235,6 +235,18 @@ function StatCallout({ stat }) {
 }
 
 function DistroNetDetail({ project }) {
+  const [activePersona, setActivePersona] = useState(null)
+
+  useLayoutEffect(() => {
+    if (!activePersona) return undefined
+    const onKey = (e) => e.key === 'Escape' && setActivePersona(null)
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [activePersona])
   const cs = project.cs
 
   return (
@@ -307,48 +319,77 @@ function DistroNetDetail({ project }) {
           <div className="persona-grid">
             {cs.personas.map((p) => (
               <article className="persona-card" key={p.name}>
-                <div className="persona-photo cs-asset">
+                <div className="persona-photo">
                   {p.photo ? (
-                    <img className="persona-img" src={p.photo} alt={`${p.name} portrait`} loading="lazy" />
+                    <img src={p.photo} alt={`${p.name} portrait`} loading="lazy" />
                   ) : (
-                    <>
-                      <span className="persona-initial">{p.name[0]}</span>
-                      <span className="replace-me">Replace me — {p.name} portrait</span>
-                    </>
+                    <span className="persona-initial">{p.name[0]}</span>
                   )}
+                  <span className="persona-role-badge">{p.role}</span>
                 </div>
                 <div className="persona-body">
                   <div className="persona-head">
-                    <h3>
-                      {p.name} <span className="persona-role">{p.role}</span>
-                    </h3>
+                    <h3>{p.name}</h3>
                     <span className="chip">
                       {p.platformIcon} {p.platform}
                     </span>
                   </div>
                   <blockquote className="persona-quote">{p.quote}</blockquote>
-
-                  <dl className="persona-details">
-                    <div>
-                      <dt>Profile</dt>
-                      <dd>{p.profile}</dd>
-                    </div>
-                    <div>
-                      <dt>Context</dt>
-                      <dd>{p.context}</dd>
-                    </div>
-                    <div>
-                      <dt>Device</dt>
-                      <dd>{p.device}</dd>
-                    </div>
-                  </dl>
+                  <button type="button" className="btn persona-more" onClick={() => setActivePersona(p)}>
+                    More about {p.name}
+                  </button>
                 </div>
+              </article>
+            ))}
+          </div>
 
-                <div className="persona-blocks">
+          {activePersona && (
+            <div
+              className="persona-overlay"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${activePersona.name} — full persona`}
+              onClick={() => setActivePersona(null)}
+            >
+              <div className="persona-modal" onClick={(e) => e.stopPropagation()}>
+                <button type="button" className="persona-close" onClick={() => setActivePersona(null)} aria-label="Close">
+                  ×
+                </button>
+                <header className="pm-head">
+                  <div className="pm-avatar">
+                    {activePersona.photo ? (
+                      <img src={activePersona.photo} alt="" />
+                    ) : (
+                      <span>{activePersona.name[0]}</span>
+                    )}
+                  </div>
+                  <div>
+                    <h3>{activePersona.name}</h3>
+                    <p className="pm-role">
+                      {activePersona.role} · {activePersona.platformIcon} {activePersona.platform}
+                    </p>
+                  </div>
+                </header>
+                <blockquote className="persona-quote pm-quote">{activePersona.quote}</blockquote>
+                <dl className="pm-facts">
+                  <div>
+                    <dt>Profile</dt>
+                    <dd>{activePersona.profile}</dd>
+                  </div>
+                  <div>
+                    <dt>Context</dt>
+                    <dd>{activePersona.context}</dd>
+                  </div>
+                  <div>
+                    <dt>Device</dt>
+                    <dd>{activePersona.device}</dd>
+                  </div>
+                </dl>
+                <div className="pm-cols">
                   <div>
                     <h4 className="block-goals">Goals</h4>
                     <ul className="feature-list">
-                      {p.goals.map((g) => (
+                      {activePersona.goals.map((g) => (
                         <li key={g}>{g}</li>
                       ))}
                     </ul>
@@ -356,7 +397,7 @@ function DistroNetDetail({ project }) {
                   <div>
                     <h4 className="block-pains">Pains</h4>
                     <ul className="feature-list">
-                      {p.pains.map((g) => (
+                      {activePersona.pains.map((g) => (
                         <li key={g}>{g}</li>
                       ))}
                     </ul>
@@ -364,7 +405,7 @@ function DistroNetDetail({ project }) {
                   <div>
                     <h4 className="block-jtbd">Jobs to be done</h4>
                     <ul className="feature-list">
-                      {p.jtbd.map((g) => (
+                      {activePersona.jtbd.map((g) => (
                         <li key={g}>{g}</li>
                       ))}
                     </ul>
@@ -372,15 +413,15 @@ function DistroNetDetail({ project }) {
                   <div>
                     <h4 className="block-impl">Design implications</h4>
                     <ul className="feature-list">
-                      {p.implications.map((g) => (
+                      {activePersona.implications.map((g) => (
                         <li key={g}>{g}</li>
                       ))}
                     </ul>
                   </div>
                 </div>
-              </article>
-            ))}
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
