@@ -10,7 +10,7 @@ const cats = [
     role: 'Farm Security Director',
     bio: 'Pure ginger energy. Inspects every crop, chases every sunbeam, approves zero intruders.',
     pose: 'alert',
-    photo: null,
+    photo: '/assets/cats/jeeru.jpg',
   },
   {
     name: 'Masala',
@@ -19,7 +19,7 @@ const cats = [
     role: 'Chief of Staff (she runs the place)',
     bio: "Seven years of unimpressed. Lets the humans believe they're in charge.",
     pose: 'regal',
-    photo: null,
+    photo: '/assets/cats/masala.jpg',
   },
   {
     name: 'Cookie',
@@ -28,7 +28,7 @@ const cats = [
     role: 'WFH Supervisor',
     bio: 'A croissant with legs. Sleeps on my keyboard during standups, purrs through deadlines.',
     pose: 'loaf',
-    photo: null,
+    photo: '/assets/cats/cookie.jpg',
   },
 ]
 
