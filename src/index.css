@@ -2076,8 +2076,9 @@ a.stat-source {
   color: var(--muted);
 }
 
+/* Hyperlink affordance: blue on hover, color-only (matches edu-link) */
 a.stat-source:hover {
-  color: var(--text);
+  color: #2f6fed;
 }
 
 /* Personas — full detail cards */
