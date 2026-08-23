@@ -3260,11 +3260,14 @@ main section {
   pointer-events: none;
 }
 
+/* Photos are square, frame is 4/3 — anchor to the BOTTOM so the empty
+   headroom gets cropped away, never the cat's body */
 .cat-portrait img,
 .cat-portrait svg {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 100%;
 }
 
 .cat-portrait svg {
