@@ -234,7 +234,17 @@ export default function About() {
               <span className="year">2014 — 2018</span>
               <div>
                 <h4>B.Tech, Information Technology</h4>
-                <p className="tl-role">DA-IICT · Gandhinagar, India</p>
+                <p className="tl-role">
+                  <a
+                    className="edu-link"
+                    href="https://www.daiict.ac.in/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    DA-IICT
+                  </a>{' '}
+                  · Gandhinagar, India
+                </p>
               </div>
             </div>
             <div className="tl-item">
