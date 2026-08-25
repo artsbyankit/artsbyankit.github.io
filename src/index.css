@@ -1737,6 +1737,11 @@ p {
   font-size: 16px;
   font-weight: 600;
   color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+.card:hover .card-more {
+  color: #2f6fed;
 }
 
 .card:hover .card-more span {
