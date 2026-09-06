@@ -51,12 +51,11 @@
   <body>
     <div id="root"></div>
     <script>
-      // Butter-mode BFG: keep the animated WebGL backdrop cheap.
-      // Cap render resolution at 1x (fewer fragments for the fluted shader —
-      // the biggest always-running GPU cost) and 60fps so it never hogs the
-      // compositor on scroll. Runs before the AI-FX runtime parses.
+      // Butter-mode: cap the animated backdrop's render resolution at 1x —
+      // 4x fewer fragments for the fluted shader, visually invisible on a
+      // soft glass pattern. No FPS cap: the loop follows the display's
+      // refresh (120Hz ProMotion etc.) so the glass flows at native rate.
       window.__AIFX_MAX_DPR__ = 1
-      window.__AIFX_FPS_CAP__ = 60
     </script>
     <script defer src="https://cdn.aidesigner.ai/effects/runtime/v1.js"></script>
     <script type="module" src="/src/main.jsx"></script>
