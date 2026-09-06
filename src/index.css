@@ -2852,3 +2852,8 @@ main section {
     grid-template-columns: 1fr;
   }
 }
+
+/* Low-spec profile (weak iGPU laptops): gentler frost everywhere, cheaper saturate */
+html.low-spec {
+  --frost: blur(6px) saturate(112%);
+}

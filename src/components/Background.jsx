@@ -63,11 +63,15 @@ function useFluteCounts() {
 
 export default function Background() {
   const flutes = useFluteCounts()
+  const lowSpec =
+    typeof document !== 'undefined' &&
+    document.documentElement.classList.contains('low-spec')
   const common = {
     'data-aifx': 'fluted-glass',
     'data-aifx-colors': bgPalette.colors.join(','),
     'data-aifx-bg': bgPalette.base,
     'data-aifx-flute-angle': '90',
+    ...(lowSpec ? { 'data-aifx-speed': '0.25' } : { 'data-aifx-speed': '0.5' }),
   }
 
   return (
