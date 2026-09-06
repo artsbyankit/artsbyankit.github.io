@@ -516,6 +516,9 @@ p {
   top: max(18px, env(safe-area-inset-top));
   left: 50%;
   transform: translateX(-50%);
+  will-change: transform; /* promote the fixed glass to its own layer so the
+                             backdrop-filter re-blur is isolated and doesn't
+                             repaint the whole page as you scroll */
   z-index: 50;
 }
 

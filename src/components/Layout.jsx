@@ -153,10 +153,18 @@ function LayoutEffects() {
     const onMove = (e) => {
       if (raf) return
       raf = requestAnimationFrame(() => {
-        rects.forEach((r, el) => {
-          el.style.setProperty('--mx', `${e.clientX - r.left}px`)
-          el.style.setProperty('--my', `${e.clientY - r.top}px`)
-        })
+        const target = e.target.closest
+          ? e.target.closest('.card-body, .skill-box, .btn, .social-big a, .nav-links a')
+          : null
+        // Only the element actually under the cursor needs its spotlight
+        // updated — writing to every tracked element every frame repaints
+        // the whole set and steals the frame budget (the butter-killer).
+        if (target) {
+          const r = rects.get(target) || target.getBoundingClientRect()
+          rects.set(target, r)
+          target.style.setProperty('--mx', `${e.clientX - r.left}px`)
+          target.style.setProperty('--my', `${e.clientY - r.top}px`)
+        }
         raf = null
       })
     }
