@@ -95,10 +95,15 @@ Node/npm availability note:
                 + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
   npm.ps1 requires execution policy RemoteSigned (already set for current user).
 
-Git (not installed):
-  If future work needs real git (clone/pull/commit/push), install with:
-    winget install Git.Git --silent
-  And optionally:  git -C F:\portfolio init
+Git:
+  - Installed: git 2.55.0 (winget). Run it with the refreshed-PATH trick below.
+  - Remote already set:  git remote -v  ->  origin = https://github.com/artsbyankit/artsbyankit.github.io
+  - Branch: main. Full upstream history is present locally.
+  - Pushing requires auth (a GitHub personal access token via the terminal,
+    or Git Credential Manager when it prompts). Set author with:
+      git config --global user.name "artsbyankit"
+      git config --global user.email "artsbyankit@users.noreply.github.com"
+  - NOTE: never commit or store a GitHub token in any file in this repo.
 
 
 ========================================================================
