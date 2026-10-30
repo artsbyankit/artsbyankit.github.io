@@ -45,6 +45,20 @@ function Hero() {
   }
   return (
     <div className="ns-hero" ref={ref} onPointerMove={onMove} role="img" aria-label="The NestCare logo between two reaching hands, on mint">
+      <div
+        className="ns-hero-bg"
+        data-aifx="halftone"
+        data-aifx-colors="#82d4c3,#d5fd07"
+        data-aifx-bg="#fafaf7"
+        data-aifx-dot-scale="0.45"
+        data-aifx-duotone="0"
+        data-aifx-contrast="1.53"
+        data-aifx-scale="0.4"
+        data-aifx-flow-angle="102"
+        data-aifx-glow="0.67"
+        data-aifx-grain="0"
+        aria-hidden="true"
+      />
       <img className="ns-hand ns-hand-a" src={`${IMG}/handA.webp`} alt="" />
       <img className="ns-hand ns-hand-b" src={`${IMG}/handB.webp`} alt="" />
       <img className="ns-hero-logo" src={`${IMG}/logo.webp`} alt="" />
@@ -57,9 +71,17 @@ function Hero() {
 // The curved arrow from the Figma file, redrawn as a stroke so it can draw itself.
 const CurvedArrow = () => (
   <svg className="ns-arrow" viewBox="0 0 358 532" fill="none" aria-hidden="true">
-    <path pathLength="1" d="M333.5 23.7C245 48 215 165 189 291.7 168 390 120 483 8.5 505.7" />
-    <path pathLength="1" className="ns-arrow-head" d="M35 523 8.5 505.7 27 480" />
-    <circle cx="334" cy="23" r="15" />
+    <defs>
+      <filter id="ns-marker" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="4" />
+        <feDisplacementMap in="SourceGraphic" scale="3.5" />
+      </filter>
+    </defs>
+    <g filter="url(#ns-marker)">
+      <path pathLength="1" d="M333.5 23.7C245 48 215 165 189 291.7 168 390 120 483 8.5 505.7" />
+      <path pathLength="1" className="ns-arrow-head" d="M35 523 8.5 505.7 27 480" />
+      <circle cx="334" cy="23" r="15" />
+    </g>
   </svg>
 )
 
@@ -91,20 +113,108 @@ function CountUp({ value }) {
   return <strong ref={ref}>{n}{suffix}</strong>
 }
 
-// The whole pitch in one switch: the same visit, with and without NestCare.
+const QUEUE_SIZE = 11
+const TOKEN = QUEUE_SIZE + 1
+let nextPatient = 0
+
+// A consultation takes 4 to 7 minutes, so 6 people ahead means roughly 25 to 40.
+const newQueue = () =>
+  Array.from({ length: QUEUE_SIZE }, () => ({
+    id: nextPatient++,
+    minutes: 4 + Math.floor(Math.random() * 4),
+  }))
+
+const formatWait = (minutes) => {
+  const h = Math.floor(minutes / 60)
+  return h ? `${h}h ${minutes % 60}m` : `${minutes}m`
+}
+
+// The whole pitch in one switch: where you stand, with and without NestCare.
 function QueueToggle() {
   const [booked, setBooked] = useState(false)
+  const [queue, setQueue] = useState(newQueue)
+  const current = useRef(queue)
+  const ref = useRef(null)
+
+  // Walk-in: the person being seen counts down a minute at a time, so the total
+  // falls with them (50, 49, 48...). At zero they go in and everyone moves up.
+  useEffect(() => {
+    if (booked || prefersStill()) return undefined
+    let visible = false
+    let timer
+    let holding = false
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+    })
+    io.observe(ref.current)
+    const step = () => {
+      let delay = 280
+      if (visible && !document.hidden) {
+        let q = current.current.filter((p) => !p.done)
+        if (!q.length && !holding) {
+          holding = true
+          delay = 2400 // let "Your turn" land before starting over
+        } else if (!q.length) {
+          holding = false
+          q = newQueue()
+          delay = 900
+        } else if (q[0].minutes <= 1) {
+          q = [{ ...q[0], minutes: 0, done: true }, ...q.slice(1)]
+          delay = 750
+        } else {
+          q = [{ ...q[0], minutes: q[0].minutes - 1 }, ...q.slice(1)]
+        }
+        current.current = q
+        setQueue(q)
+      }
+      timer = setTimeout(step, delay)
+    }
+    timer = setTimeout(step, 600)
+    return () => {
+      clearTimeout(timer)
+      io.disconnect()
+    }
+  }, [booked])
+
+  const waiting = queue.filter((p) => !p.done)
+  const wait = waiting.reduce((sum, p) => sum + p.minutes, 0)
+  const mode = booked ? 'booked' : wait ? 'wait' : 'turn'
+  const title = { booked: 'Next in line', wait: `${formatWait(wait)} estimated wait`, turn: 'Your turn, finally' }[mode]
+
   return (
-    <div className="ns-queue">
+    <div className={`ns-queue${booked ? ' booked' : ''}`} ref={ref}>
       <div className="ns-switch" role="group" aria-label="Compare a clinic visit">
-        <button type="button" aria-pressed={!booked} className={booked ? '' : 'on'} onClick={() => setBooked(false)}>Walk-in</button>
-        <button type="button" aria-pressed={booked} className={booked ? 'on' : ''} onClick={() => setBooked(true)}>With NestCare</button>
+        <button type="button" aria-pressed={!booked} onClick={() => setBooked(false)}>Walk-in</button>
+        <button type="button" aria-pressed={booked} onClick={() => setBooked(true)}>With NestCare</button>
       </div>
-      <div className={`ns-line${booked ? ' booked' : ''}`} aria-hidden="true">
-        {Array.from({ length: 11 }, (_, i) => <i key={i} />)}
-        <b>You</b>
+      <div className="ns-line" aria-hidden="true">
+        <div className="ns-doctor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 3H5a1 1 0 0 0-1 1v5a5 5 0 0 0 10 0V4a1 1 0 0 0-1-1h-1" />
+            <path d="M9 14v2a5 5 0 0 0 10 0v-3" />
+            <circle cx="19" cy="11" r="2" />
+          </svg>
+          <span>Doctor</span>
+        </div>
+        {queue.map((p) => {
+          const place = waiting.indexOf(p)
+          return (
+            <div className={`ns-patient${p.done ? ' done' : ''}${place === 0 ? ' front' : ''}`} key={p.id} style={{ '--i': p.done ? -1 : place }}>
+              <span>{p.minutes}m</span>
+              <i />
+            </div>
+          )
+        })}
+        <div className={`ns-you${mode === 'turn' ? ' front' : ''}`} style={{ '--i': waiting.length }}>
+          <span>#{TOKEN}</span>
+          <i />
+          <b>You</b>
+        </div>
       </div>
-      <p aria-live="polite">{booked ? 'Slot booked from home. You arrive when your turn is near.' : 'You, behind everyone, with no idea how long this will take.'}</p>
+      <div className="ns-queue-copy">
+        <strong key={mode}>Token {TOKEN} · {title}</strong>
+        <span key={booked}>{booked ? 'Slot booked from home. Arrive when your turn is near.' : 'Every patient takes a different time, so no one can tell you when.'}</span>
+      </div>
     </div>
   )
 }
@@ -254,7 +364,9 @@ function Surveys() {
         <p className="ns-more">+10 more questions</p>
       </div>
       <div className="ns-insights">
-        <img src={s.photo} alt={s.photoAlt} loading="lazy" />
+        <div className="ns-fill">
+          <img src={s.photo} alt={s.photoAlt} loading="lazy" />
+        </div>
         <div className="ns-glass ns-panel">
           <img className="ns-bang" src={`${IMG}/exclaim.webp`} alt="" loading="lazy" />
           <h3>Key Insights</h3>
@@ -398,11 +510,11 @@ export default function NestCare({ project, next }) {
         </section>
 
         <section className="ns-section ns-tried reveal">
-          <CurvedArrow />
           <div className="ns-phone">
             <img src={`${IMG}/phone.webp`} alt="The NestCare splash screen on a phone" loading="lazy" />
           </div>
-          <div>
+          <div className="ns-tried-copy">
+            <CurvedArrow />
             <h2 className="section-title">Ever Tried...</h2>
             {everTried.map((p) => (
               <p key={p}>{p}</p>
@@ -434,7 +546,9 @@ export default function NestCare({ project, next }) {
                 <Pill>Clinics</Pill>
               </div>
             </div>
-            <img src={`${IMG}/audience.webp`} alt="A family riding together in the back of a shared jeep" loading="lazy" />
+            <div className="ns-fill">
+              <img src={`${IMG}/audience.webp`} alt="A family riding together in the back of a shared jeep" loading="lazy" />
+            </div>
           </div>
         </section>
 
@@ -454,7 +568,7 @@ export default function NestCare({ project, next }) {
           <Head title="Solution Statement" />
           <div className="ns-solution">
             <img src={`${IMG}/care.webp`} alt="A nurse checking an elderly man’s blood pressure at home" loading="lazy" />
-            <p className="ns-glass">
+            <p className="ns-solution-card">
               NestCare provides a simple, patient-friendly mobile platform that enables users in Tier 2 &amp; 3 cities
               to easily book appointments, receive real-time updates, and manage care without long queues or confusing
               processes. The app supports family-managed profiles for seniors, offers clear reminders and token

@@ -139,7 +139,7 @@ function LayoutEffects() {
           }
         })
       },
-      { threshold: 0.12 },
+      { threshold: 0 },
     )
     // Pages are lazy()-loaded, so this effect can run before a route's
     // content exists. Watch the DOM for late-mounted reveals too.
