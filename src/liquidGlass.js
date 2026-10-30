@@ -39,6 +39,7 @@ const CHANNELS = {
 
 const filters = new Map() // "w x h x r" -> url(#id), shared between same-size surfaces
 let defs = null
+let sliceCount = 0
 
 // Squircle bevel: 0 at the outer edge, 1 where the surface goes flat.
 const bevel = (t) => (1 - (1 - t) ** 4) ** 0.25
@@ -58,11 +59,12 @@ function refractedOffset(t, bezel, thickness, ior) {
   return (rayOut / rayDown) * thickness * bevel(t)
 }
 
-function buildMap(w, h, radius, optics) {
+function buildMap(w, h, radius, optics, capped = true) {
   const res = w * h > HALF_RES_AREA ? 0.5 : 1
   const mw = Math.round(w * res)
   const mh = Math.round(h * res)
-  const bezel = Math.min(Math.max(radius * optics.bezel, BEZEL_MIN), BEZEL_MAX)
+  const wanted = radius * optics.bezel
+  const bezel = capped ? Math.min(Math.max(wanted, BEZEL_MIN), BEZEL_MAX) : wanted
   const thickness = bezel * optics.thickness
 
   const table = new Float32Array(65)
@@ -110,7 +112,7 @@ function buildMap(w, h, radius, optics) {
     }
   }
   ctx.putImageData(img, 0, 0)
-  return { href: canvas.toDataURL('image/png'), scale: max * 2 }
+  return { canvas, scale: max * 2 }
 }
 
 const channelPass = (channel, factor, scale) => `
@@ -133,10 +135,7 @@ function filterMarkup(w, h, optics, { href, scale }) {
     <feColorMatrix in="out" type="saturate" values="${optics.saturate}" />`
 }
 
-function filterFor(w, h, radius, optics) {
-  const key = [w, h, radius, ...Object.values(optics)].join('x').replace(/\./g, '_')
-  if (filters.has(key)) return filters.get(key)
-
+function createFilter(id, w, h, optics, map) {
   if (!defs) {
     const svg = document.createElementNS(SVG_NS, 'svg')
     svg.setAttribute('aria-hidden', 'true')
@@ -148,7 +147,6 @@ function filterFor(w, h, radius, optics) {
     document.body.appendChild(svg)
   }
 
-  const id = `liquid-glass-${key}`
   const filter = document.createElementNS(SVG_NS, 'filter')
   filter.id = id
   filter.setAttribute('filterUnits', 'userSpaceOnUse')
@@ -158,12 +156,68 @@ function filterFor(w, h, radius, optics) {
   filter.setAttribute('width', w)
   filter.setAttribute('height', h)
   filter.setAttribute('color-interpolation-filters', 'sRGB')
-  filter.innerHTML = filterMarkup(w, h, optics, buildMap(w, h, radius, optics))
+  filter.innerHTML = filterMarkup(w, h, optics, map)
   defs.appendChild(filter)
+  return `url(#${id})`
+}
 
-  const value = `url(#${id})`
+function filterFor(w, h, radius, optics) {
+  const key = [w, h, radius, ...Object.values(optics)].join('x').replace(/\./g, '_')
+  if (filters.has(key)) return filters.get(key)
+
+  const { canvas, scale } = buildMap(w, h, radius, optics)
+  const value = createFilter(`liquid-glass-${key}`, w, h, optics, { href: canvas.toDataURL('image/png'), scale })
   filters.set(key, value)
   return value
+}
+
+// A pill that swells (the nav dock) is cut into left cap, middle and right cap,
+// each with its own fixed filter. Scaling them is GPU work and never rebuilds a
+// filter. The caps only ever scale uniformly, so they stay true half-circles at
+// any size, while the middle (which bends light vertically only) absorbs the
+// extra width.
+function buildSlices(box, w, h, optics) {
+  const size = Math.round(h)
+  const cap = size / 2
+  // A backdrop filter can only sample inside its own box, so each piece is wider
+  // than what shows, leaving it real background to bend, and is clipped back.
+  const room = Math.ceil(size * 0.75)
+  const midPad = 8
+  const midWidth = Math.max(Math.round(w - h), 1)
+  const { canvas, scale } = buildMap(size + room * 2 + 4, size, cap, optics, false)
+  const cut = (x, width) => {
+    const part = document.createElement('canvas')
+    part.width = width
+    part.height = size
+    part.getContext('2d').drawImage(canvas, x, 0, width, size, 0, 0, width, size)
+    return part.toDataURL('image/png')
+  }
+  const place = (name, width, sourceX, sourceWidth, clip) => {
+    const el = box.querySelector(`.lg-slice-${name}`)
+    el.style.width = `${width}px`
+    el.style.height = `${size}px`
+    el.style.clipPath = clip
+    const map = { href: cut(sourceX, sourceWidth), scale }
+    el.style.setProperty('--lg-slice', createFilter(`liquid-glass-slice-${name}-${++sliceCount}`, width, size, optics, map))
+    return el
+  }
+  return {
+    size,
+    midWidth,
+    midPad,
+    left: place('left', cap + room, 0, cap + room, `inset(0 ${room}px 0 0 round ${cap}px 0 0 ${cap}px)`),
+    mid: place('mid', midWidth + midPad * 2, cap + room, 4, `inset(0 ${midPad}px)`),
+    right: place('right', cap + room, cap + room + 4, cap + room, `inset(0 0 0 ${room}px round 0 ${cap}px ${cap}px 0)`),
+  }
+}
+
+function placeSlices({ size, midWidth, midPad, left, mid, right }, width, height) {
+  const s = height / size
+  const overlap = 0.5 // hides hairline gaps at fractional scales
+  const sx = (width - height + overlap * 2) / midWidth
+  left.style.transform = `scale(${s})`
+  right.style.transform = `scale(${s})`
+  mid.style.transform = `translateX(${height / 2 - overlap - midPad * sx}px) scale(${sx}, ${s})`
 }
 
 // Every selector in the stylesheet that opts in via var(--lg-filter, ...).
@@ -193,8 +247,8 @@ function radiusOf(style, w, h) {
 }
 
 // A little frost scales with size: tags stay crystal clear, while panels that
-// hold paragraphs of text keep them readable over the moving background. A glass
-// node can override it (the dock floats over everything, so it does).
+// hold paragraphs of text keep them readable over the moving background. A rule
+// can override it with --lg-blur (the dock floats over everything, so it does).
 function blurOf(style, w, h) {
   const custom = parseFloat(style.getPropertyValue('--lg-blur'))
   if (!Number.isNaN(custom)) return custom
@@ -233,7 +287,6 @@ export function initLiquidGlass() {
     const style = getComputedStyle(el)
     const filter = filterFor(w, h, radiusOf(style, w, h), opticsOf(style, w, h))
     el.style.setProperty('--lg-filter', filter)
-    el.style.setProperty('--lg-host-filter', filter) // for a glass layer on a pseudo-element
   }
   // Drop filters nothing uses any more (sizes left behind by window resizes).
   const sweep = () => {
@@ -262,6 +315,17 @@ export function initLiquidGlass() {
     }, RESIZE_SETTLE_MS)
   })
 
+  const slices = new WeakMap()
+  const follow = new ResizeObserver((entries) => {
+    for (const { target } of entries) {
+      const box = target.querySelector(':scope > .lg-slices')
+      const { width, height } = target.getBoundingClientRect()
+      if (!height) continue
+      if (!slices.has(box)) slices.set(box, buildSlices(box, width, height, opticsOf(getComputedStyle(target), width, height)))
+      placeSlices(slices.get(box), width, height)
+    }
+  })
+
   const scan = () => {
     for (const el of tracked) {
       if (!el.isConnected) {
@@ -269,7 +333,9 @@ export function initLiquidGlass() {
         tracked.delete(el)
       }
     }
+    for (const box of document.querySelectorAll('.lg-slices')) follow.observe(box.parentElement)
     for (const el of document.querySelectorAll(selector)) {
+      if (el.querySelector(':scope > .lg-slices')) continue
       // Glass nested inside a backdrop-filtered parent only sees that parent, so
       // there's nothing to refract; it keeps the plain frost fallback.
       const host = el.parentElement.closest(selector)

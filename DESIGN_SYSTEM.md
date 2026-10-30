@@ -188,7 +188,7 @@ Refractive glass built by `src/liquidGlass.js`: a displacement map per size and 
 - **Opt in:** any rule with `backdrop-filter: var(--lg-filter, <fallback>)`. The engine finds these rules by reading the stylesheet.
 - **Fallback:** Safari, Firefox, low-spec machines and reduced-transparency users keep `--frost`. So does glass nested inside glass, which has nothing behind it to refract.
 - **Tune:** set `--lg-ior`, `--lg-bezel`, `--lg-thickness`, `--lg-dispersion`, `--lg-blur` and `--lg-saturate` on a rule in `index.css`; defaults are at the top of `liquidGlass.js`.
-- **Nav dock:** the dock's glass lives on `.dock-glass::before`, because a backdrop-filter on the dock itself would stop the pills inside from seeing the page. One glass pill travels the track: it rests on Let's talk and moves to the hovered link.
+- **Nav dock:** the dock's glass lives in `.lg-slices` (left cap, middle, right cap), because a backdrop-filter on the dock itself would stop the pills inside from seeing the page. The filters never change; the pieces are only moved by `transform` as the dock swells, and the caps scale uniformly so they stay round. One glass pill travels the track: it rests on Let's talk and moves to the hovered link.
 - **Exception:** the persona modal's full-screen scrim stays a plain blur, since it has no edge to refract.
 
 ### Nav dock `.dock-glass`

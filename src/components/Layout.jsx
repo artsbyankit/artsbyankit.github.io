@@ -40,6 +40,12 @@ function Navbar() {
   return (
     <header className="dock">
       <div className="dock-glass">
+        <span className="lg-slices" aria-hidden="true">
+          <i className="lg-slice-left"></i>
+          <i className="lg-slice-mid"></i>
+          <i className="lg-slice-right"></i>
+          <i className="lg-tint"></i>
+        </span>
         <Link to="/" className="logo" onClick={close} title="Ankit Patel — UI/UX Designer">
           <span className="logo-cat-trigger">
             <Cat />
