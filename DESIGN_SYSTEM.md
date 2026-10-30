@@ -2,9 +2,10 @@
 
 Single source of truth for the site's visual language. Every value here is pulled from `src/index.css` (CSS custom properties) and the components. When you change a style, update both this file and the code so they never drift.
 
-> Dark-mode only. Scheme: `color-scheme: dark`.
+> **Out of date:** sections 1, 5 and 8 still describe the old dark theme. Live colors are in `src/theme.js`, glass values in `src/index.css`.
 
 ---
+
 
 ## 1. Color Tokens
 
@@ -180,6 +181,15 @@ box-shadow panel-highlight + glass-shadow · blur(10px) · overflow hidden
 | Padding | `4px 10px` | `3px 10px` | — |
 | Color | muted | muted | **green** `#00ff88` |
 | Border | 1px `--border` | 1px `--border` | green 40% |
+
+### Liquid glass (all glass surfaces)
+Refractive glass built by `src/liquidGlass.js`: a displacement map per size and corner radius, computed with Snell's law over a squircle bevel. Surfaces under 60,000 px² also get per-channel dispersion.
+
+- **Opt in:** any rule with `backdrop-filter: var(--lg-filter, <fallback>)`. The engine finds these rules by reading the stylesheet.
+- **Fallback:** Safari, Firefox, low-spec machines and reduced-transparency users keep `--frost`. So does glass nested inside glass, which has nothing behind it to refract.
+- **Tune:** set `--lg-ior`, `--lg-bezel`, `--lg-thickness`, `--lg-dispersion`, `--lg-blur` and `--lg-saturate` on a rule in `index.css`; defaults are at the top of `liquidGlass.js`.
+- **Nav dock:** the dock's glass lives on `.dock-glass::before`, because a backdrop-filter on the dock itself would stop the pills inside from seeing the page. One glass pill travels the track: it rests on Let's talk and moves to the hovered link.
+- **Exception:** the persona modal's full-screen scrim stays a plain blur, since it has no edge to refract.
 
 ### Nav dock `.dock-glass`
 ```

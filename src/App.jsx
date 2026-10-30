@@ -8,7 +8,6 @@ const CaseStudy = lazy(() => import('./pages/CaseStudy'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const NotFound = lazy(() => import('./pages/NotFound'))
-
 export default function App() {
   // Fetch the lazy route chunks once the browser is idle, so navigation
   // between pages is instant without blocking the first paint.

@@ -5,6 +5,8 @@ import Background from './Background'
 import Cat from './Cat'
 import { SITE_URL, metaFor, notFoundMeta } from '../data/routes'
 
+const DARK_SURFACES = '.card-cover, .cs-cover'
+
 function Navbar() {
   const [open, setOpen] = useState(false)
 
@@ -397,6 +399,31 @@ function LayoutEffects() {
   }, [])
 
 
+  // Clear glass can't hide what's behind it, so like iOS the dock's labels flip
+  // to white while a dark cover is underneath.
+  useEffect(() => {
+    const dock = document.querySelector('.dock-glass')
+    if (!dock) return
+    let raf = null
+    const check = () => {
+      raf = null
+      const r = dock.getBoundingClientRect()
+      const under = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2)
+      dock.classList.toggle('on-dark', under.some((el) => el.matches(DARK_SURFACES)))
+    }
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(check)
+    }
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+    schedule()
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [location.pathname])
+
   useEffect(() => {
     // macOS workaround: backdrop-filter can go stale after the window is
     // occluded (e.g. switching apps), leaving frosted glass looking clear.
@@ -425,6 +452,7 @@ function LayoutEffects() {
     ].join(', ')
     const kick = () => {
       document.querySelectorAll(GLASS).forEach((el) => {
+        if (el.style.getPropertyValue('--lg-filter')) return // only frost needs this
         el.style.webkitBackdropFilter = 'blur(11px) saturate(130%)'
         el.style.backdropFilter = 'blur(11px) saturate(130%)'
         requestAnimationFrame(() => {

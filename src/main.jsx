@@ -8,6 +8,7 @@ import './adaptiveAccent.js' // accent reacts to the animated bg
 import './index.css'
 import './themeColor.js'
 import App from './App.jsx'
+import { initLiquidGlass } from './liquidGlass.js'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </StrictMode>,
 )
+initLiquidGlass()
 
 // Offline/instant repeat-visit caching — production only (dev uses HMR).
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
