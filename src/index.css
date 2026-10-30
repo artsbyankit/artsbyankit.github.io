@@ -2954,10 +2954,13 @@ html.liquid-glass .tool-list li {
 
 /* The open mobile menu sits right on top of the page's headlines. */
 html.liquid-glass .nav-links-mobile {
-  --lg-blur: 10;
-  --panel-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0.54));
+  --lg-bezel: 1.4; --lg-bezel-max: 30;
+  --lg-ior: 1.6; --lg-thickness: 2.4;
+  --lg-blur: 4; --lg-rim-blur: 0.5;
+  --lg-saturate: 1.55;
+  --panel-bg: rgba(255, 255, 255, 0.34);
   --glass-bg: var(--panel-bg);
-  --glass-border: rgba(255, 255, 255, 0.6); --panel-border: rgba(255, 255, 255, 0.6);
+  --glass-border: transparent; --panel-border: transparent;
 }
 
 /* Edge light, as on iOS: bright on the top-left, a thinner caustic on the opposite
@@ -3198,6 +3201,91 @@ html.liquid-glass .dock-glass:not(.has-target) .nav-cta::after {
   background: var(--panel-bg); border: 1px solid var(--panel-border);
   box-shadow: var(--panel-highlight), var(--glass-shadow);
   -webkit-backdrop-filter: var(--lg-filter, var(--frost)); backdrop-filter: var(--lg-filter, var(--frost));
+}
+
+/* Mobile menu. A backdrop-filter on the panel would stop the pills inside it from
+   seeing the page, so the panel's glass moves to a layer behind them (as on the dock).
+   Selected and hovered items are then real lenses, bending the page and the panel. */
+.nav-mobile-glass {
+  display: none;
+}
+
+html.liquid-glass .nav-links-mobile {
+  border-color: transparent; background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  /* Never fade the panel itself: glass inside a parent below opacity 1 can't see the
+     page and flashes grey. The glass layer and each item fade on their own instead. */
+  opacity: 1;
+}
+
+html.liquid-glass .nav-links-mobile > .nav-mobile-glass {
+  display: block; position: absolute;
+  inset: 0; z-index: -1;
+  border-radius: inherit;
+  background: var(--panel-bg);
+  box-shadow: var(--panel-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--lg-filter, var(--frost)); backdrop-filter: var(--lg-filter, var(--frost));
+  opacity: 0;
+  transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.liquid-glass .nav-links-mobile.open > .nav-mobile-glass {
+  opacity: 1;
+}
+
+html.liquid-glass .nav-links-mobile a {
+  --lg-bezel: 1; --lg-bezel-max: 200;
+  --lg-dome: 0.55; --lg-ior: 1.5;
+  --lg-dispersion: 0.015; --lg-blur: 0;
+  --lg-soften: 0.4; --lg-saturate: 1.2;
+  --lg-rim-blur: -1;
+}
+
+/* Everything the desktop dock's traveling pill would add stays out of this menu. */
+.nav-links-mobile a,
+.nav-links-mobile a.nav-cta,
+.nav-links-mobile a.nav-green {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  color: var(--text) !important;
+  /* Only a slight blur behind the menu, so a halo keeps labels clear of the page text. */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.95), 0 0 2px rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav-links-mobile a::before,
+.nav-links-mobile a::after {
+  display: none !important;
+}
+
+.nav-links-mobile a.active,
+.nav-links-mobile a:hover,
+.nav-links-mobile a:active,
+.nav-links-mobile a:focus-visible {
+  -webkit-backdrop-filter: var(--lg-filter, none) !important; backdrop-filter: var(--lg-filter, none) !important;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.9),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 0 12px rgba(255, 255, 255, 0.22),
+    0 4px 12px rgba(31, 56, 88, 0.12) !important;
+}
+
+.nav-links-mobile a.active {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--muted) !important;
+  text-shadow: none !important;
+}
+
+.nav-links-mobile a:hover,
+.nav-links-mobile a:active,
+.nav-links-mobile a:focus-visible {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: var(--text) !important;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8) !important;
+  transform: none;
 }
 
 /* Low-spec profile (weak iGPU laptops): gentler frost everywhere, cheaper saturate */

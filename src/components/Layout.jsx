@@ -88,6 +88,7 @@ function Navbar() {
             inert={!open}
           >
             {links}
+            <span className="nav-mobile-glass" aria-hidden="true" />
           </nav>
         </>,
         document.body,
