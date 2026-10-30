@@ -24,6 +24,9 @@ const OPTICS = {
   dispersion: ['--lg-dispersion', 0.05], // how much more blue bends than red
   saturate: ['--lg-saturate', 1.3],
   rim: ['--lg-rim-blur', -1], // 0 or more: frost only the centre, keep the bent rim this sharp
+  dome: ['--lg-dome', -1], // 0 or more: a true glass dome on a base this thick (relative to the bezel)
+  marble: ['--lg-marble', 0], // 1: a solid glass sphere resting on the page, instead of a dome
+  soften: ['--lg-soften', 0], // px of anti-aliasing after the bend, which browsers don't do themselves
 }
 const BEZEL_MIN = 6
 const SMALL_AREA = 60000 // px², below this a surface can afford dispersion
@@ -60,18 +63,52 @@ function refractedOffset(t, bezel, thickness, ior) {
   return (rayOut / rayDown) * thickness * bevel(t)
 }
 
+// Sideways travel through a spherical dome, per unit of bezel, for a ray landing a
+// fraction r of the way from the centre to the rim. Snell's law, nothing fitted:
+// the ray enters at asin(r), bends to asin(r / ior) and crosses the glass below it.
+function domeOffset(r, base, ior) {
+  const incident = Math.asin(r)
+  const refracted = Math.asin(r / ior)
+  return -(Math.sqrt(1 - r * r) + base) * Math.tan(incident - refracted)
+}
+
+// The same ray, followed all the way through a solid sphere of radius 1 resting on
+// the page: bent going in, bent again coming out, then on down to the page. It lands
+// close to the middle (a strong magnification) and past it near the rim (the flipped
+// image in a real marble). Rays that would miss the page are eased onto the far edge.
+function marbleOffset(r, ior) {
+  const incident = Math.asin(r)
+  const refracted = Math.asin(r / ior)
+  const turn = 2 * (incident - refracted)
+  const exitX = Math.sin(2 * refracted - incident)
+  const exitZ = -Math.cos(incident - 2 * refracted)
+  const fall = Math.cos(turn)
+  const landed = fall > 0.05 ? exitX - ((exitZ + 1) / fall) * Math.sin(turn) : -Infinity
+  // Soft limit: stays true in the middle, never leaves the marble.
+  const eased = landed < -0.55 ? -0.55 - 0.4 * Math.tanh((-landed - 0.55) / 0.4) : landed
+  return eased - r
+}
+
 function buildMap(w, h, radius, optics, capped = true) {
-  const res = w * h > HALF_RES_AREA ? 0.5 : 1
+  const marble = optics.marble > 0
+  const dome = marble || optics.dome >= 0
+  // A lens bends hard over very few pixels, so its map gets twice the detail.
+  const res = dome ? 2 : w * h > HALF_RES_AREA ? 0.5 : 1
   const mw = Math.round(w * res)
   const mh = Math.round(h * res)
   const wanted = radius * optics.bezel
   const bezel = capped ? Math.min(Math.max(wanted, BEZEL_MIN), optics.bezelMax) : wanted
   const thickness = bezel * optics.thickness
 
-  const table = new Float32Array(65)
+  const steps = dome ? 256 : 64
+  const table = new Float32Array(steps + 1)
   let max = 0
-  for (let i = 0; i < 64; i++) {
-    table[i] = refractedOffset(Math.max(i / 64, 0.02), bezel, thickness, optics.ior)
+  for (let i = 0; i < steps; i++) {
+    table[i] = marble
+      ? marbleOffset(1 - i / steps, optics.ior) * bezel
+      : dome
+      ? domeOffset(1 - i / steps, optics.dome, optics.ior) * bezel
+      : refractedOffset(Math.max(i / steps, 0.02), bezel, thickness, optics.ior)
     max = Math.max(max, Math.abs(table[i]))
   }
   max = max || 1
@@ -110,7 +147,9 @@ function buildMap(w, h, radius, optics, capped = true) {
       } else {
         ny = Math.sign(py)
       }
-      const offset = table[Math.floor((dist / bezel) * 64)] / max
+      const at = (dist / bezel) * steps
+      const low = Math.floor(at)
+      const offset = (dome ? table[low] + (table[low + 1] - table[low]) * (at - low) : table[low]) / max
       img.data[o] = 128 + nx * offset * 127
       img.data[o + 1] = 128 + ny * offset * 127
       if (split) {
@@ -153,10 +192,12 @@ function filterMarkup(w, h, optics, { href, maskHref, scale }) {
          <feBlend in="r" in2="g" mode="screen" result="rg" />
          <feBlend in="rg" in2="b" mode="screen" result="out" />`
       : `<feDisplacementMap in="soft" in2="map" scale="${scale.toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="out" />`
+  const soften = optics.soften > 0 ? `<feGaussianBlur in="out" stdDeviation="${optics.soften}" result="out" />` : ''
   return `
     <feGaussianBlur in="SourceGraphic" stdDeviation="${optics.blur}" result="soft" />
     <feImage href="${href}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map" />
     ${refract}
+    ${soften}
     <feColorMatrix in="out" type="saturate" values="${optics.saturate}" />`
 }
 

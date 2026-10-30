@@ -97,6 +97,15 @@ function Chapter({ number, title, dark, children }) {
 function Compare() {
   const [active, setActive] = useState(SECTIONS[0])
   const [split, setSplit] = useState(50)
+  const [roll, setRoll] = useState(0)
+  // A rolling ball turns by the distance travelled over its radius.
+  const drag = (e) => {
+    const value = Number(e.target.value)
+    const wipe = e.target.parentElement
+    const radius = wipe.querySelector('.lg-lens').offsetWidth / 2
+    setSplit(value)
+    setRoll((((value - 50) / 100) * wipe.offsetWidth) / radius)
+  }
   return (
     <div className="ss-compare">
       <div className="ss-tabs" role="group" aria-label="Choose a home page section">
@@ -106,7 +115,7 @@ function Compare() {
           </button>
         ))}
       </div>
-      <div className="ss-wipe" style={{ aspectRatio: `1920 / ${active.height}`, '--split': `${split}%` }}>
+      <div className="ss-wipe" style={{ aspectRatio: `1920 / ${active.height}`, '--split': `${split}%`, '--roll': `${roll}rad` }}>
         <img
           src={`${IMG}/wf-home.svg`}
           style={{ top: `${(-active.top / active.height) * 100}%` }}
@@ -123,7 +132,7 @@ function Compare() {
         <span className="ss-wipe-tag left">Final</span>
         <span className="ss-wipe-tag right">Wireframe</span>
         <span className="ss-wipe-handle" aria-hidden="true">
-          <i className="lg-lens">✦</i>
+          <i className="lg-lens"><span className="ss-star">✦</span></i>
         </span>
         <input
           type="range"
@@ -131,7 +140,7 @@ function Compare() {
           max="100"
           value={split}
           aria-label="Share of the section showing the finished design"
-          onChange={(e) => setSplit(Number(e.target.value))}
+          onChange={drag}
         />
       </div>
       <p className="ss-note" key={active.id}>{active.note}</p>
@@ -287,11 +296,9 @@ function ProductDemo() {
 
 function FinalHome() {
   const [pin, setPin] = useState(null)
-  const loupe = useLoupe([`${IMG}/final-text.svg`, `${IMG}/final-photos.webp`])
   return (
-    <div className="ss-final" onPointerMove={loupe.move} onPointerLeave={loupe.leave}>
+    <div className="ss-final">
       <img className="ss-final-type" src={`${IMG}/final-text.svg`} width="1920" height="6637" loading="lazy" alt="" />
-      {loupe.element}
       <img
         className="ss-frame"
         src={`${IMG}/final-photos.webp`}
@@ -303,7 +310,7 @@ function FinalHome() {
       />
       {PINS.map((p, i) => (
         <div className={`ss-pin${pin === i ? ' open' : ''}${p.x > 55 ? ' flip' : ''}`} key={p.title} style={{ left: `${p.x}%`, top: `${p.y}%` }}>
-          <button type="button" className="lg-lens" aria-expanded={pin === i} aria-label={`Design note: ${p.title}`} onClick={() => setPin(pin === i ? null : i)}>✦</button>
+          <button type="button" className="lg-lens" aria-expanded={pin === i} aria-label={`Design note: ${p.title}`} onClick={() => setPin(pin === i ? null : i)}><span className="ss-star">✦</span></button>
           {pin === i && (
             <div className="ss-pin-note">
               <strong>{p.title}</strong>
@@ -442,7 +449,7 @@ export default function SilkSerenity({ project, next }) {
             real studio. JM stands for Jiru Masala, my cat, and the studio is imaginary, as is the Silk Serenity brand.
             No cats were invoiced.
           </aside>
-          <p className="ss-hint">Hover over any image to look closer, or click it to open it full size and zoom right in.</p>
+          <p className="ss-hint">Hover over a frame to look closer, or click it to open it full size and zoom right in.</p>
         </div>
       </section>
 

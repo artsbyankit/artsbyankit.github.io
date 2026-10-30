@@ -418,7 +418,7 @@ html[data-ss-dark] .dock-glass .lg-tint {
   width: 100%;
   padding: 0;
   border: 0;
-  overflow: hidden;
+  overflow: clip;
   background: none;
   cursor: zoom-in;
 }
@@ -779,7 +779,7 @@ html[data-ss-dark] .dock-glass .lg-tint {
 
 .ss-final {
   position: relative;
-  overflow: hidden;
+  overflow: clip;
 }
 
 .ss-final-type {
@@ -833,9 +833,15 @@ html[data-ss-dark] .dock-glass .lg-tint {
   transition: transform 0.25s ease;
 }
 
+/* A touch rolls the marble a little way along and turns the star with it. */
 .ss-pin > button:hover,
 .ss-pin.open > button {
-  transform: rotate(90deg) scale(1.1);
+  transform: translateX(8px);
+}
+
+.ss-pin > button:hover .ss-star,
+.ss-pin.open .ss-star {
+  transform: perspective(160px) rotate3d(0.25, 1, 0.15, 14deg);
 }
 
 .ss-pin-note {
@@ -963,8 +969,48 @@ html[data-ss-dark] .dock-glass .lg-tint {
   }
 }
 
-/* Over white the lens has nothing to bend, so a light smoke keeps its star visible. */
+/* Clear glass: the star carries its own soft shadow so it still shows over white. */
 .ss-pin > .lg-lens,
 .ss-wipe-handle .lg-lens {
-  background: linear-gradient(150deg, rgba(20, 20, 20, 0.3), rgba(20, 20, 20, 0.42));
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.75), 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+/* The star floats in the middle of the marble and turns as it rolls. */
+.ss-star {
+  position: relative;
+  z-index: 1;
+  display: block;
+  transform: perspective(160px) rotate3d(0.25, 1, 0.15, var(--roll, 0rad));
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.ss-wipe-handle .ss-star {
+  transition: none;
+}
+
+/* Pins roll in along the page as they scroll into view. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ss-pin > button {
+      animation: ss-roll-in linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 42%;
+    }
+
+    .ss-pin > button .ss-star {
+      animation: ss-roll-star linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 42%;
+    }
+  }
+}
+
+@keyframes ss-roll-in {
+  from { translate: -120px 0; }
+  to { translate: 0 0; }
+}
+
+@keyframes ss-roll-star {
+  from { rotate: 0 1 0 -215deg; }
+  to { rotate: 0 1 0 0deg; }
 }
