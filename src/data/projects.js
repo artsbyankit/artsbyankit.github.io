@@ -390,6 +390,16 @@ const projects = [
     excerpt:
       'My best design work so far: a complete identity and website for a concept skincare brand, built from black, white and one star.',
   },
+  {
+    slug: 'eat-me-first',
+    title: 'Eat Me First',
+    category: 'Mobile App · Daily Design',
+    year: 'Day 01',
+    emoji: '🍅',
+    gradient: 'linear-gradient(140deg, #0d2c1c, #1d5c3a 55%, #d94a2b)',
+    excerpt:
+      'A small grocery app that shows your whole fridge as a bento home screen, warns you what is about to expire, and turns it into something to cook.',
+  },
 ]
 
 export default projects

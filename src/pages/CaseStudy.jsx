@@ -4,6 +4,7 @@ import projects from '../data/projects'
 
 const NestCare = lazy(() => import('./NestCare'))
 const SilkSerenity = lazy(() => import('./SilkSerenity'))
+const EatMeFirst = lazy(() => import('./EatMeFirst'))
 
 const FLOW = [
   {
@@ -650,7 +651,11 @@ export default function CaseStudy() {
   if (slug === 'aperture') return <Navigate to="/work/silk-serenity" replace />
 
   if (slug === 'silk-serenity') {
-    return <SilkSerenity project={project} next={projects[0]} />
+    return <SilkSerenity project={project} next={projects[projects.indexOf(project) + 1] ?? projects[0]} />
+  }
+
+  if (slug === 'eat-me-first') {
+    return <EatMeFirst project={project} next={projects[0]} />
   }
 
   if (project?.custom) {
