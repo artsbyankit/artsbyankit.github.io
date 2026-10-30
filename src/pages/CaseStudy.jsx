@@ -3,6 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom'
 import projects from '../data/projects'
 
 const NestCare = lazy(() => import('./NestCare'))
+const SilkSerenity = lazy(() => import('./SilkSerenity'))
 
 const FLOW = [
   {
@@ -645,6 +646,12 @@ export default function CaseStudy() {
 
   // Atlas was replaced by NestCare; keep old links working.
   if (slug === 'atlas') return <Navigate to="/work/nestcare" replace />
+  // Aperture was replaced by Silk Serenity.
+  if (slug === 'aperture') return <Navigate to="/work/silk-serenity" replace />
+
+  if (slug === 'silk-serenity') {
+    return <SilkSerenity project={project} next={projects[0]} />
+  }
 
   if (project?.custom) {
     const next = projects[projects.indexOf(project) + 1]

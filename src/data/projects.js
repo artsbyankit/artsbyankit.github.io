@@ -381,33 +381,14 @@ const projects = [
     ],
   },
   {
-    slug: 'aperture',
-    title: 'Aperture Photography Tool',
-    category: 'Desktop App',
-    year: '2023',
-    role: 'UX/UI Designer',
-    duration: '7 weeks',
-    tools: ['Figma', 'Electron', 'Framer'],
-    emoji: '📷',
-    gradient: 'linear-gradient(140deg, #1a1a1a, #2d2d2d 55%, #3d3d3d)',
-    excerpt: 'Designing an editing workspace for photographers that respects their craft and their colorblind clients.',
-    overview:
-      'Aperture is a desktop photo editing tool built for working photographers. The old interface prioritized feature density over flow — panels everywhere, overwhelming presets, and terrible colorblind support in a visual profession.',
-    problem:
-      'Photographers reported "analysis paralysis" from the tool, and several colorblind users could not reliably read the color grading interface. Power users wanted speed; beginners wanted a way in.',
-    process: [
-      'Interviewed 14 professional photographers about their editing rituals and tools.',
-      'Designed a modular workspace with dockable panels and a distraction-free focus mode.',
-      'Rebuilt the color grading UI with patterns and labels alongside color, so it works without color vision.',
-      'Prototyped and tested keyboard-first editing flows with 12 power users.',
-    ],
-    solution:
-      'A workspace that adapts: minimal by default, expandable when needed. The signature feature is a color-grading wheel that communicates via pattern and position, not just hue, making the tool genuinely accessible. A focus mode hides everything but the image.',
-    results: [
-      'Power users rated workflow speed up 35%.',
-      'Shipped with WCAG 2.1 AAA contrast on every control.',
-      'Adopted by two photography education programs for their courses.',
-    ],
+    slug: 'silk-serenity',
+    title: 'Silk Serenity',
+    category: 'Branding & UI/UX',
+    year: '2024',
+    emoji: '✦',
+    gradient: 'linear-gradient(140deg, #000, #1a1a1a 55%, #3a3a3a)',
+    excerpt:
+      'My best design work so far: a complete identity and website for a concept skincare brand, built from black, white and one star.',
   },
 ]
 
