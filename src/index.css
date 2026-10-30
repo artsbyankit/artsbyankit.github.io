@@ -2945,7 +2945,7 @@ html.liquid-glass .skill-box,
 html.liquid-glass .tool-list li {
   --lg-bezel: 1.4; --lg-bezel-max: 34;
   --lg-ior: 1.6; --lg-thickness: 2.4;
-  --lg-blur: 11; --lg-rim-blur: 0.8;
+  --lg-blur: 11; --lg-rim-blur: 0;
   --lg-saturate: 1.55;
   --panel-bg: rgba(255, 255, 255, 0.24);
   --glass-bg: var(--panel-bg);
@@ -2956,7 +2956,7 @@ html.liquid-glass .tool-list li {
 html.liquid-glass .nav-links-mobile {
   --lg-bezel: 1.4; --lg-bezel-max: 30;
   --lg-ior: 1.6; --lg-thickness: 2.4;
-  --lg-blur: 4; --lg-rim-blur: 0.5;
+  --lg-blur: 4; --lg-rim-blur: 0;
   --lg-saturate: 1.55;
   --panel-bg: rgba(255, 255, 255, 0.34);
   --glass-bg: var(--panel-bg);
@@ -2985,7 +2985,7 @@ html.liquid-glass .cat-role,
 .lg-lens {
   --lg-bezel: 1; --lg-bezel-max: 200;
   --lg-dome: 0.55; --lg-ior: 1.5;
-  --lg-dispersion: 0.015; --lg-blur: 0.6; --lg-soften: 0.4;
+  --lg-dispersion: 0; --lg-blur: 0.6; --lg-soften: 0.4;
   --lg-saturate: 1.45; --lg-rim-blur: -1;
 }
 
@@ -3009,7 +3009,7 @@ html.liquid-glass .social-big a:active {
    These stay still while the marble rolls, because the light doesn't move. */
 .lg-lens {
   --lg-marble: 1; --lg-ior: 1.5;
-  --lg-dispersion: 0.012; --lg-blur: 0.5; --lg-soften: 0.45;
+  --lg-dispersion: 0; --lg-blur: 0.5; --lg-soften: 0.45;
   --lg-saturate: 1.3;
   position: relative;
   border: 0;
@@ -3237,7 +3237,7 @@ html.liquid-glass .nav-links-mobile.open > .nav-mobile-glass {
 html.liquid-glass .nav-links-mobile a {
   --lg-bezel: 1; --lg-bezel-max: 200;
   --lg-dome: 0.55; --lg-ior: 1.5;
-  --lg-dispersion: 0.015; --lg-blur: 0;
+  --lg-dispersion: 0; --lg-blur: 0;
   --lg-soften: 0.4; --lg-saturate: 1.2;
   --lg-rim-blur: -1;
 }
@@ -3286,6 +3286,37 @@ html.liquid-glass .nav-links-mobile a {
   color: var(--text) !important;
   text-shadow: 0 0 6px rgba(255, 255, 255, 0.8) !important;
   transform: none;
+}
+
+/* Set by liquidGlass.js when a machine stays slow: small controls drop their live glass
+   for a light tint and big cards use a plain blur. The nav and marbles stay real glass. */
+html.lg-lite .btn:not(.nav-cta),
+html.lg-lite .social-big a,
+html.lg-lite .tag,
+html.lg-lite .hero-tag,
+html.lg-lite .persona-role-badge,
+html.lg-lite .cat-role,
+html.lg-lite .tool-list li {
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+}
+
+html.lg-lite .card,
+html.lg-lite .skill-box,
+html.lg-lite .ns-glass,
+html.lg-lite .cat-card,
+html.lg-lite .persona-card,
+html.lg-lite .fc-process,
+html.lg-lite .cs-note,
+html.lg-lite .metrics-table,
+html.lg-lite .cs-next-card {
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important; backdrop-filter: blur(10px) saturate(140%) !important;
+}
+
+html.lg-lite .btn:not(.nav-cta),
+html.lg-lite .tools-row .tag,
+html.lg-lite .cs-meta .tag,
+html.lg-lite .hero-tag {
+  background: rgba(255, 255, 255, 0.34) !important;
 }
 
 /* Low-spec profile (weak iGPU laptops): gentler frost everywhere, cheaper saturate */

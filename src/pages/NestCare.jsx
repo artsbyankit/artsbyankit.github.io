@@ -237,7 +237,7 @@ function JourneyStepper() {
       </ol>
       <div className="ns-scene" key={s.stage}>
         <div className="ns-scene-art">
-          <img src={s.art} alt={`A meme showing someone feeling ${s.feeling.toLowerCase()}`} />
+          <img src={s.art} alt={`A meme showing someone feeling ${s.feeling.toLowerCase()}`} loading="lazy" />
           <strong>{s.feeling}</strong>
         </div>
         <dl>

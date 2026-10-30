@@ -50,7 +50,7 @@ function useLoupe(layers) {
 }
 
 // Type-heavy frames are SVG, so they stay razor sharp at any zoom. Photographs come in three widths.
-function Frame({ name, alt, height = 1080, vector, tone }) {
+function Frame({ name, alt, height = 1080, vector, tone, priority }) {
   const open = useContext(OpenFrame)
   const hi = vector ? `${IMG}/${name}.svg` : `${IMG}/${name}-3840.webp`
   const loupe = useLoupe([hi])
@@ -73,7 +73,8 @@ function Frame({ name, alt, height = 1080, vector, tone }) {
         width="1920"
         height={height}
         alt={alt}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : undefined}
         decoding="async"
       />
       {loupe.element}
@@ -381,25 +382,33 @@ export default function SilkSerenity({ project, next }) {
   const [index, setIndex] = useState(null)
   const root = useRef(null)
   useEffect(() => {
-    let raf = null
+    let timer = null
     const check = () => {
-      raf = null
+      timer = null
       const under = document.elementsFromPoint(window.innerWidth / 2, 32).find((el) => el.closest('.ss'))
       const dark = under?.closest('[data-tone="dark"], .dark, .ss-play')
       document.documentElement.toggleAttribute('data-ss-dark', Boolean(dark))
     }
     const schedule = () => {
-      if (!raf) raf = requestAnimationFrame(check)
+      if (!timer) timer = setTimeout(check, 120)
     }
     check()
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule, { passive: true })
     return () => {
-      if (raf) cancelAnimationFrame(raf)
+      clearTimeout(timer)
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
       document.documentElement.removeAttribute('data-ss-dark')
     }
+  }, [])
+
+  // This page's frames cover the whole screen, so the animated background behind them
+  // can't be seen. Stop it here, and bring it back on the way out.
+  useEffect(() => {
+    const tiers = [...document.querySelectorAll('.bg-effect')]
+    tiers.forEach((el) => el.removeAttribute('data-aifx'))
+    return () => tiers.forEach((el) => el.setAttribute('data-aifx', 'fluted-glass'))
   }, [])
   const openFrame = (e) => {
     const list = [...root.current.querySelectorAll('.ss-zoom img')]
@@ -411,7 +420,7 @@ export default function SilkSerenity({ project, next }) {
     <div className="ss" ref={root}>
       <span className="ss-progress" aria-hidden="true" />
       <button type="button" className="ss-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>✦</button>
-      <Frame name="cover" tone="dark" height={1311} alt="Silk Serenity wordmark in white over a close-up of blueberries" />
+      <Frame name="cover" tone="dark" priority height={1311} alt="Silk Serenity wordmark in white over a close-up of blueberries" />
 
       <section className="ss-intro">
         <div className="ss-inner reveal">

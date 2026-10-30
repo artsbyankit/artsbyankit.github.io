@@ -411,15 +411,17 @@ function LayoutEffects() {
   useEffect(() => {
     const dock = document.querySelector('.dock-glass')
     if (!dock) return
-    let raf = null
+    // A hit test is costly and the labels only need to flip on time for the eye, so this
+    // runs about eight times a second while scrolling, not every frame.
+    let timer = null
     const check = () => {
-      raf = null
+      timer = null
       const r = dock.getBoundingClientRect()
       const under = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2)
       dock.classList.toggle('on-dark', under.some((el) => el.matches(DARK_SURFACES)))
     }
     const schedule = () => {
-      if (!raf) raf = requestAnimationFrame(check)
+      if (!timer) timer = setTimeout(check, 120)
     }
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule, { passive: true })
@@ -427,7 +429,7 @@ function LayoutEffects() {
     return () => {
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
-      if (raf) cancelAnimationFrame(raf)
+      clearTimeout(timer)
     }
   }, [location.pathname])
 

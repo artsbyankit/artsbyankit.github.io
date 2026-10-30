@@ -23,7 +23,7 @@ const OPTICS = {
   thickness: ['--lg-thickness', 1.45], // glass height, relative to the bezel
   dispersion: ['--lg-dispersion', 0.05], // how much more blue bends than red
   saturate: ['--lg-saturate', 1.3],
-  rim: ['--lg-rim-blur', -1], // 0 or more: frost only the centre, keep the bent rim this sharp
+  rim: ['--lg-rim-blur', -1], // 0 or more: frost only the centre, keep the bent rim sharp
   dome: ['--lg-dome', -1], // 0 or more: a true glass dome on a base this thick (relative to the bezel)
   marble: ['--lg-marble', 0], // 1: a solid glass sphere resting on the page, instead of a dome
   soften: ['--lg-soften', 0], // px of anti-aliasing after the bend, which browsers don't do themselves
@@ -33,6 +33,9 @@ const SMALL_AREA = 60000 // px², below this a surface can afford dispersion
 const HALF_RES_AREA = 200000 // px², above this the map is built at half size
 const RESIZE_SETTLE_MS = 140 // wait out animations like the dock swell
 const MAX_FILTERS = 80
+const SLOW_FPS = 40
+const SLOW_WINDOWS = 4 // seconds in a row
+const WATCH_MS = 45000
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 const CHANNELS = {
@@ -176,10 +179,9 @@ function filterMarkup(w, h, optics, { href, maskHref, scale }) {
   if (maskHref) {
     return `
       <feGaussianBlur in="SourceGraphic" stdDeviation="${optics.blur}" result="soft" />
-      <feGaussianBlur in="SourceGraphic" stdDeviation="${optics.rim}" result="crisp" />
       <feImage href="${href}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map" />
       <feImage href="${maskHref}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="edge" />
-      <feDisplacementMap in="crisp" in2="map" scale="${scale.toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="bent" />
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="${scale.toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="bent" />
       <feComposite in="bent" in2="edge" operator="in" result="rim" />
       <feMerge result="out"><feMergeNode in="soft" /><feMergeNode in="rim" /></feMerge>
       <feColorMatrix in="out" type="saturate" values="${optics.saturate}" />`
@@ -262,13 +264,13 @@ function buildSlices(box, w, h, optics) {
     part.getContext('2d').drawImage(canvas, x, 0, width, size, 0, 0, width, size)
     return part.toDataURL('image/png')
   }
-  const place = (name, width, sourceX, sourceWidth, clip) => {
+  const place = (name, width, sourceX, sourceWidth, clip, passes = optics) => {
     const el = box.querySelector(`.lg-slice-${name}`)
     el.style.width = `${width}px`
     el.style.height = `${size}px`
     el.style.clipPath = clip
     const map = { href: cut(sourceX, sourceWidth), scale }
-    el.style.setProperty('--lg-slice', createFilter(`liquid-glass-slice-${name}-${++sliceCount}`, width, size, optics, map))
+    el.style.setProperty('--lg-slice', createFilter(`liquid-glass-slice-${name}-${++sliceCount}`, width, size, passes, map))
     return el
   }
   return {
@@ -276,7 +278,7 @@ function buildSlices(box, w, h, optics) {
     midWidth,
     midPad,
     left: place('left', cap + room, 0, cap + room, `inset(0 ${room}px 0 0 round ${cap}px 0 0 ${cap}px)`),
-    mid: place('mid', midWidth + midPad * 2, cap + room, 4, `inset(0 ${midPad}px)`),
+    mid: place('mid', midWidth + midPad * 2, cap + room, 4, `inset(0 ${midPad}px)`, { ...optics, dispersion: 0 }),
     right: place('right', cap + room, cap + room + 4, cap + room, `inset(0 0 0 ${room}px round 0 ${cap}px ${cap}px 0)`),
   }
 }
@@ -396,9 +398,23 @@ export function initLiquidGlass() {
     }
   })
 
+  // Maps are built as a surface nears the screen, so nothing is computed for parts of
+  // the page nobody has scrolled to. The margin is wide enough that it's ready on arrival.
+  const near = new IntersectionObserver(
+    (entries) => {
+      for (const { target, isIntersecting } of entries) {
+        if (!isIntersecting) continue
+        near.unobserve(target)
+        ro.observe(target)
+      }
+    },
+    { rootMargin: '1200px 0px' },
+  )
+
   const scan = () => {
     for (const el of tracked) {
       if (!el.isConnected) {
+        near.unobserve(el)
         ro.unobserve(el)
         tracked.delete(el)
       }
@@ -411,7 +427,7 @@ export function initLiquidGlass() {
       const host = el.parentElement.closest(selector)
       if (!tracked.has(el) && (!host || getComputedStyle(host).backdropFilter === 'none')) {
         tracked.add(el)
-        ro.observe(el)
+        near.observe(el)
       }
     }
   }
@@ -426,4 +442,45 @@ export function initLiquidGlass() {
     })
   }).observe(document.body, { childList: true, subtree: true })
   scan()
+  watchFrameRate()
+}
+
+// Slower machines keep the nav and cards as real glass but drop it on small controls,
+// which are the most numerous. Only sustained slowness counts, only while the page is in
+// front (browsers throttle pages behind other windows), and the check stops itself.
+function watchFrameRate() {
+  const root = document.documentElement
+  try {
+    if (sessionStorage.getItem('lg-lite')) {
+      root.classList.add('lg-lite')
+      return
+    }
+  } catch {
+    /* storage can be blocked; the check below still works */
+  }
+  const started = performance.now()
+  let frames = 0
+  let windowStart = started
+  let slow = 0
+  const tick = (now) => {
+    frames++
+    if (now - windowStart >= 1000) {
+      const fps = (frames * 1000) / (now - windowStart)
+      const watching = !document.hidden && document.hasFocus()
+      slow = watching && fps < SLOW_FPS ? slow + 1 : 0
+      frames = 0
+      windowStart = now
+      if (slow >= SLOW_WINDOWS) {
+        root.classList.add('lg-lite')
+        try {
+          sessionStorage.setItem('lg-lite', '1')
+        } catch {
+          /* fine, it just re-checks on the next visit */
+        }
+        return
+      }
+    }
+    if (now - started < WATCH_MS) requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
 }

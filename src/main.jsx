@@ -26,6 +26,20 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   })
 }
 
+// Once the page is idle, fetch the other routes' code so moving between them is instant.
+// Skipped for visitors who asked to save data.
+window.addEventListener('load', () => {
+  if (navigator.connection?.saveData) return
+  const fetchRoutes = () => {
+    import('./pages/Projects')
+    import('./pages/About')
+    import('./pages/CaseStudy')
+    import('./pages/Contact')
+  }
+  if ('requestIdleCallback' in window) requestIdleCallback(fetchRoutes, { timeout: 4000 })
+  else setTimeout(fetchRoutes, 2000)
+})
+
 // The AIDesigner runtime injects its "Made in AIDesigner" badge into <body>;
 // remove it as soon as it appears so it never lingers on the page.
 new MutationObserver(() => {
