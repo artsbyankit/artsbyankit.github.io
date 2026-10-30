@@ -1428,7 +1428,7 @@ p {
 }
 
 .card:hover .card-more {
-  color: #2f6fed;
+  color: #0f3f9e;
 }
 
 .card:hover .card-more span {
@@ -2943,9 +2943,13 @@ html.liquid-glass .metrics-table,
 html.liquid-glass .cs-next-card,
 html.liquid-glass .skill-box,
 html.liquid-glass .tool-list li {
-  --panel-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.28) 48%, rgba(255, 255, 255, 0.45));
+  --lg-bezel: 1.4; --lg-bezel-max: 34;
+  --lg-ior: 1.6; --lg-thickness: 2.4;
+  --lg-blur: 11; --lg-rim-blur: 0.8;
+  --lg-saturate: 1.55;
+  --panel-bg: rgba(255, 255, 255, 0.24);
   --glass-bg: var(--panel-bg);
-  --glass-border: rgba(255, 255, 255, 0.6); --panel-border: rgba(255, 255, 255, 0.6);
+  --glass-border: transparent; --panel-border: transparent;
 }
 
 /* The open mobile menu sits right on top of the page's headlines. */
@@ -2954,6 +2958,60 @@ html.liquid-glass .nav-links-mobile {
   --panel-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0.54));
   --glass-bg: var(--panel-bg);
   --glass-border: rgba(255, 255, 255, 0.6); --panel-border: rgba(255, 255, 255, 0.6);
+}
+
+/* Edge light, as on iOS: bright on the top-left, a thinner caustic on the opposite
+   edge, a soft glow inside, and almost no drop shadow. */
+html.liquid-glass {
+  --lg-rim:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.9),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 0 16px rgba(255, 255, 255, 0.16);
+  --panel-highlight: var(--lg-rim);
+  --glass-shadow: 0 6px 22px rgba(31, 56, 88, 0.1);
+}
+
+/* Small controls are whole lenses: the curve runs edge to edge, so everything
+   behind them bends, with hardly any frost and no flat centre. */
+html.liquid-glass .btn:not(.nav-cta),
+html.liquid-glass .social-big a,
+html.liquid-glass .tools-row .tag,
+html.liquid-glass .cs-meta .tag,
+html.liquid-glass .persona-role-badge,
+html.liquid-glass .cat-role,
+.lg-lens {
+  --lg-bezel: 1; --lg-bezel-max: 200;
+  --lg-ior: 1.65; --lg-thickness: 2.6;
+  --lg-dispersion: 0.09; --lg-blur: 0.5;
+  --lg-saturate: 1.65; --lg-rim-blur: -1;
+}
+
+html.liquid-glass .btn:not(.nav-cta) {
+  --glass-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05) 48%, rgba(255, 255, 255, 0.14));
+  --glass-border: transparent;
+  border-color: transparent;
+  box-shadow: var(--lg-rim), var(--glass-shadow);
+}
+
+/* Pressed glass swells and catches the light instead of sinking. */
+html.liquid-glass .btn:not(.nav-cta):active,
+html.liquid-glass .social-big a:active {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+}
+
+/* A free-floating round lens, for controls that sit on top of photographs. */
+.lg-lens {
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.1));
+  color: #fff;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.95),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 0 12px rgba(255, 255, 255, 0.18),
+    0 4px 14px rgba(0, 0, 0, 0.18);
+  -webkit-backdrop-filter: var(--lg-filter, blur(6px) saturate(160%)); backdrop-filter: var(--lg-filter, blur(6px) saturate(160%));
 }
 
 /* Nav dock. A backdrop-filter on the dock itself would stop the pills inside it

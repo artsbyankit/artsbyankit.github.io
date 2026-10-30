@@ -15,27 +15,68 @@ const FACTS = [
 ]
 
 const SECTIONS = [
-  { id: 'hero', label: 'Hero', ratio: '1920 / 1100', note: 'The wireframe already split the hero in half. Colour photography then does what the grey box was holding space for.' },
-  { id: 'summer', label: 'Summer Collection', ratio: '1920 / 1200', note: 'A big image and a small one, offset on purpose, so the page feels placed by hand and not poured into a grid.' },
-  { id: 'journal', label: 'Journal', ratio: '1920 / 1800', note: 'Two articles side by side, then one at full width. The change of pace keeps a long list from feeling long.' },
-  { id: 'social', label: 'Instagram', ratio: '1920 / 1000', note: 'A quiet line of type next to four product shots, which closes the page on the same still-life mood it opened with.' },
+  { id: 'hero', label: 'Hero', top: 0, height: 1100, shift: 0, note: 'The wireframe already split the hero in half. Colour photography then does what the grey box was holding space for.' },
+  { id: 'summer', label: 'Summer Collection', top: 2240, height: 1200, shift: 744, note: 'A big image and a small one, offset on purpose, so the page feels placed by hand and not poured into a grid.' },
+  { id: 'journal', label: 'Journal', top: 3500, height: 1800, shift: 744, note: 'Two articles side by side, then one at full width. The change of pace keeps a long list from feeling long.' },
+  { id: 'social', label: 'Instagram', top: 5300, height: 1000, shift: 744, note: 'A quiet line of type next to four product shots, which closes the page on the same still-life mood it opened with.' },
 ]
 
-function Frame({ name, alt, height = 1080 }) {
+// A circle that follows the mouse and shows the frame at three times the size.
+function useLoupe(layers) {
+  const [on, setOn] = useState(false)
+  const lens = useRef(null)
+  const move = (e) => {
+    if (e.pointerType !== 'mouse') return
+    const r = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - r.left
+    const y = e.clientY - r.top
+    const style = lens.current?.style
+    if (style) {
+      style.transform = `translate(${x}px, ${y}px)`
+      style.backgroundSize = `${r.width * 3}px ${r.height * 3}px`
+      style.backgroundPosition = `${90 - x * 3}px ${90 - y * 3}px`
+    }
+    if (!on) setOn(true)
+  }
+  const element = on ? (
+    <span
+      className="ss-lens"
+      ref={lens}
+      aria-hidden="true"
+      style={{ backgroundImage: layers.map((l) => `url(${l})`).join(', ') }}
+    />
+  ) : null
+  return { element, move, leave: () => setOn(false) }
+}
+
+// Type-heavy frames are SVG, so they stay razor sharp at any zoom. Photographs come in three widths.
+function Frame({ name, alt, height = 1080, vector, tone }) {
   const open = useContext(OpenFrame)
+  const hi = vector ? `${IMG}/${name}.svg` : `${IMG}/${name}-3840.webp`
+  const loupe = useLoupe([hi])
   return (
-    <button type="button" className="ss-zoom" aria-label={`Enlarge: ${alt}`} onClick={open}>
+    <button
+      type="button"
+      className="ss-zoom"
+      data-tone={tone}
+      aria-label={`Enlarge: ${alt}`}
+      onClick={open}
+      onPointerMove={loupe.move}
+      onPointerLeave={loupe.leave}
+    >
       <img
         className="ss-frame"
-        src={`${IMG}/${name}-1920.webp`}
-        srcSet={`${IMG}/${name}-960.webp 960w, ${IMG}/${name}-1920.webp 1920w`}
-        sizes="100vw"
+        src={vector ? hi : `${IMG}/${name}-1920.webp`}
+        srcSet={vector ? undefined : `${IMG}/${name}-960.webp 960w, ${IMG}/${name}-1920.webp 1920w, ${hi} 3840w`}
+        sizes={vector ? undefined : '100vw'}
+        data-hi={hi}
         width="1920"
         height={height}
         alt={alt}
         loading="lazy"
         decoding="async"
       />
+      {loupe.element}
     </button>
   )
 }
@@ -65,12 +106,25 @@ function Compare() {
           </button>
         ))}
       </div>
-      <div className="ss-wipe" style={{ aspectRatio: active.ratio, '--split': `${split}%` }}>
-        <img src={`${IMG}/wf-${active.id}.webp`} alt={`${active.label} section as a low-fidelity wireframe`} />
-        <img className="ss-wipe-final" src={`${IMG}/final-${active.id}.webp`} alt={`${active.label} section as the finished design`} />
+      <div className="ss-wipe" style={{ aspectRatio: `1920 / ${active.height}`, '--split': `${split}%` }}>
+        <img
+          src={`${IMG}/wf-home.svg`}
+          style={{ top: `${(-active.top / active.height) * 100}%` }}
+          alt={`${active.label} section as a low-fidelity wireframe`}
+        />
+        <div className="ss-wipe-final">
+          <img
+            src={`${IMG}/final-photos.webp`}
+            style={{ top: `${(-(active.top - active.shift) / active.height) * 100}%` }}
+            alt={`${active.label} section as the finished design`}
+          />
+          <img src={`${IMG}/final-text.svg`} style={{ top: `${(-(active.top - active.shift) / active.height) * 100}%` }} alt="" />
+        </div>
         <span className="ss-wipe-tag left">Final</span>
         <span className="ss-wipe-tag right">Wireframe</span>
-        <span className="ss-wipe-handle" aria-hidden="true" />
+        <span className="ss-wipe-handle" aria-hidden="true">
+          <i className="lg-lens">✦</i>
+        </span>
         <input
           type="range"
           min="0"
@@ -121,8 +175,8 @@ function FlipCard() {
         onClick={() => setBack(!back)}
       >
         <span className="ss-card-inner">
-          <img src={`${IMG}/card-front.webp`} width="1000" height="555" loading="lazy" alt="" />
-          <img src={`${IMG}/card-back.webp`} width="1000" height="555" loading="lazy" alt="" />
+          <img src={`${IMG}/card-front.svg`} width="600" height="333" loading="lazy" alt="" />
+          <img src={`${IMG}/card-back.svg`} width="600" height="333" loading="lazy" alt="" />
         </span>
       </button>
       <p className="ss-hint">Tap the card to turn it over</p>
@@ -233,20 +287,23 @@ function ProductDemo() {
 
 function FinalHome() {
   const [pin, setPin] = useState(null)
+  const loupe = useLoupe([`${IMG}/final-text.svg`, `${IMG}/final-photos.webp`])
   return (
-    <div className="ss-final">
+    <div className="ss-final" onPointerMove={loupe.move} onPointerLeave={loupe.leave}>
+      <img className="ss-final-type" src={`${IMG}/final-text.svg`} width="1920" height="6637" loading="lazy" alt="" />
+      {loupe.element}
       <img
         className="ss-frame"
-        src={`${IMG}/final-home.webp`}
-        width="1800"
-        height="6222"
+        src={`${IMG}/final-photos.webp`}
+        width="1920"
+        height="6637"
         loading="lazy"
         decoding="async"
         alt="Full Silk Serenity home page: split hero, Summer Collection, Journal, Instagram grid, oversized footer wordmark, and a closing Thank You band"
       />
       {PINS.map((p, i) => (
         <div className={`ss-pin${pin === i ? ' open' : ''}${p.x > 55 ? ' flip' : ''}`} key={p.title} style={{ left: `${p.x}%`, top: `${p.y}%` }}>
-          <button type="button" aria-expanded={pin === i} aria-label={`Design note: ${p.title}`} onClick={() => setPin(pin === i ? null : i)}>✦</button>
+          <button type="button" className="lg-lens" aria-expanded={pin === i} aria-label={`Design note: ${p.title}`} onClick={() => setPin(pin === i ? null : i)}>✦</button>
           {pin === i && (
             <div className="ss-pin-note">
               <strong>{p.title}</strong>
@@ -259,31 +316,52 @@ function FinalHome() {
   )
 }
 
-// Every frame on the page, big, with arrow keys to walk through them.
+// Every frame on the page at full resolution. Click to zoom, move to look around.
 function Lightbox({ frames, index, setIndex }) {
   const ref = useRef(null)
+  const [zoom, setZoom] = useState(false)
   const open = index !== null
   useEffect(() => {
     const d = ref.current
     if (open && !d.open) d.showModal()
     if (!open && d.open) d.close()
   }, [open])
-  const step = (by) => setIndex((index + by + frames.length) % frames.length)
+  const step = (by) => {
+    setZoom(false)
+    setIndex((index + by + frames.length) % frames.length)
+  }
   const onKey = (e) => {
     if (e.key === 'ArrowRight') step(1)
     if (e.key === 'ArrowLeft') step(-1)
   }
+  const pan = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.transformOrigin = `${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`
+  }
+  const close = () => {
+    setZoom(false)
+    setIndex(null)
+  }
   const frame = open ? frames[index] : null
   return (
-    <dialog ref={ref} className="ss-box" aria-label="Enlarged frame" onClose={() => setIndex(null)} onKeyDown={onKey} onClick={(e) => e.target === ref.current && setIndex(null)}>
+    <dialog ref={ref} className="ss-box" aria-label="Enlarged frame" onClose={close} onKeyDown={onKey} onClick={(e) => e.target === ref.current && close()}>
       {frame && (
         <>
-          <img src={frame.src} alt={frame.alt} />
+          <div className="ss-box-view">
+            <img
+              className={zoom ? 'zoomed' : ''}
+              src={frame.src}
+              alt={frame.alt}
+              onPointerMove={pan}
+              onPointerDown={pan}
+              onClick={() => setZoom(!zoom)}
+            />
+          </div>
           <div className="ss-box-bar">
             <button type="button" aria-label="Previous frame" onClick={() => step(-1)}>←</button>
             <span>{index + 1} / {frames.length}</span>
             <button type="button" aria-label="Next frame" onClick={() => step(1)}>→</button>
-            <button type="button" aria-label="Close" onClick={() => setIndex(null)}>×</button>
+            <button type="button" aria-label="Close" onClick={close}>×</button>
           </div>
         </>
       )}
@@ -295,9 +373,30 @@ export default function SilkSerenity({ project, next }) {
   const [frames, setFrames] = useState([])
   const [index, setIndex] = useState(null)
   const root = useRef(null)
+  useEffect(() => {
+    let raf = null
+    const check = () => {
+      raf = null
+      const under = document.elementsFromPoint(window.innerWidth / 2, 32).find((el) => el.closest('.ss'))
+      const dark = under?.closest('[data-tone="dark"], .dark, .ss-play')
+      document.documentElement.toggleAttribute('data-ss-dark', Boolean(dark))
+    }
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(check)
+    }
+    check()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      document.documentElement.removeAttribute('data-ss-dark')
+    }
+  }, [])
   const openFrame = (e) => {
     const list = [...root.current.querySelectorAll('.ss-zoom img')]
-    setFrames(list.map((img) => ({ src: img.currentSrc || img.src, alt: img.alt })))
+    setFrames(list.map((img) => ({ src: img.dataset.hi, alt: img.alt })))
     setIndex(list.indexOf(e.currentTarget.querySelector('img')))
   }
   return (
@@ -305,7 +404,7 @@ export default function SilkSerenity({ project, next }) {
     <div className="ss" ref={root}>
       <span className="ss-progress" aria-hidden="true" />
       <button type="button" className="ss-top" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>✦</button>
-      <Frame name="cover" height={1311} alt="Silk Serenity wordmark in white over a close-up of blueberries" />
+      <Frame name="cover" tone="dark" height={1311} alt="Silk Serenity wordmark in white over a close-up of blueberries" />
 
       <section className="ss-intro">
         <div className="ss-inner reveal">
@@ -343,6 +442,7 @@ export default function SilkSerenity({ project, next }) {
             real studio. JM stands for Jiru Masala, my cat, and the studio is imaginary, as is the Silk Serenity brand.
             No cats were invoiced.
           </aside>
+          <p className="ss-hint">Hover over any image to look closer, or click it to open it full size and zoom right in.</p>
         </div>
       </section>
 
@@ -375,7 +475,7 @@ export default function SilkSerenity({ project, next }) {
         </p>
       </Chapter>
 
-      <Frame name="cards" alt="Front and back of a white Silk Serenity business card on black" />
+      <Frame name="cards" vector tone="dark" alt="Front and back of a white Silk Serenity business card on black" />
       <FlipCard />
       <Frame name="bag" alt="Kraft paper shopping bag with the stacked wordmark at the bottom left and the star at the top right" />
 
@@ -391,7 +491,7 @@ export default function SilkSerenity({ project, next }) {
         </p>
       </Chapter>
 
-      <Frame name="stationery" alt="Three white A4 sheets on black: a letterhead, a typed letter, and a back page with a large wordmark" />
+      <Frame name="stationery" vector tone="dark" alt="Three white A4 sheets on black: a letterhead, a typed letter, and a back page with a large wordmark" />
 
       <Chapter number="04" title="Photography without colour" dark>
         <p>
@@ -433,7 +533,7 @@ export default function SilkSerenity({ project, next }) {
         </p>
       </Chapter>
 
-      <Frame name="type" alt="Style sheet showing the Adorage and LT Superior typefaces with black and white colour swatches" />
+      <Frame name="type" vector tone="dark" alt="Style sheet showing the Adorage and LT Superior typefaces with black and white colour swatches" />
       <TypeTester />
 
       <Chapter number="07" title="From wireframe to website">
@@ -459,11 +559,11 @@ export default function SilkSerenity({ project, next }) {
           <p className="ss-hint">Try it. This is the product wireframe made clickable, with sample copy and photos from the home page.</p>
           <div className="ss-pages">
             <figure>
-              <img src={`${IMG}/wf-collection.webp`} width="1100" height="2098" loading="lazy" alt="Wireframe of the collection page with a four-column product grid" />
+              <img src={`${IMG}/wf-collection.svg`} width="1920" height="3662" loading="lazy" alt="Wireframe of the collection page with a four-column product grid" />
               <figcaption>Collection</figcaption>
             </figure>
             <figure>
-              <img src={`${IMG}/wf-product.webp`} width="1100" height="1750" loading="lazy" alt="Wireframe of the Green Tea Cleanser product page" />
+              <img src={`${IMG}/wf-product.svg`} width="1920" height="3054" loading="lazy" alt="Wireframe of the Green Tea Cleanser product page" />
               <figcaption>Product</figcaption>
             </figure>
           </div>
@@ -483,7 +583,7 @@ export default function SilkSerenity({ project, next }) {
 
       <section className="ss-intro">
         <div className="ss-inner reveal">
-          <h2 className="ss-closing">Why this is my best work</h2>
+          <h2 className="ss-closing">What holds it together</h2>
           <div className="ss-reasons">
             <div>
               <h3>It’s one system</h3>

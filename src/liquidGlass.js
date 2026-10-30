@@ -19,12 +19,13 @@
 const OPTICS = {
   ior: ['--lg-ior', 1.5],
   bezel: ['--lg-bezel', 0.55], // curved edge width, relative to the corner radius
+  bezelMax: ['--lg-bezel-max', 28], // px; raise it and the whole surface becomes a lens
   thickness: ['--lg-thickness', 1.45], // glass height, relative to the bezel
   dispersion: ['--lg-dispersion', 0.05], // how much more blue bends than red
   saturate: ['--lg-saturate', 1.3],
+  rim: ['--lg-rim-blur', -1], // 0 or more: frost only the centre, keep the bent rim this sharp
 }
 const BEZEL_MIN = 6
-const BEZEL_MAX = 28
 const SMALL_AREA = 60000 // px², below this a surface can afford dispersion
 const HALF_RES_AREA = 200000 // px², above this the map is built at half size
 const RESIZE_SETTLE_MS = 140 // wait out animations like the dock swell
@@ -64,7 +65,7 @@ function buildMap(w, h, radius, optics, capped = true) {
   const mw = Math.round(w * res)
   const mh = Math.round(h * res)
   const wanted = radius * optics.bezel
-  const bezel = capped ? Math.min(Math.max(wanted, BEZEL_MIN), BEZEL_MAX) : wanted
+  const bezel = capped ? Math.min(Math.max(wanted, BEZEL_MIN), optics.bezelMax) : wanted
   const thickness = bezel * optics.thickness
 
   const table = new Float32Array(65)
@@ -80,6 +81,9 @@ function buildMap(w, h, radius, optics, capped = true) {
   canvas.height = mh
   const ctx = canvas.getContext('2d')
   const img = ctx.createImageData(mw, mh)
+  const split = optics.rim >= 0
+  const maskCanvas = split ? document.createElement('canvas') : null
+  const maskImg = split ? ctx.createImageData(mw, mh) : null
   const hw = w / 2
   const hh = h / 2
 
@@ -109,17 +113,38 @@ function buildMap(w, h, radius, optics, capped = true) {
       const offset = table[Math.floor((dist / bezel) * 64)] / max
       img.data[o] = 128 + nx * offset * 127
       img.data[o + 1] = 128 + ny * offset * 127
+      if (split) {
+        maskImg.data[o] = maskImg.data[o + 1] = maskImg.data[o + 2] = 255
+        maskImg.data[o + 3] = 255 * Math.min(1, (1 - dist / bezel) * 1.7)
+      }
     }
   }
   ctx.putImageData(img, 0, 0)
-  return { canvas, scale: max * 2 }
+  if (split) {
+    maskCanvas.width = mw
+    maskCanvas.height = mh
+    maskCanvas.getContext('2d').putImageData(maskImg, 0, 0)
+  }
+  return { canvas, maskCanvas, scale: max * 2 }
 }
 
 const channelPass = (channel, factor, scale) => `
   <feDisplacementMap in="soft" in2="map" scale="${(scale * factor).toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="d${channel}" />
   <feColorMatrix in="d${channel}" type="matrix" values="${CHANNELS[channel]} 0 0 0 1 0" result="${channel}" />`
 
-function filterMarkup(w, h, optics, { href, scale }) {
+function filterMarkup(w, h, optics, { href, maskHref, scale }) {
+  // Big cards, as on iOS: a heavily frosted centre inside a sharper, bent rim.
+  if (maskHref) {
+    return `
+      <feGaussianBlur in="SourceGraphic" stdDeviation="${optics.blur}" result="soft" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="${optics.rim}" result="crisp" />
+      <feImage href="${href}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map" />
+      <feImage href="${maskHref}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="edge" />
+      <feDisplacementMap in="crisp" in2="map" scale="${scale.toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="bent" />
+      <feComposite in="bent" in2="edge" operator="in" result="rim" />
+      <feMerge result="out"><feMergeNode in="soft" /><feMergeNode in="rim" /></feMerge>
+      <feColorMatrix in="out" type="saturate" values="${optics.saturate}" />`
+  }
   const refract =
     w * h < SMALL_AREA && optics.dispersion > 0
       ? `${channelPass('r', 1 - optics.dispersion * 0.8, scale)}
@@ -165,8 +190,12 @@ function filterFor(w, h, radius, optics) {
   const key = [w, h, radius, ...Object.values(optics)].join('x').replace(/\./g, '_')
   if (filters.has(key)) return filters.get(key)
 
-  const { canvas, scale } = buildMap(w, h, radius, optics)
-  const value = createFilter(`liquid-glass-${key}`, w, h, optics, { href: canvas.toDataURL('image/png'), scale })
+  const { canvas, maskCanvas, scale } = buildMap(w, h, radius, optics)
+  const value = createFilter(`liquid-glass-${key}`, w, h, optics, {
+    href: canvas.toDataURL('image/png'),
+    maskHref: maskCanvas?.toDataURL('image/png'),
+    scale,
+  })
   filters.set(key, value)
   return value
 }
