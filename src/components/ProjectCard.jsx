@@ -10,7 +10,7 @@ export default function ProjectCard({ project }) {
       <div className="card-body">
         <div className="card-tags">
           <span className="tag">{project.category}</span>
-          <span className="tag">{project.year}</span>
+          {project.year && <span className="tag">{project.year}</span>}
           {project.inProgress && <span className="tag tag-live">In progress</span>}
         </div>
         <h3>{project.title}</h3>

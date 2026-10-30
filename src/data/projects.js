@@ -284,33 +284,14 @@ const projects = [
     },
   },
   {
-    slug: 'atlas',
-    title: 'Atlas Design System',
-    category: 'Design Systems',
-    year: '2024',
-    role: 'Design Lead',
-    duration: '4 months',
-    tools: ['Figma', 'Tokens Studio', 'Storybook'],
-    emoji: '🧭',
-    gradient: 'linear-gradient(140deg, #42275a, #734b6d 55%, #4a2f5a)',
-    excerpt: 'A scalable design system uniting 6 product teams on one visual language, built on fully documented tokens.',
-    overview:
-      'Six product teams at a SaaS company were shipping interfaces that looked like six different products. Atlas was created as a single source of truth: a token-driven design system with 48 components, theming support, and a contribution model anyone could use.',
-    problem:
-      'Designers and engineers duplicated patterns, brand colors drifted across teams, and onboarding a new hire took weeks of tribal knowledge. Accessibility was an afterthought in most flows.',
-    process: [
-      'Audited every product surface to find shared patterns and recurring inconsistencies.',
-      'Defined a token architecture (primitive, semantic, component) that supports light, dark, and brand themes.',
-      'Built components in Figma with variants and autolayout, paired with production-ready code in Storybook.',
-      'Created governance docs, a contribution checklist, and office hours to keep quality high.',
-    ],
-    solution:
-      'Atlas delivers 48 documented components, a WCAG 2.1 AA-aligned color system, and a Figma-to-code pipeline that lets engineers ship from the same source of truth. A monthly "design system day" keeps the library evolving.',
-    results: [
-      'Design-to-dev handoff time reduced by 50%.',
-      'Adoption across all 6 teams within two quarters.',
-      'Accessibility violations in audits dropped by 90%.',
-    ],
+    slug: 'nestcare',
+    title: 'NestCare',
+    custom: true,
+    category: 'Mobile App · Healthcare',
+    emoji: '🪺',
+    gradient: 'linear-gradient(140deg, #0a6e66, #0e8f82 55%, #3fb8a6)',
+    excerpt:
+      'A patient-first healthcare app that makes booking, reminders and family-managed care simple for India’s Tier 2 & 3 cities.',
   },
   {
     slug: 'growspace',

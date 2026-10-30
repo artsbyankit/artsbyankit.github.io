@@ -2931,6 +2931,7 @@ html.liquid-glass .nav-cta {
 }
 
 /* Panels hold paragraphs of text, so they keep a denser tint. */
+html.liquid-glass .ns-glass,
 html.liquid-glass .card,
 html.liquid-glass .portrait,
 html.liquid-glass .cs-gallery .frame,
@@ -3097,6 +3098,14 @@ html.liquid-glass .dock-glass:not(.has-target) .nav-cta::after {
 .social-big a.brand-instagram {
   --brand-b: 129 52 175;
   --brand-tint: linear-gradient(45deg, rgb(245 133 41 / 0.66), rgb(221 42 123 / 0.66) 50%, rgb(129 52 175 / 0.66) 80%, rgb(81 91 212 / 0.66));
+}
+
+/* Glass panels on the NestCare case study (the rest of its styles load with the page). */
+.ns-glass {
+  position: relative;
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--lg-filter, var(--frost)); backdrop-filter: var(--lg-filter, var(--frost));
 }
 
 /* Low-spec profile (weak iGPU laptops): gentler frost everywhere, cheaper saturate */

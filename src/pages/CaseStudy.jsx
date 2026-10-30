@@ -1,6 +1,8 @@
-import { useLayoutEffect, useRef, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { lazy, useLayoutEffect, useRef, useState } from 'react'
+import { useParams, Link, Navigate } from 'react-router-dom'
 import projects from '../data/projects'
+
+const NestCare = lazy(() => import('./NestCare'))
 
 const FLOW = [
   {
@@ -640,6 +642,14 @@ function DistroNetDetail({ project }) {
 export default function CaseStudy() {
   const { slug } = useParams()
   const project = projects.find((p) => p.slug === slug)
+
+  // Atlas was replaced by NestCare; keep old links working.
+  if (slug === 'atlas') return <Navigate to="/work/nestcare" replace />
+
+  if (project?.custom) {
+    const next = projects[projects.indexOf(project) + 1]
+    return <NestCare project={project} next={next} />
+  }
 
   if (!project) {
     return (
