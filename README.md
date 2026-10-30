@@ -24,6 +24,7 @@ npm run preview # serve the production build
 - `src/pages/` — page layouts
 - `src/components/` — shared components (Layout, ProjectCard)
 - `src/data/projects.js` — case study content
+- `src/data/routes.js` — page titles and descriptions (new pages must be added here to get their own HTML file and sitemap entry)
 - `src/index.css` — design system, themes, styling
 - `public/` — static assets (resume, backgrounds, favicon)
 

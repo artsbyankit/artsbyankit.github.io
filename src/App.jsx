@@ -7,6 +7,7 @@ const Projects = lazy(() => import('./pages/Projects'))
 const CaseStudy = lazy(() => import('./pages/CaseStudy'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   // Fetch the lazy route chunks once the browser is idle, so navigation
@@ -30,7 +31,7 @@ export default function App() {
           <Route path="work/:slug" element={<CaseStudy />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>

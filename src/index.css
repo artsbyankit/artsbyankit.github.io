@@ -9,7 +9,7 @@
   --glass-sheen: linear-gradient(115deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.15) 32%, transparent 62%); --glass-sheen-opacity: 0.5;
   --panel-border: rgba(255, 255, 255, 0.6); --radius: 20px;
   --radius-sm: 12px; --maxw: 1120px;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif; --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
+  --font-body: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif; --font-display: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
   --panel-bg: linear-gradient(
     150deg,
     rgba(255, 255, 255, 0.55),

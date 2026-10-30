@@ -1,8 +1,9 @@
 import { Suspense, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { NavLink, Outlet, Link, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, Link, useLocation, useNavigationType } from 'react-router-dom'
 import Background from './Background'
 import Cat from './Cat'
+import { SITE_URL, metaFor, notFoundMeta } from '../data/routes'
 
 function Navbar() {
   const [open, setOpen] = useState(false)
@@ -99,6 +100,22 @@ function Footer() {
 
 function LayoutEffects() {
   const location = useLocation()
+  const navigationType = useNavigationType()
+
+  // New page: start at the top. Back/forward and first load (both POP) keep
+  // the browser's own scroll restoration.
+  useEffect(() => {
+    if (navigationType !== 'POP') window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [location.pathname, navigationType])
+
+  useEffect(() => {
+    const meta = metaFor(location.pathname) || notFoundMeta
+    document.title = meta.title
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description)
+    document
+      .querySelector('link[rel="canonical"]')
+      ?.setAttribute('href', `${SITE_URL}${meta.path || location.pathname}`)
+  }, [location.pathname])
 
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
@@ -369,11 +386,10 @@ function LayoutEffects() {
         it.style.transformOrigin = ''
         it.style.marginLeft = ''
         it.style.marginRight = ''
-        dock.style.paddingRight = ''
-        dock.style.paddingRight = ''
         it.classList.remove('nav-green')
         it.classList.remove('nav-flash')
       })
+      dock.style.paddingRight = ''
       dock.style.height = ''
       dock.style.removeProperty('--dock-grow')
       dock.style.removeProperty('--logo-scale')

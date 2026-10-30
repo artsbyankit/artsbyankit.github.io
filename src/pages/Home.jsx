@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="container">
-          <Link to="/freelance" className="btn freelance-pill">
+          <Link to="/contact" className="btn freelance-pill">
             <span className="pulse" aria-hidden="true"></span>
             <span className="freelance-label">Available for freelance projects</span>
           </Link>
@@ -96,7 +96,7 @@ export default function Home() {
                   alt="Ankit Patel — UI/UX Designer"
                   width="640"
                   height="640"
-                  fetchPriority="high"
+                  loading="lazy"
                   decoding="async"
                 />
               </picture>

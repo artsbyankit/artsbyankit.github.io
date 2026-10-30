@@ -43,17 +43,16 @@ function useFluteCounts() {
     }
 
     compute()
-    const ro = new ResizeObserver(() => {
+    const schedule = () => {
       clearTimeout(timer)
       timer = setTimeout(compute, 150)
-    })
+    }
+    const ro = new ResizeObserver(schedule)
     if (document.querySelector('.container')) ro.observe(document.querySelector('.container'))
-    window.addEventListener('resize', () => {
-      clearTimeout(timer)
-      timer = setTimeout(compute, 150)
-    })
+    window.addEventListener('resize', schedule)
     return () => {
       ro.disconnect()
+      window.removeEventListener('resize', schedule)
       clearTimeout(timer)
     }
   }, [])

@@ -31,40 +31,15 @@
     <meta name="twitter:image" content="https://artsbyankit.github.io/og.jpg" />
     <meta name="twitter:image:alt" content="Ankit Patel - UI/UX Designer, turning complex ideas into intuitive experiences" />
     <title>Ankit Patel - UI/UX Designer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.aidesigner.ai" crossorigin />
-    <link rel="dns-prefetch" href="https://cdn.aidesigner.ai" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
+    <link rel="canonical" href="https://artsbyankit.github.io/" />
+    <link rel="preconnect" href="https://cdn.aidesigner.ai" />
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      // Butter-mode: cap the animated backdrop's render resolution at 1x —
-      // 4x fewer fragments for the fluted shader, visually invisible on a
-      // soft glass pattern. No FPS cap: the loop follows the display's
-      // refresh (120Hz ProMotion etc.) so the glass flows at native rate.
-      //
-      // Low-spec profile (weak iGPU laptops: <=4 CPU cores): drop the canvas
-      // to 0.75x resolution, soften glass blur via the --frost token, and
-      // slow the flute drift. Macs and desktops never see it.
-      window.__AIFX_MAX_DPR__ = 1
-      if ((navigator.hardwareConcurrency || 8) <= 4) {
-        window.__AIFX_MAX_DPR__ = 0.75
-        document.documentElement.classList.add('low-spec')
-      }
-    </script>
+    <noscript>
+      <p>This portfolio needs JavaScript. You can reach Ankit Patel at ArtsByAnkit@gmail.com.</p>
+    </noscript>
+    <script defer src="/boot.js"></script>
     <script defer src="https://cdn.aidesigner.ai/effects/runtime/v1.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
