@@ -455,7 +455,7 @@ export default function SilkSerenity({ project, next }) {
           </div>
           <aside className="ss-cat">
             <strong>A note on the client.</strong> You will spot “JMstudio” in the corners of these layouts. It is not a
-            real studio. JM stands for Jiru Masala, my cat, and the studio is imaginary, as is the Silk Serenity brand.
+            real studio. JM stands for Jeeru Masala, my cat, and the studio is imaginary, as is the Silk Serenity brand.
             No cats were invoiced.
           </aside>
           <p className="ss-hint">Hover over a frame to look closer, or click it to open it full size and zoom right in.</p>
