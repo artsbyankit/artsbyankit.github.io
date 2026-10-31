@@ -159,10 +159,45 @@ const PINS = [
   { x: 50, y: 88, title: 'Oversized footer', text: 'The wordmark returns at full size, above the newsletter sign-up.' },
 ]
 
-// A sheet of card, not a picture of one: tilts with the pointer, turns over on click.
+function SwayingCards() {
+  const open = useContext(OpenFrame)
+  return (
+    <button
+      type="button"
+      className="ss-zoom ss-cards"
+      data-tone="dark"
+      aria-label="Enlarge: front and back of a white Silk Serenity business card on black"
+      onClick={open}
+    >
+      <img src={`${IMG}/card-front.svg`} data-hi={`${IMG}/card-front.svg`} width="600" height="333" loading="lazy" alt="Front of the Silk Serenity business card" />
+      <img src={`${IMG}/card-back.svg`} data-hi={`${IMG}/card-back.svg`} width="600" height="333" loading="lazy" alt="Back of the Silk Serenity business card" />
+    </button>
+  )
+}
+
+const AUTO_TURN_MS = 4000
+
+// A sheet of card, not a picture of one: turns over by itself while on screen, tilts with
+// the pointer, turns over on click. It holds still under the pointer so it can be read.
 function FlipCard() {
   const [back, setBack] = useState(false)
   const ref = useRef(null)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let timer = null
+    const observer = new IntersectionObserver(([entry]) => {
+      clearInterval(timer)
+      if (!entry.isIntersecting) return
+      timer = setInterval(() => {
+        if (!ref.current.matches(':hover')) setBack((b) => !b)
+      }, AUTO_TURN_MS)
+    })
+    observer.observe(ref.current)
+    return () => {
+      clearInterval(timer)
+      observer.disconnect()
+    }
+  }, [])
   const tilt = (e) => {
     if (e.pointerType !== 'mouse') return
     const r = ref.current.getBoundingClientRect()
@@ -491,7 +526,7 @@ export default function SilkSerenity({ project, next }) {
         </p>
       </Chapter>
 
-      <Frame name="cards" vector tone="dark" alt="Front and back of a white Silk Serenity business card on black" />
+      <SwayingCards />
       <FlipCard />
       <Frame name="bag" alt="Kraft paper shopping bag with the stacked wordmark at the bottom left and the star at the top right" />
 

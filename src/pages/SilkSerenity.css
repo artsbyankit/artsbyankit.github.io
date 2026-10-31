@@ -400,7 +400,7 @@ html[data-ss-dark] .dock-glass a,
 html[data-ss-dark] .dock-glass .nav-toggle {
   color: #fff !important;
   -webkit-text-fill-color: #fff;
-  text-shadow: none;
+  text-shadow: none !important; /* a white halo on white text reads as doubled letters */
 }
 
 html[data-ss-dark] .dock-glass {
@@ -507,6 +507,36 @@ html[data-ss-dark] .dock-glass .lg-tint {
   color: #fff;
   text-align: center;
   perspective: 1400px;
+}
+
+/* Two cards at the same spots as the flat frame, each rocking gently on its own. */
+.ss-cards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.7%;
+  aspect-ratio: 1920 / 1080;
+  background: #000;
+  perspective: 1400px;
+}
+
+.ss-cards img {
+  width: 31.25%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ss-cards img {
+    animation: ss-sway 6s ease-in-out infinite alternate;
+  }
+
+  .ss-cards img + img {
+    animation-delay: -3s;
+  }
+}
+
+@keyframes ss-sway {
+  from { transform: rotateX(4deg) rotateY(-14deg); }
+  to { transform: rotateX(-4deg) rotateY(14deg); }
 }
 
 .ss-card {

@@ -468,7 +468,7 @@ main:has(> .page-skeleton) {
 .logo {
   align-self: center; font-family: var(--font-display);
   font-weight: 700; white-space: nowrap;
-  font-size: calc(20px * var(--logo-scale, 1)); letter-spacing: -0.02em;
+  font-size: calc(20px * var(--logo-scale, 1)); letter-spacing: 0;
   display: inline-flex; align-items: center;
   /* Green dot + name swell with the dock's expansion (JS sets --logo-scale). */
   gap: calc(12px * var(--logo-scale, 1));
@@ -1639,6 +1639,18 @@ main:has(> .page-skeleton) {
   font-size: 15px; letter-spacing: 0.08em;
   text-transform: uppercase; color: rgba(255, 255, 255, 0.75);
   text-align: center; padding: 0 24px;
+}
+
+/* On a phone the subtitle wraps to several lines, so it stacks under the title. */
+@media (max-width: 640px) {
+  .cs-cover:has(.cs-cover-sub) {
+    flex-direction: column; gap: 8px;
+    aspect-ratio: auto; padding: 32px 0;
+  }
+
+  .cs-cover-sub {
+    position: static; transform: none;
+  }
 }
 
 /* Placeholder badge: marks spots waiting for a real asset */
