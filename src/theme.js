@@ -20,7 +20,7 @@ export const bgPalette = {
 /* ---------- INK & PAPER ---------- */
 const ink = {
   text: '#12233a',
-  muted: 'rgba(18, 35, 58, 0.72)',
+  muted: 'rgba(18, 35, 58, 0.82)', // at least 4.5:1 on the darkest background blue
 };
 
 /* ---------- SEMANTIC COLORS ---------- */

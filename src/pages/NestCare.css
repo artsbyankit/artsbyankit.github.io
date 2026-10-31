@@ -217,24 +217,6 @@
   background: var(--ns-mint);
 }
 
-.ns-coral {
-  background: var(--ns-coral);
-  color: #3a0d08;
-}
-
-.ns-amber {
-  background: var(--ns-amber);
-  color: #41240a;
-}
-
-.ns-sky {
-  background: var(--ns-sky);
-}
-
-.ns-plain {
-  background: rgba(255, 255, 255, 0.55);
-}
-
 .ns-list {
   margin: 16px 0 0;
   padding: 0;
@@ -785,7 +767,7 @@
   display: block;
   font-size: clamp(28px, 3.4vw, 40px);
   line-height: 1.1;
-  color: var(--ns-deep);
+  color: #0a5f57; /* --ns-deep is too light for text on the glass */
 }
 
 .ns-stat span {
@@ -811,7 +793,7 @@
   margin-bottom: 8px;
   font-size: 15px;
   font-weight: 700;
-  color: #c9503f;
+  color: #a83a2b;
 }
 
 .ns-solution img {
@@ -857,7 +839,7 @@
   gap: 20px;
 }
 
-.ns-features h4 {
+.ns-features h3 {
   margin: 16px 0 0;
   font-size: 15px;
   color: var(--ns-deep);

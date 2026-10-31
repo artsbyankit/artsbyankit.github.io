@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { NavLink, Outlet, Link, useLocation, useNavigationType } from 'react-router-dom'
 import Background from './Background'
 import Cat from './Cat'
+import ErrorBoundary from './ErrorBoundary'
 import { SITE_URL, metaFor, notFoundMeta } from '../data/routes'
 
 const DARK_SURFACES = '.card-cover, .cs-cover'
@@ -485,6 +486,7 @@ function LayoutEffects() {
 }
 
 export default function Layout() {
+  const location = useLocation()
   return (
     <>
       <Background />
@@ -493,6 +495,7 @@ export default function Layout() {
       </a>
       <Navbar />
       <main id="main-content">
+        <ErrorBoundary key={location.pathname}>
         <Suspense
           fallback={
             <div className="page-skeleton" aria-hidden="true">
@@ -506,6 +509,7 @@ export default function Layout() {
         >
           <Outlet />
         </Suspense>
+        </ErrorBoundary>
       </main>
       <Footer />
       <LayoutEffects />

@@ -21,6 +21,7 @@ export const routes = [
     title: `About - ${SITE_TITLE}`,
     description:
       'About Ankit Patel — UI/UX designer with 7+ years across startups, studios, and global product teams.',
+    preload: { href: '/about-me.avif', type: 'image/avif' },
   },
   {
     path: '/contact',
@@ -31,6 +32,7 @@ export const routes = [
     path: `/work/${p.slug}`,
     title: `${p.title} - Ankit Patel`,
     description: p.excerpt,
+    preload: p.preload,
   })),
 ]
 

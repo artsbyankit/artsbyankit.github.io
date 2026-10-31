@@ -15,6 +15,7 @@ const ACTIVE_KEY = 'last-active'
 const STALE_MS = 30 * 24 * 60 * 60 * 1000 // 30 days without a visit
 const MIN_UPDATE_MS = 60 * 1000 // throttle timestamp writes to 1/min
 const HASHED_ASSET = /^\/assets\/.+-[\w-]{8}\.[a-z0-9]+$/i
+const MAX_ENTRIES = 160 // every deploy adds new file names, so the cache has to be bounded
 const STATIC_FILE = /\.(png|webp|avif|jpg|jpeg|svg|gif|woff2?|pdf|js)$/i
 
 self.addEventListener('install', (event) => {
@@ -71,11 +72,22 @@ async function purgeIfStale() {
   }
 }
 
+// Oldest entries go first. Anything removed is simply fetched again when needed.
+async function trim(cache) {
+  const keys = await cache.keys()
+  await Promise.all(keys.slice(0, Math.max(keys.length - MAX_ENTRIES, 0)).map((key) => cache.delete(key)))
+}
+
+async function store(cache, request, response) {
+  await cache.put(request, response)
+  await trim(cache)
+}
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE)
   try {
     const fresh = await fetch(request)
-    if (fresh.ok) cache.put(request, fresh.clone())
+    if (fresh.ok) store(cache, request, fresh.clone()).catch(() => {})
     return fresh
   } catch {
     // Offline: the exact page if we have it, otherwise the app shell (the
@@ -90,7 +102,7 @@ async function cacheFirst(request) {
   const hit = await cache.match(request)
   if (hit) return hit
   const response = await fetch(request)
-  if (response.ok) cache.put(request, response.clone())
+  if (response.ok) store(cache, request, response.clone()).catch(() => {})
   return response
 }
 
@@ -98,7 +110,7 @@ async function staleWhileRevalidate(event) {
   const cache = await caches.open(CACHE)
   const hit = await cache.match(event.request)
   const refresh = fetch(event.request).then((response) => {
-    if (response.ok) cache.put(event.request, response.clone())
+    if (response.ok) store(cache, event.request, response.clone()).catch(() => {})
     return response
   })
   if (!hit) return refresh

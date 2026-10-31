@@ -26,25 +26,11 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   })
 }
 
-// Once the page is idle, fetch the other routes' code so moving between them is instant.
-// Skipped for visitors who asked to save data.
-window.addEventListener('load', () => {
-  if (navigator.connection?.saveData) return
-  const fetchRoutes = () => {
-    import('./pages/Projects')
-    import('./pages/About')
-    import('./pages/CaseStudy')
-    import('./pages/Contact')
-  }
-  if ('requestIdleCallback' in window) requestIdleCallback(fetchRoutes, { timeout: 4000 })
-  else setTimeout(fetchRoutes, 2000)
-})
-
 // The AIDesigner runtime injects its "Made in AIDesigner" badge into <body>;
 // remove it as soon as it appears so it never lingers on the page.
 new MutationObserver(() => {
-  document.querySelectorAll('[data-aifx-wm]').forEach((el) => el.remove())
-}).observe(document.documentElement, { childList: true, subtree: true })
+  document.querySelectorAll('body > [data-aifx-wm]').forEach((el) => el.remove())
+}).observe(document.body, { childList: true })
 
 // Watchdog: if the effect runtime loaded but never materialized a canvas in
 // the visible bg tier (happens on some Firefox/Android builds), retry it once.

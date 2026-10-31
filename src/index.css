@@ -84,10 +84,6 @@ p {
   z-index: -1; pointer-events: none;
 }
 
-.bg-effect-mobile,
-.bg-effect-tablet {
-  display: none;
-}
 
 
 @media (prefers-reduced-motion: reduce) {
@@ -281,6 +277,19 @@ p {
 }
 
 /* ---------- Route-transition skeleton ---------- */
+main:has(> .page-skeleton) {
+  min-height: 100svh;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .page-skeleton {
   width: 100%; max-width: var(--maxw);
   margin: 0 auto; padding: 64px 24px 0;
@@ -1712,25 +1721,9 @@ p {
   border-style: dashed;
 }
 
-.persona-img {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: center;
-  transform: scale(1.35); display: block;
-}
-
-.persona-card:nth-child(2) .persona-img,
-.persona-card:nth-child(3) .persona-img,
-.persona-card:nth-child(4) .persona-img {
-  transform: scale(1.15); object-position: top;
-}
-
 .persona-body {
   display: flex; flex-direction: column;
   gap: 16px; min-width: 0;
-}
-
-.persona-blocks {
-  grid-column: 1 / -1;
 }
 
 .persona-initial {
@@ -1750,55 +1743,12 @@ p {
   flex-direction: column; gap: 2px;
 }
 
-.persona-role {
-  font-size: 17px; font-weight: 500;
-  color: var(--muted);
-}
-
 .persona-quote {
   margin: 0; padding: 0 0 0 16px;
   border-left: 3px solid var(--line); color: var(--text);
   font-size: 17px; font-style: italic;
   line-height: 1.55;
 }
-
-.persona-details {
-  margin: 0; display: flex;
-  flex-direction: column; gap: 10px;
-}
-
-.persona-details > div {
-  display: grid; grid-template-columns: 92px 1fr;
-  gap: 12px; font-size: 15px;
-  line-height: 1.5;
-}
-
-.persona-details dt {
-  font-size: 13px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--muted); padding-top: 1px;
-}
-
-.persona-details dd {
-  margin: 0; color: var(--text);
-}
-
-.persona-blocks {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 16px 20px; border-top: 1px solid var(--line);
-  padding-top: 16px;
-}
-
-.persona-blocks h4 {
-  font-size: 14px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 10px;
-}
-
-.persona-blocks h4.block-goals { color: var(--persona-goals);}
-.persona-blocks h4.block-pains { color: var(--persona-pains);}
-.persona-blocks h4.block-jtbd { color: var(--persona-jtbd);}
-.persona-blocks h4.block-impl { color: var(--persona-impl);}
 
 /* Process flowchart — standard flowchart: terminals, process boxes, arrowed flow lines */
 .flow {
@@ -2135,6 +2085,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454;}
   padding: 22px; -webkit-backdrop-filter: var(--lg-filter, var(--frost)); backdrop-filter: var(--lg-filter, var(--frost));
 }
 
+.skill-box h3,
 .skill-box h4 {
   font-size: 19px; margin-bottom: 8px;
 }
@@ -2167,17 +2118,13 @@ h4.block-impl + .feature-list li::before { background: #ffb454;}
   border-top: 1px solid var(--line);
 }
 
-.section-flush {
-  padding-bottom: 0;
-}
-
 .tl-item .year {
   font-family: var(--font-display); font-weight: 600;
   font-size: 15px; color: var(--muted);
   padding-top: 2px;
 }
 
-.tl-item h4 {
+.tl-item h3 {
   margin-bottom: 2px;
 }
 
@@ -2336,10 +2283,6 @@ h4.block-impl + .feature-list li::before { background: #ffb454;}
     grid-template-columns: 1fr;
   }
 
-  .persona-blocks {
-    grid-template-columns: 1fr;
-  }
-
   .persona-card {
     grid-template-columns: 1fr;
   }
@@ -2400,15 +2343,7 @@ h4.block-impl + .feature-list li::before { background: #ffb454;}
   }
 }
 
-/* Tablet: exactly one bg layer (641–1280px) */
 @media (min-width: 641px) and (max-width: 1280px) {
-  .bg-effect-desktop {
-    display: none;
-  }
-
-  .bg-effect-tablet {
-    display: block;
-  }
 }
 
 /* Phone-only: hamburger menu replaces the pill nav.
@@ -2416,14 +2351,6 @@ h4.block-impl + .feature-list li::before { background: #ffb454;}
    background on every device tier. The single Vanta layer serves
    all widths — no per-tier display toggles anymore. */
 @media (max-width: 640px) {
-  .bg-effect-desktop,
-  .bg-effect-tablet {
-    display: none;
-  }
-
-  .bg-effect-mobile {
-    display: block;
-  }
 
   .dock {
     top: calc(10px + env(safe-area-inset-top, 0px)); width: calc(100% - 20px);
@@ -2573,7 +2500,6 @@ main section {
 
 /* Long grids/lists get the same treatment */
 .work-grid > *,
-.persona-blocks > *,
 .metrics-table,
 .tool-list {
   content-visibility: auto;
@@ -2730,7 +2656,6 @@ main section {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35); pointer-events: none;
 }
 
-.persona-img,
 .persona-initial {
   transform: none !important; object-position: 50% 30% !important;
 }

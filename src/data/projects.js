@@ -382,6 +382,11 @@ const projects = [
   },
   {
     slug: 'silk-serenity',
+    preload: {
+      href: '/images/silk-serenity/cover-1920.webp',
+      srcset: '/images/silk-serenity/cover-960.webp 960w, /images/silk-serenity/cover-1920.webp 1920w, /images/silk-serenity/cover-3840.webp 3840w',
+      sizes: '100vw',
+    },
     title: 'Silk Serenity',
     category: 'Branding & UI/UX',
     year: '2024',

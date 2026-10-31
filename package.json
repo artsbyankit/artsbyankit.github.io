@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "node node_modules/oxlint/bin/oxlint",
+    "check": "node scripts/check-dist.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -22,7 +23,6 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "oxlint": "^1.75.0",
-    "postcss-discard-duplicates": "^9.0.2",
     "vite": "^8.2.0"
   }
 }

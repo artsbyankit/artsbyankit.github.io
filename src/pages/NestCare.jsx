@@ -610,11 +610,11 @@ export default function NestCare({ project, next }) {
               <Pill>Features</Pill>
               <div>
                 <div>
-                  <h4>Patients</h4>
+                  <h3>Patients</h3>
                   <List items={cs.patients} />
                 </div>
                 <div>
-                  <h4>Clinic</h4>
+                  <h3>Clinic</h3>
                   <List items={cs.clinic} />
                 </div>
               </div>

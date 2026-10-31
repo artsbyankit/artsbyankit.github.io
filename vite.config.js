@@ -22,7 +22,7 @@ const CSP = [
 const escapeAttr = (s) =>
   s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-function renderPage(html, { title, description, url }) {
+function renderPage(html, { title, description, url, preload }) {
   const t = escapeAttr(title)
   const d = escapeAttr(description)
   const setContent = (attr, name, value) =>
@@ -36,6 +36,15 @@ function renderPage(html, { title, description, url }) {
   if (url) {
     html = setContent('property', 'og:url', url)
     html = html.replace(/(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
+  }
+  if (preload) {
+    const attrs = [
+      `href="${preload.href}"`,
+      preload.type && `type="${preload.type}"`,
+      preload.srcset && `imagesrcset="${preload.srcset}"`,
+      preload.sizes && `imagesizes="${preload.sizes}"`,
+    ].filter(Boolean)
+    html = html.replace('</head>', `  <link rel="preload" as="image" fetchpriority="high" ${attrs.join(' ')} />\n  </head>`)
   }
   return html
 }
@@ -58,11 +67,11 @@ function staticRoutes() {
     },
     closeBundle() {
       const shell = readFileSync('dist/index.html', 'utf8')
-      for (const { path, title, description } of routes) {
+      for (const { path, title, description, preload } of routes) {
         if (path === '/') continue
         const file = `dist${path}.html`
         mkdirSync(dirname(file), { recursive: true })
-        writeFileSync(file, renderPage(shell, { title, description, url: `${SITE_URL}${path}` }))
+        writeFileSync(file, renderPage(shell, { title, description, url: `${SITE_URL}${path}`, preload }))
       }
       writeFileSync(
         'dist/404.html',

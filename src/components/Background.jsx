@@ -1,5 +1,6 @@
-// Fluted-glass background — one effect per tier (desktop/tablet/mobile),
-// exactly one visible at any width. Flute count is DYNAMIC: derived from the
+// Fluted-glass background. Only one effect is ever mounted, set up for the current tier
+// (desktop/tablet/mobile), since each one costs a WebGL context and a shader compile.
+// Flute count is DYNAMIC: derived from the
 // live width of the page's .container column so the vertical lines keep the
 // same horizontal rhythm as the content (no stray half-flutes at the padding),
 // and re-measured on resize for all three modes.
@@ -8,6 +9,22 @@ import { bgPalette } from '../theme.js'
 
 // Target distance between flute lines inside the content column, per tier.
 const TARGET_SPACING = { desktop: 62, tablet: 48, mobile: 36 }
+
+const PHONE = '(max-width: 640px)'
+const TABLET = '(max-width: 1280px)'
+const currentTier = () =>
+  window.matchMedia(PHONE).matches ? 'mobile' : window.matchMedia(TABLET).matches ? 'tablet' : 'desktop'
+
+function useTier() {
+  const [tier, setTier] = useState(currentTier)
+  useEffect(() => {
+    const update = () => setTier(currentTier())
+    const queries = [PHONE, TABLET].map((q) => window.matchMedia(q))
+    queries.forEach((q) => q.addEventListener('change', update))
+    return () => queries.forEach((q) => q.removeEventListener('change', update))
+  }, [])
+  return tier
+}
 
 function useFluteCounts() {
   const [counts, setCounts] = useState({ desktop: 22, tablet: 17, mobile: 11 })
@@ -62,6 +79,7 @@ function useFluteCounts() {
 
 export default function Background() {
   const flutes = useFluteCounts()
+  const tier = useTier()
   const lowSpec =
     typeof document !== 'undefined' &&
     document.documentElement.classList.contains('low-spec')
@@ -75,9 +93,7 @@ export default function Background() {
 
   return (
     <div className="bg-host" aria-hidden="true">
-      <div {...common} data-aifx-flutes={flutes.desktop} className="bg-effect bg-effect-desktop" />
-      <div {...common} data-aifx-flutes={flutes.tablet} className="bg-effect bg-effect-tablet" />
-      <div {...common} data-aifx-flutes={flutes.mobile} className="bg-effect bg-effect-mobile" />
+      <div {...common} data-aifx-flutes={flutes[tier]} className="bg-effect" />
     </div>
   )
 }

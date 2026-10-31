@@ -59,27 +59,27 @@ export default function About() {
           </div>
           <div className="skill-list">
             <div className="skill-box reveal">
-              <h4>User Research</h4>
+              <h3>User Research</h3>
               <p>Interviews, journey mapping, and heuristic audits that ground every decision in evidence.</p>
             </div>
             <div className="skill-box reveal">
-              <h4>Wireframing & Prototyping</h4>
+              <h3>Wireframing & Prototyping</h3>
               <p>From lo-fi wireframes to interactive prototypes that answer real questions early.</p>
             </div>
             <div className="skill-box reveal">
-              <h4>User Flows & Information Architecture</h4>
+              <h3>User Flows & Information Architecture</h3>
               <p>Structuring information and mapping journeys so products feel obvious to use.</p>
             </div>
             <div className="skill-box reveal">
-              <h4>Usability Testing</h4>
+              <h3>Usability Testing</h3>
               <p>Testing with real users to find friction and validate ideas before they ship.</p>
             </div>
             <div className="skill-box reveal">
-              <h4>Design Systems</h4>
+              <h3>Design Systems</h3>
               <p>Token-based, documented libraries that scale across teams and products.</p>
             </div>
             <div className="skill-box reveal">
-              <h4>Accessibility</h4>
+              <h3>Accessibility</h3>
               <p>WCAG-aware patterns and inclusive color systems designed for everyone.</p>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function About() {
           </div>
           <div className="skill-list">
             <div className="skill-box reveal">
-              <h4>Design tools</h4>
+              <h3>Design tools</h3>
               <ul className="tool-list">
                 <li>Figma</li>
                 <li>Adobe XD</li>
@@ -105,7 +105,7 @@ export default function About() {
               </ul>
             </div>
             <div className="skill-box reveal">
-              <h4>Adobe Suite</h4>
+              <h3>Adobe Suite</h3>
               <ul className="tool-list">
                 <li>After Effects</li>
                 <li>Illustrator</li>
@@ -115,7 +115,7 @@ export default function About() {
               </ul>
             </div>
             <div className="skill-box reveal">
-              <h4>Languages</h4>
+              <h3>Languages</h3>
               <ul className="tool-list">
                 <li>English</li>
                 <li>Hindi</li>
@@ -138,7 +138,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">Aug 2025 — Present</span>
               <div>
-                <h4>UI/UX Designer</h4>
+                <h3>UI/UX Designer</h3>
                 <p className="tl-role">Cimpress · Remote, Ahmedabad, India</p>
                 <ul>
                   <li>Supported UX research, wireframing, and UI design for digital products.</li>
@@ -150,7 +150,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">Jan 2022 — Dec 2024</span>
               <div>
-                <h4>Motion Designer</h4>
+                <h3>Motion Designer</h3>
                 <p className="tl-role">Azrael Services Pvt Ltd · Remote, Gurgaon, India</p>
                 <ul>
                   <li>Produced high-quality motion graphics and videos for diverse clients.</li>
@@ -162,7 +162,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">Nov 2021 — Jan 2022</span>
               <div>
-                <h4>UI/UX Designer</h4>
+                <h3>UI/UX Designer</h3>
                 <p className="tl-role">Unizyr Technologies · Gandhinagar, India</p>
                 <ul>
                   <li>Led UI/UX design for multiple client projects, from wireframes to high-fidelity UIs.</li>
@@ -174,7 +174,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">May 2019 — Jul 2019</span>
               <div>
-                <h4>Intern UI/UX Designer</h4>
+                <h3>Intern UI/UX Designer</h3>
                 <p className="tl-role">PushStart · Remote, Mumbai, India</p>
                 <ul>
                   <li>Designed UX flows and UI assets for the company website.</li>
@@ -233,7 +233,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">2014 — 2018</span>
               <div>
-                <h4>B.Tech, Information Technology</h4>
+                <h3>B.Tech, Information Technology</h3>
                 <p className="tl-role">
                   <a
                     className="edu-link"
@@ -250,7 +250,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">2014</span>
               <div>
-                <h4>12th Science (HSC)</h4>
+                <h3>12th Science (HSC)</h3>
                 <p className="tl-role">GS &amp; HSEB · Gandhinagar, India</p>
               </div>
             </div>

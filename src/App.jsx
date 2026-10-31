@@ -12,12 +12,15 @@ export default function App() {
   // Fetch the lazy route chunks once the browser is idle, so navigation
   // between pages is instant without blocking the first paint.
   useEffect(() => {
+    if (navigator.connection?.saveData) return
     const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1))
     idle(() => {
-      import('./pages/Projects')
-      import('./pages/About')
-      import('./pages/Contact')
-      import('./pages/CaseStudy')
+      // Only a head start: a failure here surfaces again, handled, when the page is opened.
+      const ignore = () => {}
+      import('./pages/Projects').catch(ignore)
+      import('./pages/About').catch(ignore)
+      import('./pages/Contact').catch(ignore)
+      import('./pages/CaseStudy').catch(ignore)
     })
   }, [])
 

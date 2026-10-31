@@ -15,6 +15,7 @@ export default function Projects() {
           </p>
         </div>
 
+        <h2 className="sr-only">Case studies</h2>
         <div className="work-grid">
           {projects.map((p) => (
             <ProjectCard key={p.slug} project={p} />
