@@ -391,15 +391,9 @@
 }
 
 /* The dock stays clear glass. Over black its text and rim turn white. */
-.dock-glass a,
-.dock-glass .nav-toggle {
-  transition: color 0.25s ease;
-}
-
 html[data-ss-dark] .dock-glass a,
 html[data-ss-dark] .dock-glass .nav-toggle {
   color: #fff !important;
-  -webkit-text-fill-color: #fff;
   text-shadow: none !important; /* a white halo on white text reads as doubled letters */
 }
 
@@ -408,7 +402,7 @@ html[data-ss-dark] .dock-glass {
 }
 
 html[data-ss-dark] .dock-glass .lg-tint {
-  background: rgba(0, 0, 0, 0.5);
+  --lg-dark: 1;
 }
 
 /* interactive pieces */

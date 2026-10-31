@@ -436,6 +436,11 @@ main:has(> .page-skeleton) {
 }
 
 /* ---------- Floating liquid-glass dock ---------- */
+/* How long the dock takes to change between its light and dark looks, both ways. */
+:root {
+  --dock-flip: 0.5s ease;
+}
+
 .dock {
   position: fixed; top: max(18px, env(safe-area-inset-top));
   left: 50%; transform: translateX(-50%);
@@ -462,7 +467,8 @@ main:has(> .page-skeleton) {
     var(--glass-shadow);
   transition:
     height 0.3s cubic-bezier(0.87, 0, 0.13, 1),
-    padding 0.3s cubic-bezier(0.87, 0, 0.13, 1);
+    padding 0.3s cubic-bezier(0.87, 0, 0.13, 1),
+    border-color var(--dock-flip);
 }
 
 .logo {
@@ -1085,7 +1091,8 @@ main:has(> .page-skeleton) {
   box-shadow: inset 0 0 0 1px transparent; transform: scale(1);
   transform-origin: left center; will-change: transform, margin;
   transition:
-    color 0.18s cubic-bezier(0.87, 0, 0.13, 1),
+    color var(--dock-flip),
+    text-shadow var(--dock-flip),
     background 0.18s cubic-bezier(0.87, 0, 0.13, 1),
     border-color 0.18s cubic-bezier(0.87, 0, 0.13, 1),
     box-shadow 0.18s cubic-bezier(0.87, 0, 0.13, 1),
@@ -1158,6 +1165,7 @@ main:has(> .page-skeleton) {
   padding: 0; border-radius: 12px;
   cursor: pointer; align-items: center;
   justify-content: center;
+  transition: color var(--dock-flip);
 }
 
 /* ---------- Hero ---------- */
@@ -1311,6 +1319,8 @@ main:has(> .page-skeleton) {
 
 .logo {
   transition:
+    color var(--dock-flip),
+    text-shadow var(--dock-flip),
     opacity 0.2s ease,
     font-size 0.3s cubic-bezier(0.87, 0, 0.13, 1),
     gap 0.3s cubic-bezier(0.87, 0, 0.13, 1);
@@ -3033,10 +3043,26 @@ html.liquid-glass .dock-glass > .lg-slices {
   right: 0; transform-origin: 100% 0;
 }
 
+/* Gradients can't animate, but a registered number can: --lg-dark fades the tint from
+   white gradient (0) to dark (1). */
+@property --lg-dark {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 .lg-slices > .lg-tint {
   inset: 0; border-radius: inherit;
   will-change: auto; -webkit-backdrop-filter: none; backdrop-filter: none;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.26));
+  background:
+    linear-gradient(rgba(0, 0, 0, calc(0.5 * var(--lg-dark))) 0 0),
+    linear-gradient(
+      150deg,
+      rgba(255, 255, 255, calc(0.36 * (1 - var(--lg-dark)))),
+      rgba(255, 255, 255, calc(0.12 * (1 - var(--lg-dark)))) 48%,
+      rgba(255, 255, 255, calc(0.26 * (1 - var(--lg-dark))))
+    );
+  transition: --lg-dark var(--dock-flip);
   box-shadow:
     inset 0 1.5px 1px rgba(255, 255, 255, 0.85),
     inset 0 -1.5px 1px rgba(255, 255, 255, 0.4),
@@ -3066,7 +3092,6 @@ html.liquid-glass .dock-glass .nav-links a {
 html.liquid-glass .dock-glass.on-dark .logo,
 html.liquid-glass .dock-glass.on-dark .nav-links a {
   color: #fff; text-shadow: 0 0 10px rgba(10, 20, 40, 0.55);
-  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
 /* Pills sit inside the dock: back to fine, clear glass instead of its thick slab. */
