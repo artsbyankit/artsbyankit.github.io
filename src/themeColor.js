@@ -11,7 +11,7 @@
 import { bgPalette } from './theme.js'
 
 const BRAND = [bgPalette.base, bgPalette.colors[2], bgPalette.colors[1]]
-const SAMPLE_MS = 600 // each readPixels stalls the GPU pipeline; fewer = smoother FF
+const SAMPLE_MS = 3000 // each readPixels stalls the GPU, which shows as a small hitch
 const MIN_DELTA = 10
 
 const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))

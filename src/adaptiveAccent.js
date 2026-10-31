@@ -19,9 +19,14 @@ function rgbToHue(r, g, b) {
   return h * 360
 }
 
+let lastHue = null
+
 onBgSample((rgb) => {
   if (!REACTIVE_SHINE) return
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
   const h = rgbToHue(rgb[0], rgb[1], rgb[2])
+  // Changing the shine restyles the whole page, so only do it for a change you could see.
+  if (lastHue !== null && Math.abs(h - lastHue) < 12) return
+  lastHue = h
   setLiveShine(`hsl(${Math.round(h)} 45% 96%)`)
 })

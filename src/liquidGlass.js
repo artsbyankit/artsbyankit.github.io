@@ -30,7 +30,11 @@ const OPTICS = {
 }
 const BEZEL_MIN = 6
 const SMALL_AREA = 60000 // px², below this a surface can afford dispersion
-const HALF_RES_AREA = 200000 // px², above this the map is built at half size
+// A map is the single most expensive part of the filter, and its cost follows its pixel
+// count, not the surface's. It's a smooth gradient that the browser scales up cleanly, so
+// each kind of surface uses the smallest map that still looks the same.
+const MAP_SCALE = { panel: 0.25, lens: 0.5, marble: 1, plain: 0.5 }
+const DOCK_MAP_SCALE = 0.5
 const RESIZE_SETTLE_MS = 140 // wait out animations like the dock swell
 const MAX_FILTERS = 80
 const SLOW_FPS = 40
@@ -92,11 +96,11 @@ function marbleOffset(r, ior) {
   return eased - r
 }
 
-function buildMap(w, h, radius, optics, capped = true) {
+function buildMap(w, h, radius, optics, capped = true, fullSize = false) {
   const marble = optics.marble > 0
   const dome = marble || optics.dome >= 0
-  // A lens bends hard over very few pixels, so its map gets twice the detail.
-  const res = dome ? 2 : w * h > HALF_RES_AREA ? 0.5 : 1
+  const kind = optics.rim >= 0 ? 'panel' : marble ? 'marble' : dome ? 'lens' : 'plain'
+  const res = fullSize ? 1 : MAP_SCALE[kind]
   const mw = Math.round(w * res)
   const mh = Math.round(h * res)
   const wanted = radius * optics.bezel
@@ -256,12 +260,14 @@ function buildSlices(box, w, h, optics) {
   const room = Math.ceil(size * 0.75)
   const midPad = 8
   const midWidth = Math.max(Math.round(w - h), 1)
-  const { canvas, scale } = buildMap(size + room * 2 + 4, size, cap, optics, false)
+  const { canvas, scale } = buildMap(size + room * 2 + 4, size, cap, optics, false, true)
   const cut = (x, width) => {
     const part = document.createElement('canvas')
-    part.width = width
-    part.height = size
-    part.getContext('2d').drawImage(canvas, x, 0, width, size, 0, 0, width, size)
+    part.width = Math.max(Math.round(width * DOCK_MAP_SCALE), 1)
+    part.height = Math.round(size * DOCK_MAP_SCALE)
+    const ctx = part.getContext('2d')
+    ctx.imageSmoothingQuality = 'high'
+    ctx.drawImage(canvas, x, 0, width, size, 0, 0, part.width, part.height)
     return part.toDataURL('image/png')
   }
   const place = (name, width, sourceX, sourceWidth, clip, passes = optics) => {
