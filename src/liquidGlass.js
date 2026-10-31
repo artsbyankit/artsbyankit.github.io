@@ -11,9 +11,10 @@
 // are found by reading the stylesheet, and each matching element gets a filter
 // built for its exact size and corner radius.
 //
-// backdrop-filter: url() only renders in Chromium. Other browsers, low-spec
-// machines and reduced-transparency users never get --lg-filter, so the CSS
-// falls back to the site's standard --frost recipe.
+// backdrop-filter: url() only renders in Chromium. Other browsers and
+// reduced-transparency users never get --lg-filter, so the CSS falls back to the
+// site's standard --frost recipe. CPU core counts don't decide this: Brave reports
+// fake ones, so slow devices are found by real frame rate (see watchFrameRate).
 
 // Optical settings, overridable per surface with --lg-* custom properties.
 const OPTICS = {
@@ -345,7 +346,6 @@ function opticsOf(style, w, h) {
 export function initLiquidGlass() {
   if (
     !/Chrome\/|Chromium\//.test(navigator.userAgent) ||
-    document.documentElement.classList.contains('low-spec') ||
     window.matchMedia('(prefers-reduced-transparency: reduce)').matches
   )
     return
