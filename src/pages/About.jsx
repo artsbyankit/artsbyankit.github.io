@@ -143,7 +143,7 @@ export default function About() {
                 <ul>
                   <li>Designed NestCare, a healthcare booking app for India’s Tier 2 &amp; 3 cities, in a team of two.</li>
                   <li>Brand, packaging, and visual design for small businesses.</li>
-                  <li>Building AI tools like Claude into my research and design process.</li>
+                  <li>Building AI into my research and design process.</li>
                 </ul>
               </div>
             </div>
