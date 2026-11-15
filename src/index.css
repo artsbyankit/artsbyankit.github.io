@@ -1545,7 +1545,8 @@ main:has(> .page-skeleton) {
   display: block; width: fit-content;
   align-items: center; gap: 8px;
   color: var(--muted); font-size: 16px;
-  font-weight: 500; margin-bottom: 40px;
+  font-weight: 500; margin-bottom: 30px;
+  padding: 10px 0; margin-top: -10px; /* 44px tap target, same visual spacing */
   transition: color 0.15s ease;
 }
 

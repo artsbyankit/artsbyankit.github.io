@@ -9,9 +9,9 @@ export default function Projects() {
           <div className="eyebrow">Portfolio</div>
           <h1>Selected work & case studies</h1>
           <p>
-            A collection of projects spanning mobile apps, web platforms, design systems,
-            and e-commerce. Each case study covers the problem, my process, and the
-            measurable outcome.
+            A collection of projects spanning mobile apps, web platforms, and brand
+            identity. Each case study covers the problem, my process, and the
+            decisions behind the design.
           </p>
         </div>
 

@@ -1,5 +1,15 @@
 const projects = [
   {
+    slug: 'nestcare',
+    title: 'NestCare',
+    custom: true,
+    category: 'Mobile App · Healthcare',
+    emoji: '🪺',
+    gradient: 'linear-gradient(140deg, #0a6e66, #0e8f82 55%, #3fb8a6)',
+    excerpt:
+      'A patient-first healthcare app that makes booking, reminders and family-managed care simple for India’s Tier 2 & 3 cities.',
+  },
+  {
     slug: 'distronet',
     title: 'DistroNet',
     category: 'B2B SaaS · Concept',
@@ -282,16 +292,6 @@ const projects = [
         flows: ['Web: reorder stock', 'Operator: scan-load', 'Rider: earnings → POD'],
       },
     },
-  },
-  {
-    slug: 'nestcare',
-    title: 'NestCare',
-    custom: true,
-    category: 'Mobile App · Healthcare',
-    emoji: '🪺',
-    gradient: 'linear-gradient(140deg, #0a6e66, #0e8f82 55%, #3fb8a6)',
-    excerpt:
-      'A patient-first healthcare app that makes booking, reminders and family-managed care simple for India’s Tier 2 & 3 cities.',
   },
   {
     slug: 'silk-serenity',

@@ -14,7 +14,7 @@ export const routes = [
     path: '/work',
     title: `Work - ${SITE_TITLE}`,
     description:
-      'Selected UI/UX case studies across mobile apps, web platforms, design systems, and e-commerce — the problem, the process, and the measurable outcome.',
+      'Selected UI/UX case studies across mobile apps, web platforms, and brand identity — the problem, the process, and the decisions behind the design.',
   },
   {
     path: '/about',
