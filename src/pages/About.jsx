@@ -33,10 +33,10 @@ export default function About() {
             </div>
             <div className="about-text">
               <p>
-                For the past seven years I've worked across product teams, studios, and
-                remote companies — starting as a UI/UX intern at PushStart, designing
-                client projects at Unizyr Technologies, creating motion at Azrael
-                Services, and now designing digital products at Cimpress.
+                I've worked across startups, studios, and remote teams — starting as a
+                UI/UX intern at PushStart, designing client projects at Unizyr
+                Technologies, and spending three years creating motion at Azrael
+                Services. Today I design independently, focused on UI/UX.
               </p>
               <p>
                 My approach is user-centered and delivery-focused: research that informs
@@ -136,14 +136,14 @@ export default function About() {
           </div>
           <div className="timeline">
             <div className="tl-item">
-              <span className="year">Aug 2025 — Present</span>
+              <span className="year">2025 — Present</span>
               <div>
-                <h3>UI/UX Designer</h3>
-                <p className="tl-role">Cimpress · Remote, Ahmedabad, India</p>
+                <h3>Independent UI/UX Designer</h3>
+                <p className="tl-role">Self-employed · Remote, Gujarat, India</p>
                 <ul>
-                  <li>Supported UX research, wireframing, and UI design for digital products.</li>
-                  <li>Worked with cross-functional teams to deliver user-focused design solutions.</li>
-                  <li>Contributed to maintaining visual consistency and usability standards.</li>
+                  <li>Designed NestCare, a healthcare booking app for India’s Tier 2 &amp; 3 cities, in a team of two.</li>
+                  <li>Brand, packaging, and visual design for small businesses.</li>
+                  <li>Building AI tools like Claude into my research and design process.</li>
                 </ul>
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">2014 — 2018</span>
               <div>
-                <h3>B.Tech, Information Technology</h3>
+                <h3>B.Tech, Information Technology (coursework, not completed)</h3>
                 <p className="tl-role">
                   <a
                     className="edu-link"

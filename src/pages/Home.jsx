@@ -11,7 +11,7 @@ export default function Home() {
         <div className="container">
           <Link to="/contact" className="btn freelance-pill">
             <span className="pulse" aria-hidden="true"></span>
-            <span className="freelance-label">Available for freelance projects</span>
+            <span className="freelance-label">Open to full-time remote roles</span>
           </Link>
           <h1>
             Turning complex ideas into <span className="gradient-text">intuitive experiences</span>
@@ -36,10 +36,10 @@ export default function Home() {
           </div>
           <div className="hero-meta">
             <span>
-              <strong>7+</strong> years designing
+              <strong>3+</strong> years designing
             </span>
             <span>
-              <strong>4</strong> companies &amp; studios
+              <strong>3</strong> companies &amp; studios
             </span>
             <span>
               <strong>3</strong> languages spoken
@@ -110,17 +110,17 @@ export default function Home() {
                 that makes them feel alive.
               </p>
               <p>
-                I've worked with product teams across startups, studios, and a global company
-                like Cimpress — as a UI/UX designer and, before that, as a motion designer at
-                Azrael Services. I'm always learning, always refining.
+                I've worked with startups and studios — as a UI/UX designer, and for three
+                years as a motion designer at Azrael Services. Today I design independently,
+                and I'm always learning, always refining.
               </p>
               <div className="stat-row">
                 <div className="stat">
-                  <strong>2018</strong>
-                  <span>B.Tech (IT) · DA-IICT</span>
+                  <strong>IT</strong>
+                  <span>Studied at DA-IICT</span>
                 </div>
                 <div className="stat">
-                  <strong>7+</strong>
+                  <strong>3+</strong>
                   <span>Years in design</span>
                 </div>
                 <div className="stat">

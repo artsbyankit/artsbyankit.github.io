@@ -20,7 +20,7 @@ export const routes = [
     path: '/about',
     title: `About - ${SITE_TITLE}`,
     description:
-      'About Ankit Patel — UI/UX designer with 7+ years across startups, studios, and global product teams.',
+      'About Ankit Patel — UI/UX designer with 3+ years across startups, studios, and remote teams, plus a background in motion design.',
     preload: { href: '/about-me.avif', type: 'image/avif' },
   },
   {
