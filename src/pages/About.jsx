@@ -36,7 +36,8 @@ export default function About() {
                 I've worked across startups, studios, and remote teams — starting as a
                 UI/UX intern at PushStart, designing client projects at Unizyr
                 Technologies, and spending three years creating motion at Azrael
-                Services. Today I design independently, focused on UI/UX.
+                Services, then designing UI/UX at Cimpress. Today I design
+                independently, focused on UI/UX.
               </p>
               <p>
                 My approach is user-centered and delivery-focused: research that informs
@@ -144,6 +145,18 @@ export default function About() {
                   <li>Designed NestCare, a healthcare booking app for India’s Tier 2 &amp; 3 cities, in a team of two.</li>
                   <li>Brand, packaging, and visual design for small businesses.</li>
                   <li>Building AI into my research and design process.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="tl-item">
+              <span className="year">Aug 2025 — Dec 2025</span>
+              <div>
+                <h3>UI/UX Designer</h3>
+                <p className="tl-role">Cimpress India Private Limited</p>
+                <ul>
+                  <li>Worked in the design team on UX and UI for digital products.</li>
+                  <li>Contributed to user research, wireframes, and high-fidelity designs.</li>
+                  <li>Collaborated closely with product managers and developers.</li>
                 </ul>
               </div>
             </div>
