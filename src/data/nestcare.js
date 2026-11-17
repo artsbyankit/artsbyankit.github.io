@@ -150,7 +150,7 @@ export const surveys = [
   {
     id: 'patients',
     label: 'Patients',
-    intro: 'Insights from an online survey of patients’ main challenges and preferences in managing their care.',
+    intro: 'Insights from an online survey of 12–15 patients about their main challenges and preferences in managing their care.',
     photo: img('survey-patients'),
     photoAlt: 'Patients crowding a hospital OPD counter',
     questions: [
@@ -175,7 +175,7 @@ export const surveys = [
   {
     id: 'doctors',
     label: 'Doctors & clinics',
-    intro: 'Insights from an online survey of doctors’ main challenges and preferences in managing their clinic.',
+    intro: 'Insights from an online survey of doctors at 8 clinics about the main challenges in running their clinic.',
     photo: img('survey-doctors'),
     photoAlt: 'A nurse attending to an elderly patient at a small clinic',
     questions: [

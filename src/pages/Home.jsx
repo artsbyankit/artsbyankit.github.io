@@ -14,12 +14,12 @@ export default function Home() {
             <span className="freelance-label">Open to full-time remote roles</span>
           </Link>
           <h1>
-            Turning complex ideas into <span className="gradient-text">intuitive experiences</span>
+            Simple apps for the people <span className="gradient-text">big apps forget</span>
           </h1>
           <p className="lead">
-            I'm Ankit Patel, a UI/UX designer passionate about solving user problems through
-            clean, functional design — translating complex ideas into intuitive experiences,
-            and always refining the process to balance usability with clarity.
+            I'm Ankit Patel, a UI/UX designer in Gujarat with three years of motion design
+            behind me. My strongest project, NestCare, started with a 68-year-old who can't
+            read an English SMS.
           </p>
           <div className="hero-actions">
             <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn btn-primary">

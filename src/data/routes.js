@@ -6,7 +6,7 @@ import projects from './projects.js'
 export const SITE_URL = 'https://artsbyankit.github.io'
 const SITE_TITLE = 'Ankit Patel - UI/UX Designer'
 const SITE_DESCRIPTION =
-  'Ankit Patel — UI/UX designer turning complex ideas into intuitive experiences. Product design, motion design, and design systems. Based in Bilimora, India.'
+  'Ankit Patel, UI/UX designer in Gujarat, India, with a motion design background. Simple apps for the people big apps forget. Open to full-time remote roles.'
 
 export const routes = [
   { path: '/', title: SITE_TITLE, description: SITE_DESCRIPTION },
@@ -26,7 +26,7 @@ export const routes = [
   {
     path: '/contact',
     title: `Contact - ${SITE_TITLE}`,
-    description: "Let's build something great together. Get in touch with Ankit Patel about product and UI/UX design work.",
+    description: "Hiring a UI/UX designer? Get in touch with Ankit Patel, open to full-time remote roles.",
   },
   ...projects.map((p) => ({
     path: `/work/${p.slug}`,

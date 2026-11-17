@@ -5,11 +5,11 @@ export default function Contact() {
         <div className="container">
           <div className="eyebrow">Contact</div>
           <h1>
-            Let's build something <span className="gradient-text">great together</span>
+            Hiring a UI/UX designer? <span className="gradient-text">Let's talk.</span>
           </h1>
           <p>
-            Whether you have a product idea, a project in need of a designer, or just want
-            to talk design — my inbox is open. I reply to every message within 48 hours.
+            I'm open to full-time remote UI/UX roles. Email is the fastest way to reach me,
+            and I reply to every message within 48 hours. My resume is one click away.
           </p>
           <div className="contact-actions">
             <a className="btn btn-primary" href="mailto:ArtsByAnkit@gmail.com">

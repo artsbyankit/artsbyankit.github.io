@@ -3294,3 +3294,8 @@ html.low-spec {
     max-width: 360px; margin-inline: auto;
   }
 }
+
+/* Phones: skip the skill pills so the first project appears sooner */
+@media (max-width: 640px) {
+  .tools-strip { display: none; }
+}

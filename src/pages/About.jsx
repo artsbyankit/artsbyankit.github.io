@@ -40,10 +40,9 @@ export default function About() {
                 independently, focused on UI/UX.
               </p>
               <p>
-                My approach is user-centered and delivery-focused: research that informs
-                decisions, prototypes that answer questions, and interfaces that are as
-                pleasant to maintain as they are to use. I'm constantly learning and
-                refining my design process.
+                Three years of making 60–70 videos a month taught me pace, feedback and
+                how a screen should feel when it moves. UI/UX is the work I came back to,
+                because it starts with the person, not the screen.
               </p>
             </div>
           </div>
@@ -101,7 +100,6 @@ export default function About() {
               <ul className="tool-list">
                 <li>Figma</li>
                 <li>Adobe XD</li>
-                <li>InVision Studio</li>
                 <li>LottieFiles</li>
                 <li>Claude, OpenCode and other AI tools</li>
               </ul>
