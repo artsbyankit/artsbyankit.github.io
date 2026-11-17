@@ -132,10 +132,8 @@ function FlowChart() {
   // place each loop label with its center anchored exactly on the
   // middle of its drawn path
   useLayoutEffect(() => {
-    if (!paths) {
-      setLabels(null)
-      return
-    }
+    // Labels only render alongside paths, so there's nothing to reset here.
+    if (!paths) return
     const next = {}
     paths.loops.forEach((l, i) => {
       const el = loopRefs.current[i]
@@ -143,6 +141,8 @@ function FlowChart() {
       const p = el.getPointAtLength(el.getTotalLength() / 2)
       next[l.label] = { x: p.x, y: p.y }
     })
+    // Positions come from measuring the drawn SVG paths, which only exist after render.
+    // oxlint-disable-next-line react/set-state-in-effect
     setLabels(next)
   }, [paths])
 
@@ -441,7 +441,7 @@ function DistroNetDetail({ project }) {
           <div className="skill-list product-grid">
             {[cs.product.desktop, cs.product.mobile].map((col) => (
               <div className="skill-box product-col" key={col.title}>
-                <h4>{col.title}</h4>
+                <h3>{col.title}</h3>
                 <p className="product-for">For {col.for}</p>
                 <ul className="feature-list">
                   {col.features.map((f) => (

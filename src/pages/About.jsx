@@ -245,7 +245,7 @@ export default function About() {
             <div className="tl-item">
               <span className="year">2014 — 2018</span>
               <div>
-                <h3>B.Tech, Information Technology (coursework, not completed)</h3>
+                <h3>B.Tech, Information &amp; Communication Technology (coursework, not completed)</h3>
                 <p className="tl-role">
                   <a
                     className="edu-link"

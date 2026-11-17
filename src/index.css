@@ -1863,7 +1863,7 @@ main:has(> .page-skeleton) {
   margin-bottom: 32px;
 }
 
-.product-col h4 {
+.product-col h3 {
   font-size: 21px; margin-bottom: 4px;
 }
 
@@ -3056,12 +3056,12 @@ html.liquid-glass .dock-glass > .lg-slices {
   inset: 0; border-radius: inherit;
   will-change: auto; -webkit-backdrop-filter: none; backdrop-filter: none;
   background:
-    linear-gradient(rgba(0, 0, 0, calc(0.5 * var(--lg-dark))) 0 0),
+    linear-gradient(rgba(14, 18, 26, calc(0.28 * var(--lg-dark))) 0 0),
     linear-gradient(
       150deg,
-      rgba(255, 255, 255, calc(0.36 * (1 - var(--lg-dark)))),
-      rgba(255, 255, 255, calc(0.12 * (1 - var(--lg-dark)))) 48%,
-      rgba(255, 255, 255, calc(0.26 * (1 - var(--lg-dark))))
+      rgba(255, 255, 255, calc(0.36 * (1 - 0.72 * var(--lg-dark)))),
+      rgba(255, 255, 255, calc(0.12 * (1 - 0.72 * var(--lg-dark)))) 48%,
+      rgba(255, 255, 255, calc(0.26 * (1 - 0.72 * var(--lg-dark))))
     );
   transition: --lg-dark var(--dock-flip);
   box-shadow:

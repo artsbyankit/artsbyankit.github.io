@@ -116,7 +116,7 @@ export default function Home() {
               </p>
               <div className="stat-row">
                 <div className="stat">
-                  <strong>IT</strong>
+                  <strong>ICT</strong>
                   <span>Studied at DA-IICT</span>
                 </div>
                 <div className="stat">
@@ -136,14 +136,14 @@ export default function Home() {
       <section className="cta">
         <div className="container">
           <h2>
-            Have an idea? Let's make it <span className="gradient-text">beautiful</span>
+            Hiring a UI/UX designer? <span className="gradient-text">Let's talk.</span>
           </h2>
           <p>
-            Whether you have a product idea, a project in need of a designer, or just want
-            to talk design — my inbox is open. I reply to every message within 48 hours.
+            I'm open to full-time remote UI/UX roles, and I reply to every message within
+            48 hours.
           </p>
           <Link to="/contact" className="btn btn-primary">
-            Start a conversation
+            Get in touch
           </Link>
         </div>
       </section>
