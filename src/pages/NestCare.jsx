@@ -646,7 +646,7 @@ export default function NestCare({ project, next }) {
 
         <section className="ns-section">
           <Head eyebrow="The competition, respectfully" title="Competitive Analysis">
-            I analyzed existing competitors, direct and indirect, local and global, by evaluating their unique
+            We analyzed existing competitors, direct and indirect, local and global, by evaluating their unique
             features and app design strategies, to pave the way for finding the best solution for our users and target
             audience.
           </Head>
