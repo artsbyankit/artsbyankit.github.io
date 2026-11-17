@@ -39,7 +39,7 @@ export default function Home() {
               <strong>3+</strong> years designing
             </span>
             <span>
-              <strong>3</strong> companies &amp; studios
+              <strong>4</strong> companies &amp; studios
             </span>
             <span>
               <strong>3</strong> languages spoken

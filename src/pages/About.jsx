@@ -103,6 +103,7 @@ export default function About() {
                 <li>Adobe XD</li>
                 <li>InVision Studio</li>
                 <li>LottieFiles</li>
+                <li>Claude, OpenCode and other AI tools</li>
               </ul>
             </div>
             <div className="skill-box reveal">

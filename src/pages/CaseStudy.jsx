@@ -282,7 +282,7 @@ function DistroNetDetail({ project }) {
           )}
 
           <div className="cs-cover cs-asset" style={{ background: project.gradient }}>
-            <span className="replace-me">Replace me — hero mock (web + mobile)</span>
+            {import.meta.env.DEV && <span className="replace-me">Replace me — hero mock (web + mobile)</span>}
             <span className="cover-title">{project.title}</span>
             <span className="cs-cover-sub">Web + Mobile · B2B operations platform</span>
           </div>
@@ -470,22 +470,22 @@ function DistroNetDetail({ project }) {
           <div className="section-head">
             <div>
               <div className="eyebrow">Design Screens</div>
-              <h2 className="section-title">Coming with Step 5</h2>
+              <h2 className="section-title">Screens in progress</h2>
             </div>
           </div>
 
           <div className="cs-gallery">
             <div className="frame wide cs-asset">
-              <span className="replace-me">Replace me — web dashboard (hi-fi)</span>
+              {import.meta.env.DEV && <span className="replace-me">Replace me — web dashboard (hi-fi)</span>}
             </div>
             <div className="frame cs-asset">
-              <span className="replace-me">Replace me — mobile operator app</span>
+              {import.meta.env.DEV && <span className="replace-me">Replace me — mobile operator app</span>}
             </div>
             <div className="frame cs-asset">
-              <span className="replace-me">Replace me — rider app / dark mode</span>
+              {import.meta.env.DEV && <span className="replace-me">Replace me — rider app / dark mode</span>}
             </div>
             <div className="frame cs-asset">
-              <span className="replace-me">Replace me — offline / empty state</span>
+              {import.meta.env.DEV && <span className="replace-me">Replace me — offline / empty state</span>}
             </div>
           </div>
         </div>
@@ -550,7 +550,7 @@ function DistroNetDetail({ project }) {
           </div>
 
           <div className="proto-embed cs-asset">
-            <span className="replace-me">Replace me — embed public Figma prototype (Step 6)</span>
+            {import.meta.env.DEV && <span className="replace-me">Replace me — embed public Figma prototype (Step 6)</span>}
             <div className="proto-placeholder">
               <p>{cs.prototype.note}</p>
               <ul className="tool-list flow-cards">
