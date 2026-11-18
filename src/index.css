@@ -64,41 +64,21 @@ p {
   pointer-events: none;
 }
 
-/* Live ASCII plasma canvas (Background.jsx). Drawn in ink derived from the
-   palette, so no blend mode is needed — blend modes on a fixed layer make
-   Chromium drop the background while scrolling. */
+/* Live background layer (Background.jsx): clouds, dot grid and ASCII plasma,
+   all in page space so they scroll with the content, endlessly. Drawn in ink
+   derived from the palette, so no blend mode is needed — blend modes on a
+   fixed layer make Chromium drop the background while scrolling. */
 .bg-plasma {
   position: absolute; inset: 0;
   display: block;
-  opacity: 0.85;
 }
 
-/* Keep colors in sync with theme.js bgPalette. */
-/* Soft cloud shapes over the ramp give the frosted glass something to refract. */
+/* The sky tone stays fixed behind the moving layer.
+   Keep colors in sync with theme.js bgPalette. */
 .bg-host::before {
   content: ''; position: absolute;
   inset: 0; z-index: -1;
-  background:
-    radial-gradient(ellipse 38% 26% at 18% 22%, rgba(255, 255, 255, 0.55), transparent 70%),
-    radial-gradient(ellipse 30% 22% at 78% 14%, rgba(255, 255, 255, 0.45), transparent 70%),
-    radial-gradient(ellipse 44% 30% at 62% 58%, rgba(255, 255, 255, 0.38), transparent 72%),
-    radial-gradient(ellipse 34% 24% at 12% 78%, rgba(255, 255, 255, 0.32), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 90% 88%, rgba(130, 167, 205, 0.55), transparent 70%),
-    radial-gradient(ellipse 46% 36% at 40% 40%, rgba(130, 167, 205, 0.35), transparent 70%),
-    linear-gradient(160deg, #82a7cd 0%, #bce2f7 35%, #a3c2de 65%, #e2e6e9 100%);
-}
-
-/* Fine dither dot grid in powder blue, fading in and out down the page. */
-.bg-host::after {
-  content: ''; position: absolute;
-  inset: 0; z-index: -1;
-  background-image: radial-gradient(circle, rgba(70, 110, 175, 0.28) 0.9px, transparent 1.3px);
-  background-size: 7px 7px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 30%, #000 0%, transparent 75%),
-    radial-gradient(ellipse 60% 50% at 80% 75%, #000 0%, transparent 75%);
-  mask-image: radial-gradient(ellipse 70% 60% at 30% 30%, #000 0%, transparent 75%),
-    radial-gradient(ellipse 60% 50% at 80% 75%, #000 0%, transparent 75%);
-  opacity: 0.35;
+  background: linear-gradient(160deg, #82a7cd 0%, #bce2f7 35%, #a3c2de 65%, #e2e6e9 100%);
 }
 
 
