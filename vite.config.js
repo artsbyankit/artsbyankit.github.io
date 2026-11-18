@@ -8,11 +8,11 @@ import { SITE_URL, notFoundMeta, routes } from './src/data/routes.js'
 // (production only — Vite's dev server needs inline scripts for HMR).
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' https://cdn.aidesigner.ai",
+  "script-src 'self'",
   "style-src 'self' 'unsafe-inline'", // React style props and runtime-injected styles
   "img-src 'self' data:",
   "font-src 'self'",
-  "connect-src 'self' https://api.aidesigner.ai", // effect runtime's license check
+  "connect-src 'self'",
   "worker-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",

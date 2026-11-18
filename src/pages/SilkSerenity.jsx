@@ -438,13 +438,6 @@ export default function SilkSerenity({ project, next }) {
     }
   }, [])
 
-  // This page's frames cover the whole screen, so the animated background behind them
-  // can't be seen. Stop it here, and bring it back on the way out.
-  useEffect(() => {
-    const tiers = [...document.querySelectorAll('.bg-effect')]
-    tiers.forEach((el) => el.removeAttribute('data-aifx'))
-    return () => tiers.forEach((el) => el.setAttribute('data-aifx', 'fluted-glass'))
-  }, [])
   const openFrame = (e) => {
     const list = [...root.current.querySelectorAll('.ss-zoom img')]
     setFrames(list.map((img) => ({ src: img.dataset.hi, alt: img.alt })))

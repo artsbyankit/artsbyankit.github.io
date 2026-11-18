@@ -57,16 +57,14 @@ p {
   opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ---------- AIDesigner effect background ---------- */
+/* ---------- Site background (static powder-blue gradient, plain CSS) ---------- */
 .bg-host {
   position: fixed; inset: 0;
   z-index: -1; isolation: isolate;
   pointer-events: none;
 }
 
-/* Static ramp painted UNDER the WebGL glass — shows instantly on load and
-   remains as the fallback on browsers where the effect can't init
-   (e.g. Firefox Android). Keep colors in sync with theme.js bgPalette. */
+/* Keep colors in sync with theme.js bgPalette. */
 .bg-host::before {
   content: ''; position: absolute;
   inset: 0; z-index: -1;
@@ -77,11 +75,6 @@ p {
     #a3c2de 65%,
     #e2e6e9 100%
   );
-}
-
-.bg-effect {
-  position: absolute; inset: 0;
-  z-index: -1; pointer-events: none;
 }
 
 
@@ -1262,7 +1255,7 @@ main:has(> .page-skeleton) {
    Uses `backwards` (not `both`): after the animation, the elements return to
    `transform: none` so .hero-actions never keeps a lingering translateY(0)
    compositing context — that grouping is what made the hero buttons' child
-   backdrop-filter stop re-sampling the WebGL backdrop after window occlusion. */
+   backdrop-filter stop re-sampling the backdrop after window occlusion. */
 .hero-tag,
 .hero h1,
 .hero p.lead,

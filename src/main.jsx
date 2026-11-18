@@ -26,26 +26,6 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   })
 }
 
-// The AIDesigner runtime injects its "Made in AIDesigner" badge into <body>;
-// remove it as soon as it appears so it never lingers on the page.
-new MutationObserver(() => {
-  document.querySelectorAll('body > [data-aifx-wm]').forEach((el) => el.remove())
-}).observe(document.body, { childList: true })
-
-// Watchdog: if the effect runtime loaded but never materialized a canvas in
-// the visible bg tier (happens on some Firefox/Android builds), retry it once.
-setTimeout(() => {
-  const tier = [...document.querySelectorAll('.bg-effect')].find(
-    (el) => getComputedStyle(el).display !== 'none',
-  )
-  if (tier && !tier.querySelector('canvas')) {
-    const retry = document.createElement('script')
-    retry.src = 'https://cdn.aidesigner.ai/effects/runtime/v1.js'
-    retry.async = true
-    document.body.appendChild(retry)
-  }
-}, 3000)
-
 // Firefox Android doesn't always composite backdrop-filter until a full
 // repaint — that's why frost "appears" only after switching apps. Nudge ONCE
 // after load; repeated toggling does more harm than good.

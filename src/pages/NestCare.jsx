@@ -45,20 +45,7 @@ function Hero() {
   }
   return (
     <div className="ns-hero" ref={ref} onPointerMove={onMove} role="img" aria-label="The NestCare logo between two reaching hands, on mint">
-      <div
-        className="ns-hero-bg"
-        data-aifx="halftone"
-        data-aifx-colors="#82d4c3,#d5fd07"
-        data-aifx-bg="#fafaf7"
-        data-aifx-dot-scale="0.45"
-        data-aifx-duotone="0"
-        data-aifx-contrast="1.53"
-        data-aifx-scale="0.4"
-        data-aifx-flow-angle="102"
-        data-aifx-glow="0.67"
-        data-aifx-grain="0"
-        aria-hidden="true"
-      />
+      <div className="ns-hero-bg" aria-hidden="true" />
       <img className="ns-hand ns-hand-a" src={`${IMG}/handA.webp`} alt="" />
       <img className="ns-hand ns-hand-b" src={`${IMG}/handB.webp`} alt="" />
       <img className="ns-hero-logo" src={`${IMG}/logo.webp`} alt="" />

@@ -438,7 +438,7 @@ function LayoutEffects() {
     // macOS workaround: backdrop-filter can go stale after the window is
     // occluded (e.g. switching apps), leaving frosted glass looking clear.
     // On refocus, nudge every frosted element so the browser re-samples the
-    // backdrop behind the WebGL background.
+    // backdrop behind it.
     const GLASS = [
       '.dock-glass',
       '.nav-links a',

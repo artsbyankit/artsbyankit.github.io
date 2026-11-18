@@ -61,7 +61,7 @@
   background: var(--ns-mint);
 }
 
-/* The animated halftone sits behind everything; the mint shows until it loads. */
+/* Hero backdrop layer (the mint colour shows through). */
 .ns-hero-bg {
   position: absolute;
   inset: 0;

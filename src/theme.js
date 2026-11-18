@@ -11,7 +11,7 @@
    near-black as body text. Clean, editorial, zero color noise. */
 export const accent = '#EDEBDD';
 
-/* ---------- BACKGROUND (fluted-glass ramp) ---------- */
+/* ---------- BACKGROUND (powder-blue gradient) ---------- */
 export const bgPalette = {
   base: '#82a7cd',
   colors: ['#82a7cd', '#bce2f7', '#a3c2de', '#e2e6e9'],

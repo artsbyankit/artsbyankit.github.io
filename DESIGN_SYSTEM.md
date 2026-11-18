@@ -241,7 +241,7 @@ section-title: clamp(30px, 4.5vw, 44px)
 ## 8. Background
 
 - **Base:** `--bg` black, `color-scheme: dark`
-- **Effect:** AIDesigner `fluted-glass` WebGL background (`src/components/Background.jsx`), colors `#0c1319, #28487b, #4569a7, #6d94cf, #baceef`
+- **Background:** static powder-blue CSS gradient (`src/components/Background.jsx`, `.bg-host::before` in `index.css`), colors `#82a7cd, #bce2f7, #a3c2de, #e2e6e9` (theme.js `bgPalette`)
 - **Vignette:** radial gradient, center follows the cursor (desktop only)
 - **Noise:** subtle SVG grain overlay at 10% opacity
 
