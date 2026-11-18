@@ -8,21 +8,27 @@
    - Hygiene: a "last active" timestamp is written on every visit; if the
      site goes unused for STALE_DAYS the SW wipes its own caches so nothing
      lingers on the user's device after they stop coming back. */
-const VERSION = 'v5'
+const VERSION = 'v6'
 const CACHE = `artsbyankit-${VERSION}`
 const META_CACHE = 'artsbyankit-meta'
 const ACTIVE_KEY = 'last-active'
 const STALE_MS = 30 * 24 * 60 * 60 * 1000 // 30 days without a visit
 const MIN_UPDATE_MS = 60 * 1000 // throttle timestamp writes to 1/min
-const HASHED_ASSET = /^\/assets\/.+-[\w-]{8}\.[a-z0-9]+$/i
-const MAX_ENTRIES = 160 // every deploy adds new file names, so the cache has to be bounded
+// Vite's hashed build output only (code, styles, fonts). public/assets/ holds
+// hand-made files whose names never change, so they must not be cached forever.
+const HASHED_ASSET = /^\/assets\/[^/]+-[\w-]{8}\.(?:js|css|woff2)$/i
+const MAX_ENTRIES = 120 // every deploy adds new file names, so the cache has to be bounded
+const MAX_CACHED_BYTES = 600 * 1024 // big photos are fetched fresh, not kept on the device
+const NAV_TIMEOUT_MS = 3500 // a weak connection falls back to the cached page instead of hanging
 const STATIC_FILE = /\.(png|webp|avif|jpg|jpeg|svg|gif|woff2?|pdf|js)$/i
+// Empty app shell: renders any route on the client, used when offline.
+const SHELL = '/404.html'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((cache) => cache.addAll(['/']))
+      .then((cache) => cache.addAll([SHELL]))
       .then(() => self.skipWaiting()),
   )
 })
@@ -79,21 +85,33 @@ async function trim(cache) {
 }
 
 async function store(cache, request, response) {
+  const size = Number(response.headers.get('content-length'))
+  if (size > MAX_CACHED_BYTES) return
   await cache.put(request, response)
   await trim(cache)
 }
 
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE)
-  try {
-    const fresh = await fetch(request)
+  const network = fetch(request).then((fresh) => {
     if (fresh.ok) store(cache, request, fresh.clone()).catch(() => {})
     return fresh
-  } catch {
-    // Offline: the exact page if we have it, otherwise the app shell (the
-    // client-side router renders any route from it).
+  })
+  network.catch(() => {}) // handled below; this just avoids an unhandled rejection
+  try {
+    // Slow network: if a cached copy exists, don't wait more than a few
+    // seconds for the fresh one (it still lands in the cache for next time).
     const hit = await cache.match(request)
-    return hit || (await cache.match('/'))
+    if (!hit) return await network
+    return await Promise.race([
+      network,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), NAV_TIMEOUT_MS)),
+    ]).catch(() => hit)
+  } catch {
+    // Offline: the exact page if we have it, otherwise the empty app shell
+    // (the client-side router renders any route from it).
+    return (await cache.match(request)) || (await cache.match(SHELL))
   }
 }
 

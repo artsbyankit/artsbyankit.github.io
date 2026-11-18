@@ -33,28 +33,19 @@ const semantics = {
 };
 
 /* ============================================================
-   🎛️ BEHAVIOUR SWITCHES
-   ============================================================ */
-
-/* Reactive shine: the white specular glow on CTAs keeps a faint tint
-   of whatever the background is doing — pure white core, bg-aware soul.
-   Works with ANY accent since the shine never borrows accent hue. */
-export const REACTIVE_SHINE = true;
-
-/* ============================================================
    Everything below wires these values into the whole site.
    You normally never need to touch this part.
    ============================================================ */
 
-let shine = 'hsl(210 45% 96%)';
+/* The white specular glow on CTAs, with a faint tint of the powder blue.
+   (It used to follow the background's hue at runtime, but the palette's hues
+   only span ~9°, so it never visibly changed.) */
+const shine = 'hsl(210 45% 96%)';
 
-export function setLiveShine(v) {
-  shine = v;
-  applyTheme();
-}
+export const themeCss = () => `:root { ${themeVars()} }`;
 
-function applyTheme() {
-  const vars = `
+function themeVars() {
+  return `
     --bg: ${bgPalette.base};
     --text: ${ink.text};
     --muted: ${ink.muted};
@@ -66,13 +57,17 @@ function applyTheme() {
     --persona-jtbd: ${semantics.jtbd};
     --persona-impl: ${semantics.impl};
   `;
+}
+
+function applyTheme() {
+  if (typeof document === 'undefined') return; // pre-render (vite.config.js) inlines themeCss() instead
   let el = document.getElementById('app-theme-vars');
   if (!el) {
     el = document.createElement('style');
     el.id = 'app-theme-vars';
     document.head.appendChild(el);
   }
-  el.textContent = `:root { ${vars} }`;
+  el.textContent = themeCss();
 }
 
 applyTheme();

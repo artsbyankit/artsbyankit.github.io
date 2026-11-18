@@ -1,0 +1,82 @@
+/* About page styles, split out of index.css so they only load with this page. */
+
+.tl-item h3 {
+  margin-bottom: 2px;
+}
+
+.tl-item .tl-role {
+  color: var(--muted); font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.tl-item ul {
+  margin: 0; padding-left: 18px;
+  color: var(--muted); font-size: 17px;
+}
+
+.tl-item li {
+  margin-bottom: 6px;
+}
+
+@media (max-width: 900px) {
+  .tl-item {
+      grid-template-columns: 1fr; gap: 6px;
+    }
+}
+
+/* ---- Meet the cats — framed collector cards ---- */
+.cat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.cat-body {
+  padding: 16px 6px 0;
+}
+
+.cat-age {
+  flex: none; padding: 4px 10px;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); font-size: 12px;
+  font-weight: 600; color: var(--text);
+}
+
+.cat-meta {
+  margin-top: 5px; font-size: 13.5px;
+  color: var(--muted);
+}
+
+.cat-bio {
+  margin-top: 10px; font-size: 15px;
+  line-height: 1.55; color: var(--muted);
+}
+
+.cat-base {
+  display: inline-flex; align-items: center;
+  gap: 7px; margin-top: 14px;
+  padding: 5px 12px; border: 1px solid var(--border);
+  border-radius: 999px; background: var(--surface-2);
+  font-size: 12px; letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.cat-base::before {
+  content: ''; width: 5px;
+  height: 5px; border-radius: 50%;
+  background: var(--green);
+}
+
+@media (max-width: 900px) {
+  .cat-grid {
+      grid-template-columns: 1fr; gap: 18px;
+    }
+}
+
+.edu-link {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px solid transparent; transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.edu-link:hover {
+  color: #2f6fed;
+}

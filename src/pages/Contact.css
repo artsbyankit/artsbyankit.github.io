@@ -1,0 +1,21 @@
+/* Contact page styles, split out of index.css so they only load with this page. */
+
+.contact-big {
+  text-align: left; padding: 110px 0 40px;
+}
+
+.contact-big h1 {
+  font-size: clamp(40px, 8vw, 84px); max-width: 14ch;
+  margin: 0 0 24px;
+}
+
+.contact-big p {
+  color: var(--muted); max-width: 46ch;
+  margin: 0;
+}
+
+.contact-actions {
+  display: flex; justify-content: flex-start;
+  gap: 16px; margin-top: 48px;
+  flex-wrap: wrap;
+}

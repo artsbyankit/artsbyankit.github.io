@@ -22,7 +22,10 @@ const OPTICS = {
   bezel: ['--lg-bezel', 0.55], // curved edge width, relative to the corner radius
   bezelMax: ['--lg-bezel-max', 28], // px; raise it and the whole surface becomes a lens
   thickness: ['--lg-thickness', 1.45], // glass height, relative to the bezel
-  dispersion: ['--lg-dispersion', 0.05], // how much more blue bends than red
+  // How much more blue bends than red. Off by default: it triples the filter's
+  // per-frame work for a fringe you can barely see, so only surfaces that set
+  // --lg-dispersion (the nav links) pay for it.
+  dispersion: ['--lg-dispersion', 0],
   saturate: ['--lg-saturate', 1.3],
   rim: ['--lg-rim-blur', -1], // 0 or more: frost only the centre, keep the bent rim sharp
   dome: ['--lg-dome', -1], // 0 or more: a true glass dome on a base this thick (relative to the bezel)
@@ -234,8 +237,10 @@ function createFilter(id, w, h, optics, map) {
   return `url(#${id})`
 }
 
+const filterKey = (w, h, radius, optics) => [w, h, radius, ...Object.values(optics)].join('x').replace(/\./g, '_')
+
 function filterFor(w, h, radius, optics) {
-  const key = [w, h, radius, ...Object.values(optics)].join('x').replace(/\./g, '_')
+  const key = filterKey(w, h, radius, optics)
   if (filters.has(key)) return filters.get(key)
 
   const { canvas, maskCanvas, scale } = buildMap(w, h, radius, optics)
@@ -358,13 +363,44 @@ export function initLiquidGlass() {
   const pending = new Set()
   let settleTimer = null
 
-  const apply = (el) => {
+  // Returns false when the surface needs a new map and `build` wasn't allowed.
+  const apply = (el, build = true) => {
     const w = el.offsetWidth
     const h = el.offsetHeight
-    if (!w || !h) return
+    if (!w || !h) return true
     const style = getComputedStyle(el)
-    const filter = filterFor(w, h, radiusOf(style, w, h), opticsOf(style, w, h))
-    el.style.setProperty('--lg-filter', filter)
+    const radius = radiusOf(style, w, h)
+    const optics = opticsOf(style, w, h)
+    if (!build && !filters.has(filterKey(w, h, radius, optics))) return false
+    el.style.setProperty('--lg-filter', filterFor(w, h, radius, optics))
+    return true
+  }
+
+  // New maps are built in idle time, a few per idle slice, on-screen surfaces
+  // first. Building them inside the ResizeObserver callback cost ~43 ms of
+  // main-thread work on the first frame. Until its map exists a surface shows
+  // the plain --frost fallback, which looks nearly the same.
+  const firstQueue = new Set()
+  let drainScheduled = false
+  const idle = window.requestIdleCallback || ((fn) => setTimeout(() => fn({ timeRemaining: () => 8 }), 16))
+  const onScreen = (el) => {
+    const r = el.getBoundingClientRect()
+    return r.bottom > 0 && r.top < window.innerHeight
+  }
+  const drain = (deadline) => {
+    drainScheduled = false
+    const ordered = [...firstQueue].sort((a, b) => onScreen(b) - onScreen(a))
+    for (const el of ordered) {
+      if (deadline.timeRemaining() < 3) break
+      firstQueue.delete(el)
+      if (el.isConnected && !el.style.getPropertyValue('--lg-filter')) apply(el)
+    }
+    if (firstQueue.size) scheduleDrain()
+  }
+  const scheduleDrain = () => {
+    if (drainScheduled) return
+    drainScheduled = true
+    idle(drain, { timeout: 1000 })
   }
   // Drop filters nothing uses any more (sizes left behind by window resizes).
   const sweep = () => {
@@ -377,12 +413,16 @@ export function initLiquidGlass() {
     }
   }
 
-  // A surface's first map is built right away so it never flashes frost. Later
-  // size changes wait to settle, so an animation doesn't rebuild every frame.
+  // A surface whose map already exists (same size and optics as another) gets
+  // it right away; a new map is queued for idle time. Later size changes wait
+  // to settle, so an animation doesn't rebuild every frame.
   const ro = new ResizeObserver((entries) => {
     for (const { target } of entries) {
       if (target.style.getPropertyValue('--lg-filter')) pending.add(target)
-      else apply(target)
+      else if (!apply(target, false)) {
+        firstQueue.add(target)
+        scheduleDrain()
+      }
     }
     if (!pending.size) return
     clearTimeout(settleTimer)

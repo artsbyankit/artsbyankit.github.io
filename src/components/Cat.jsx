@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import useMounted from './useMounted'
 
 const RAINBOW = Array.from({ length: 7 })
 const TAIL = Array.from({ length: 9 })
@@ -62,6 +63,13 @@ function RainbowCat() {
 export default function Cat() {
   const [flies, setFlies] = useState([])
   const flyId = useRef(0)
+  const timers = useRef(new Set())
+  const mounted = useMounted()
+
+  useEffect(() => {
+    const pending = timers.current
+    return () => pending.forEach(clearTimeout)
+  }, [])
 
   const launch = (e) => {
     e.preventDefault()
@@ -71,7 +79,11 @@ export default function Cat() {
     const top = 5 + Math.random() * 85
     const dur = 2.8 + Math.random() * 1.4
     setFlies((f) => [...f, { id, side, top, dur }])
-    setTimeout(() => setFlies((f) => f.filter((x) => x.id !== id)), 5000)
+    const timer = setTimeout(() => {
+      timers.current.delete(timer)
+      setFlies((f) => f.filter((x) => x.id !== id))
+    }, 5000)
+    timers.current.add(timer)
   }
 
   return (
@@ -79,7 +91,7 @@ export default function Cat() {
       <span className="cat-logo" onDoubleClick={launch} aria-hidden="true">
         <span className="cat-logo-dot"></span>
       </span>
-      {createPortal(
+      {mounted && createPortal(
         <>
           {flies.map((f) => (
             <span

@@ -4,12 +4,14 @@ import { NavLink, Outlet, Link, useLocation, useNavigationType } from 'react-rou
 import Background from './Background'
 import Cat from './Cat'
 import ErrorBoundary from './ErrorBoundary'
+import useMounted from './useMounted'
 import { SITE_URL, metaFor, notFoundMeta } from '../data/routes'
 
 const DARK_SURFACES = '.card-cover, .cs-cover'
 
 function Navbar() {
   const [open, setOpen] = useState(false)
+  const mounted = useMounted()
 
   const close = () => setOpen(false)
 
@@ -76,7 +78,7 @@ function Navbar() {
           )}
         </button>
       </div>
-      {createPortal(
+      {mounted && createPortal(
         <>
           <div
             className={`menu-backdrop${open ? ' open' : ''}`}

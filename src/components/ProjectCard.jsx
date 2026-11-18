@@ -14,10 +14,10 @@ export default function ProjectCard({ project }) {
           {project.inProgress && <span className="tag tag-live">In progress</span>}
         </div>
         <h3>{project.title}</h3>
-        <p>{project.cs ? project.cs.tagline : project.excerpt}</p>
-        {project.cs && (
+        <p>{project.tagline ?? project.excerpt}</p>
+        {project.chips && (
           <div className="card-chips">
-            {project.cs.chips.slice(0, 3).map((chip) => (
+            {project.chips.map((chip) => (
               <span className="chip" key={chip}>
                 {chip}
               </span>

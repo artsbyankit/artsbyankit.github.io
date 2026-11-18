@@ -1,22 +1,32 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import '@fontsource-variable/inter/opsz.css'
-import '@fontsource-variable/inter/opsz-italic.css'
+import './fonts.css'
 import './theme.js' // 🎨 MATERIAL EDITOR — colors live here
-import './adaptiveAccent.js' // accent reacts to the animated bg
 import './index.css'
 import './themeColor.js'
 import App from './App.jsx'
 import { initLiquidGlass } from './liquidGlass.js'
 
-createRoot(document.getElementById('root')).render(
+const app = (
   <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 )
+const root = document.getElementById('root')
+// Production pages arrive pre-rendered (vite.config.js): hydrate that HTML in
+// place. If the HTML was rendered for a different path (an offline fallback, a
+// host serving the home page for unknown URLs), it can't be hydrated, so it is
+// replaced. Dev and the 404 shell start empty and render from scratch.
+const path = window.location.pathname.replace(/\/+$/, '') || '/'
+if (root.firstElementChild && root.dataset.path === path) {
+  hydrateRoot(root, app)
+} else {
+  root.replaceChildren()
+  createRoot(root).render(app)
+}
 initLiquidGlass()
 
 // Offline/instant repeat-visit caching — production only (dev uses HMR).

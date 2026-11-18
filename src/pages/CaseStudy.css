@@ -1,0 +1,596 @@
+/* CaseStudy page styles, split out of index.css so they only load with this page. */
+
+/* ---------- Case study ---------- */
+.cs-hero {
+  padding: 80px 0 0;
+}
+
+.cs-back {
+  display: block; width: fit-content;
+  align-items: center; gap: 8px;
+  color: var(--muted); font-size: 16px;
+  font-weight: 500; margin-bottom: 30px;
+  padding: 10px 0; margin-top: -10px; /* 44px tap target, same visual spacing */
+  transition: color 0.15s ease;
+}
+
+.cs-back:hover {
+  color: var(--text);
+}
+
+.cs-hero h1 {
+  font-size: clamp(36px, 6vw, 64px); margin-bottom: 20px;
+}
+
+.cs-section ul {
+  margin: 0; padding-left: 20px;
+  color: var(--muted);
+}
+
+.cs-section li {
+  margin-bottom: 10px;
+}
+
+.cs-progress-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 25%, transparent);
+  position: relative;
+}
+
+.cs-tagline {
+  font-family: var(--font-display); font-size: clamp(18px, 2.5vw, 24px);
+  color: var(--text); margin: -8px 0 16px;
+}
+
+@media (max-width: 640px) {
+  .cs-cover-sub {
+      position: static; transform: none;
+    }
+}
+
+/* Placeholder badge: marks spots waiting for a real asset */
+.cs-asset {
+  position: relative;
+}
+
+.replace-me {
+  position: absolute; top: 12px;
+  right: 12px; z-index: 2;
+  padding: 5px 10px; border-radius: 999px;
+  border: 1px dashed var(--border); background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.85); font-size: 13px;
+  font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; pointer-events: none;
+  white-space: nowrap;
+}
+
+.cs-statement {
+  font-size: clamp(19px, 2.2vw, 22px); color: var(--text);
+  font-weight: 500;
+}
+
+/* Stat callouts — glass tiles, numbers first (design principle D2) */
+.stat-grid {
+  grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+.stat-callout {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+
+.stat-value {
+  font-family: var(--font-display); font-size: clamp(30px, 3.4vw, 42px);
+  font-weight: 700; color: var(--text);
+  letter-spacing: -0.02em; line-height: 1.05;
+}
+
+.stat-label {
+  font-size: 15px; color: var(--muted);
+}
+
+.stat-source {
+  font-size: 13px; color: color-mix(in srgb, var(--muted) 70%, transparent);
+  text-decoration: none; transition: color 0.15s ease;
+}
+
+.stat-link {
+  color: var(--muted);
+}
+
+/* Hyperlink affordance: blue on hover, color-only (matches edu-link) */
+.stat-link:hover {
+  color: #2f6fed;
+}
+
+/* Personas — full detail cards */
+.persona-grid {
+  display: grid; grid-template-columns: 1fr;
+  margin-bottom: 8px;
+}
+
+.persona-photo {
+  aspect-ratio: 3 / 4; align-self: start;
+  border-radius: var(--radius-sm); border: 1px solid var(--panel-border);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); display: flex;
+  align-items: center; justify-content: center;
+}
+
+.persona-photo:has(.replace-me) {
+  border-style: dashed;
+}
+
+.persona-body {
+  display: flex; flex-direction: column;
+  gap: 16px; min-width: 0;
+}
+
+.persona-initial {
+  font-family: var(--font-display); font-size: clamp(56px, 8vw, 88px);
+  font-weight: 800; color: rgba(255, 255, 255, 0.14);
+  letter-spacing: -0.04em;
+}
+
+.persona-head {
+  display: flex; flex-wrap: wrap;
+  align-items: flex-start; justify-content: space-between;
+  gap: 8px 12px;
+}
+
+.persona-head h3 {
+  font-size: 29px; display: flex;
+  flex-direction: column; gap: 2px;
+}
+
+.persona-quote {
+  margin: 0; padding: 0 0 0 16px;
+  border-left: 3px solid var(--line); color: var(--text);
+  font-size: 17px; font-style: italic;
+  line-height: 1.55;
+}
+
+.flow-path {
+  fill: none; stroke: rgba(18, 35, 58, 0.6);
+  stroke-width: 2; stroke-linecap: round;
+}
+
+.flow-loop-path {
+  stroke-dasharray: 1 7;
+}
+
+.flow-arrow {
+  fill: var(--text); stroke: var(--text);
+  stroke-width: 1;
+}
+
+.flow-stack {
+  position: relative; display: flex;
+  flex-direction: column; align-items: center;
+  gap: 46px;
+}
+
+.fc-node {
+  position: relative;
+}
+
+.fc-desc {
+  font-size: 14.5px; color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Legend for mobile (side loops hidden on narrow screens) */
+.flow-legend {
+  display: none; gap: 14px;
+  align-items: center; justify-content: center;
+  margin-bottom: 18px; font-size: 13px;
+  font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+.flow-legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%; background: var(--muted);
+  display: inline-block; margin-right: 6px;
+}
+
+.flow-legend-sep {
+  width: 1px; height: 14px;
+  background: var(--border); margin: 0 6px;
+}
+
+.product-col h3 {
+  font-size: 21px; margin-bottom: 4px;
+}
+
+.product-for {
+  font-size: 14px; color: var(--muted);
+  font-weight: 600; margin-bottom: 16px;
+}
+
+.feature-list {
+  list-style: none; padding: 0;
+  margin: 0; display: flex;
+  flex-direction: column; gap: 10px;
+}
+
+.feature-list li {
+  position: relative; padding-left: 18px;
+  color: var(--muted); font-size: 16px;
+}
+
+.feature-list li::before {
+  content: ''; position: absolute;
+  left: 0; top: 8px;
+  width: 7px; height: 7px;
+  border-radius: 50%; background: var(--muted);
+}
+
+h4.block-goals + .feature-list li::before { background: var(--persona-goals);}
+
+h4.block-pains + .feature-list li::before { background: var(--persona-pains);}
+
+h4.block-jtbd + .feature-list li::before { background: var(--persona-jtbd);}
+
+h4.block-impl + .feature-list li::before { background: #ffb454;}
+
+.cs-quote {
+  margin: 0; padding: 8px 0 8px 24px;
+  border-left: 3px solid var(--line); color: var(--text);
+  font-style: italic; font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Status legend — glass tiles, color always paired with word */
+.status-legend {
+  gap: 16px; margin-bottom: 24px;
+}
+
+.status-chip {
+  flex: none; width: 18px;
+  height: 18px; border-radius: 6px;
+  margin-top: 3px;
+}
+
+.swatch-inline {
+  display: inline-flex; align-items: center;
+  gap: 8px; font-weight: 600;
+  color: var(--text);
+}
+
+.swatch {
+  display: inline-block; width: 16px;
+  height: 16px; border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* Prototype embed — dark neutral stage, glass NOT applied to product art */
+.proto-embed {
+  border-radius: var(--radius); border: 1px solid var(--border);
+  background: #0a0a0a; min-height: 360px;
+  display: flex; align-items: center;
+  justify-content: center; padding: 48px 32px;
+}
+
+.proto-placeholder {
+  text-align: center; max-width: 520px;
+  color: var(--muted);
+}
+
+.proto-placeholder p {
+  font-size: 16px; margin-bottom: 24px;
+}
+
+.flow-cards {
+  justify-content: center;
+}
+
+/* Metrics table — honest benchmark vs design-goal split */
+.cs-honesty {
+  font-size: 16px; color: var(--muted);
+  font-style: italic; margin-bottom: 24px;
+}
+
+.metrics-head {
+  border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05));
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+.metrics-target {
+  font-weight: 700; color: var(--text);
+  font-family: var(--font-display);
+}
+
+.metrics-type {
+  font-size: 14px;
+}
+
+.metrics-type.benchmark {
+  color: var(--green);
+}
+
+.metrics-type.goal {
+  color: var(--muted);
+}
+
+/* More case studies — glass cards */
+.cs-next-section {
+  padding-bottom: 120px;
+}
+
+.cs-next-cards {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cs-next-emoji {
+  font-size: 29px;
+}
+
+.cs-next-arrow {
+  margin-left: auto; color: var(--muted);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .cs-section {
+      grid-template-columns: 1fr; gap: 16px;
+    }
+  .stat-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  .persona-grid {
+      grid-template-columns: 1fr;
+    }
+  .persona-photo {
+      height: auto; width: 100%;
+      aspect-ratio: 4 / 3;
+    }
+  .flow-stack {
+      gap: 44px;
+    }
+  /* down-arrow between stacked nodes */
+    .fc-node:not(:last-child)::after {
+      content: '↓'; position: absolute;
+      left: 50%; top: calc(100% + 13px);
+      transform: translateX(-50%); z-index: 1;
+      color: var(--text); font-size: 19px;
+      font-weight: 700; line-height: 1;
+    }
+  .flow-legend {
+      display: flex;
+    }
+  .metrics-head {
+      display: none;
+    }
+  .metrics-type {
+      grid-column: 1 / -1;
+    }
+  .cs-next-cards {
+      grid-template-columns: 1fr;
+    }
+}
+
+/* ---- Personas: small modern cards, original layout + full-detail overlay (LOCAL PREVIEW) ---- */
+.persona-grid {
+  grid-template-columns: repeat(4, 1fr); gap: 24px;
+}
+
+.persona-photo {
+  position: relative; aspect-ratio: 226 / 237;
+  width: 100%; border-radius: 22px;
+  border: 1px solid var(--border); overflow: hidden;
+}
+
+.persona-photo::after {
+  content: ''; position: absolute;
+  inset: 0; border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35); pointer-events: none;
+}
+
+.persona-initial {
+  transform: none !important; object-position: 50% 30% !important;
+}
+
+.persona-photo > img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 30%;
+  display: block;
+}
+
+.persona-initial {
+  width: 100%; height: 100%;
+  display: grid; place-items: center;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(18, 35, 58, 0.16));
+}
+
+.persona-body {
+  padding: 14px 10px 0;
+}
+
+.persona-body h3 {
+  margin: 0; font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.persona-quote {
+  margin: 10px 0 0; padding: 0 0 0 10px;
+  border-left: 2px solid var(--line); color: var(--muted);
+  font-size: 12.5px; font-style: italic;
+  line-height: 1.5;
+}
+
+.persona-more {
+  position: absolute; right: 16px;
+  bottom: 16px; margin: 0;
+  width: fit-content;
+  min-height: 38px; padding: 10px 16px;
+  font-size: 12px;
+}
+
+/* Overlay */
+.persona-overlay {
+  position: fixed; inset: 0;
+  z-index: 200; display: grid;
+  place-items: center; padding: 24px;
+  background: color-mix(in srgb, #0b121c 55%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  animation: overlay-in 0.2s ease;
+}
+
+.persona-modal {
+  position: relative; width: min(880px, 100%);
+  max-height: min(86vh, 900px); overflow-y: auto;
+  overscroll-behavior: contain; padding: 34px 36px 38px;
+  border: 1px solid var(--glass-border); border-radius: 24px;
+  box-shadow: 0 40px 90px rgba(4, 8, 15, 0.5); animation: modal-in 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 30%),
+    var(--bg);
+}
+
+.persona-close {
+  position: absolute; top: 16px;
+  right: 16px; width: 38px;
+  height: 38px; display: grid;
+  place-items: center; border: 1px solid var(--border);
+  border-radius: 50%; background: var(--surface-2);
+  color: var(--text); font-size: 22px;
+  line-height: 1; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.persona-close:hover {
+  border-color: color-mix(in srgb, var(--text) 40%, transparent);
+}
+
+.pm-head {
+  display: flex; align-items: center;
+  gap: 16px; padding-right: 48px;
+}
+
+.pm-avatar {
+  flex: none; width: 72px;
+  height: 72px; border-radius: 50%;
+  overflow: hidden; border: 1px solid var(--glass-border);
+  display: grid; place-items: center;
+  background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); font-size: 26px;
+  font-weight: 600;
+}
+
+.pm-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 30%;
+}
+
+.pm-head h3 {
+  font-size: 26px; letter-spacing: -0.01em;
+}
+
+.pm-role {
+  margin-top: 3px; font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pm-quote {
+  margin-top: 18px; padding-left: 14px;
+  border-left: 2px solid color-mix(in srgb, var(--text) 35%, transparent); font-size: 16px;
+  font-style: italic; color: var(--text);
+}
+
+.pm-facts {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 18px; margin-top: 22px;
+  padding: 18px; border: 1px solid var(--border);
+  border-radius: 14px; background: var(--surface-2);
+}
+
+.pm-facts dt {
+  font-size: 11.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.pm-facts dd {
+  margin-top: 6px; font-size: 14.5px;
+  line-height: 1.55; color: var(--text);
+}
+
+.pm-cols {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 24px 32px; margin-top: 26px;
+}
+
+@media (max-width: 900px) {
+  .persona-grid {
+      grid-template-columns: repeat(2, 1fr); gap: 18px;
+    }
+  .persona-overlay {
+      padding: 12px;
+    }
+  .persona-modal {
+      padding: 26px 20px 30px;
+    }
+  .pm-facts {
+      grid-template-columns: 1fr;
+    }
+  .pm-cols {
+      grid-template-columns: 1fr;
+    }
+}
+
+/* A clear glass marble, for controls that sit on top of photographs. Light comes from
+   the top-left: a small window highlight, a glow gathered on the opposite inner edge,
+   a dark rim where the glass turns away, and a shadow with a bright focus inside it.
+   These stay still while the marble rolls, because the light doesn't move. */
+.lg-lens {
+  --lg-marble: 1; --lg-ior: 1.5;
+  --lg-dispersion: 0; --lg-blur: 0.5; --lg-soften: 0.45;
+  --lg-saturate: 1.3;
+  position: relative;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, transparent 58%, rgba(10, 16, 28, 0.1) 80%, rgba(10, 16, 28, 0.42) 100%);
+  color: #fff;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.55),
+    inset 1px 1.5px 2px rgba(255, 255, 255, 0.55),
+    inset -2px -3px 7px rgba(255, 255, 255, 0.28),
+    5px 9px 14px rgba(8, 14, 26, 0.3),
+    1px 2px 3px rgba(8, 14, 26, 0.32);
+  -webkit-backdrop-filter: var(--lg-filter, blur(6px) saturate(160%)); backdrop-filter: var(--lg-filter, blur(6px) saturate(160%));
+}
+
+.lg-lens::before,
+.lg-lens::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.lg-lens::before {
+  top: 11%;
+  left: 17%;
+  width: 30%;
+  height: 20%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.28) 55%, transparent 72%);
+  transform: rotate(-32deg);
+}
+
+.lg-lens::after {
+  right: 11%;
+  bottom: 9%;
+  width: 42%;
+  height: 30%;
+  background: radial-gradient(ellipse at 60% 62%, rgba(255, 255, 255, 0.42), transparent 68%);
+  transform: rotate(-38deg);
+}
+
+@media (max-width: 640px) {
+  .persona-grid {
+      grid-template-columns: 1fr;
+      max-width: 360px; margin-inline: auto;
+    }
+}

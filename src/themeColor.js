@@ -1,6 +1,6 @@
 // Dynamic browser theme-color that follows the site's powder-blue palette.
 // A slow walk through the brand blues (theme.js bgPalette) sets the browser
-// chrome colour; other modules subscribe via onBgSample().
+// chrome colour.
 import { bgPalette } from './theme.js'
 
 const BRAND = [bgPalette.base, bgPalette.colors[2], bgPalette.colors[1]]
@@ -8,11 +8,6 @@ const SAMPLE_MS = 3000
 const MIN_DELTA = 10
 
 const hexToRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
-
-const listeners = new Set()
-export function onBgSample(cb) {
-  listeners.add(cb)
-}
 
 let metaEl = null
 function meta() {
@@ -50,5 +45,4 @@ setInterval(() => {
   if (document.hidden) return
   const rgb = brandWalk(performance.now())
   writeIfChanged(rgb)
-  for (const cb of listeners) cb(rgb)
 }, SAMPLE_MS)

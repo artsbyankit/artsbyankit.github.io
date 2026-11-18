@@ -26,3 +26,6 @@ dist-ssr
 
 # Local background video (too large for GH Pages)
 public/bg.mp4
+
+# Lighthouse CI reports
+.lighthouseci

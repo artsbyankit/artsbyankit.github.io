@@ -1,6 +1,8 @@
-import { lazy, useLayoutEffect, useRef, useState } from 'react'
+import { lazy, useId, useLayoutEffect, useRef, useState } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import projects from '../data/projects'
+import caseStudies from '../data/caseStudies'
+import './CaseStudy.css'
 
 const NestCare = lazy(() => import('./NestCare'))
 const SilkSerenity = lazy(() => import('./SilkSerenity'))
@@ -37,7 +39,7 @@ function FlowChart() {
   const containerRef = useRef(null)
   const nodeRefs = useRef([])
   const loopRefs = useRef([])
-  const [markerId] = useState(() => `flow-arrow-${Math.random().toString(36).slice(2, 9)}`)
+  const markerId = `flow-arrow-${useId().replace(/[^\w-]/g, '')}`
   const [paths, setPaths] = useState(null)
   const [labels, setLabels] = useState(null)
 
@@ -347,7 +349,9 @@ function DistroNetDetail({ project }) {
             ))}
           </div>
 
+          {/* Backdrop click closes; keyboard users have Escape and the close button. */}
           {activePersona && (
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
             <div
               className="persona-overlay"
               role="dialog"
@@ -355,6 +359,8 @@ function DistroNetDetail({ project }) {
               aria-label={`${activePersona.name} — full persona`}
               onClick={() => setActivePersona(null)}
             >
+              {/* Stops backdrop clicks from closing the modal; not an action itself. */}
+              {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
               <div className="persona-modal" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="persona-close" onClick={() => setActivePersona(null)} aria-label="Close">
                   ×
@@ -643,7 +649,8 @@ function DistroNetDetail({ project }) {
 
 export default function CaseStudy() {
   const { slug } = useParams()
-  const project = projects.find((p) => p.slug === slug)
+  const card = projects.find((p) => p.slug === slug)
+  const project = card && { ...card, ...caseStudies[slug] }
 
   // Atlas was replaced by NestCare; keep old links working.
   if (slug === 'atlas') return <Navigate to="/work/nestcare" replace />
@@ -651,7 +658,7 @@ export default function CaseStudy() {
   if (slug === 'aperture') return <Navigate to="/work/silk-serenity" replace />
 
   if (slug === 'silk-serenity') {
-    return <SilkSerenity project={project} next={projects[projects.indexOf(project) + 1] ?? projects[0]} />
+    return <SilkSerenity project={project} next={projects[projects.indexOf(card) + 1] ?? projects[0]} />
   }
 
   if (slug === 'eat-me-first') {
@@ -659,7 +666,7 @@ export default function CaseStudy() {
   }
 
   if (project?.custom) {
-    const next = projects[projects.indexOf(project) + 1]
+    const next = projects[projects.indexOf(card) + 1]
     return <NestCare project={project} next={next} />
   }
 

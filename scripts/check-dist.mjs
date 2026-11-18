@@ -7,7 +7,7 @@ import { routes } from '../src/data/routes.js'
 
 const DIST = 'dist'
 // Gzipped KB, set a little above today's sizes so growth has to be a decision.
-const BUDGET_KB = { entryJs: 110, entryCss: 18, largestPageJs: 20 }
+const BUDGET_KB = { entryJs: 104, entryCss: 13, largestPageJs: 18 }
 const SECRET = /ghp_[A-Za-z0-9]{20,}|github_pat_|AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY/
 
 const errors = []
@@ -28,6 +28,13 @@ for (const { path, title } of routes) {
   if (path !== '/' && !html.includes(`<title>${title.replace(/&/g, '&amp;')}</title>`)) errors.push(`Wrong title: ${path}`)
   if (!html.includes('rel="canonical"')) errors.push(`No canonical link: ${path}`)
   if (!html.includes('Content-Security-Policy')) errors.push(`No content security policy: ${path}`)
+  // Pre-rendered: real content in #root, and no inline scripts (the CSP would block them).
+  const root = html.match(/<div id="root"[^>]*>([\s\S]*)<\/div>\s*<noscript>/)?.[1] ?? ''
+  if (!root.includes('<h1')) errors.push(`Not pre-rendered (no <h1> in #root): ${path}`)
+  if (/<script|<template/.test(root)) errors.push(`Inline script or deferred segment in #root: ${path}`)
+  if (!html.includes('application/ld+json')) errors.push(`No structured data: ${path}`)
+  const image = html.match(/<meta property="og:image" content="https:\/\/[^/]+(\/[^"]+)"/)?.[1]
+  if (!image || !existsSync(join(DIST, image))) errors.push(`Social image missing: ${path} (${image})`)
 }
 for (const name of ['404.html', 'sitemap.xml', 'robots.txt', 'sw.js']) {
   if (!existsSync(join(DIST, name))) errors.push(`Missing file: ${name}`)

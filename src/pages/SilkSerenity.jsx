@@ -67,7 +67,7 @@ function Frame({ name, alt, height = 1080, vector, tone, priority }) {
       <img
         className="ss-frame"
         src={vector ? hi : `${IMG}/${name}-1920.webp`}
-        srcSet={vector ? undefined : `${IMG}/${name}-960.webp 960w, ${IMG}/${name}-1920.webp 1920w, ${hi} 3840w`}
+        srcSet={vector ? undefined : `${IMG}/${name}-960.webp 960w, ${IMG}/${name}-1920.webp 1920w`}
         sizes={vector ? undefined : '100vw'}
         data-hi={hi}
         width="1920"
@@ -119,16 +119,20 @@ function Compare() {
       <div className="ss-wipe" style={{ aspectRatio: `1920 / ${active.height}`, '--split': `${split}%`, '--roll': `${roll}rad` }}>
         <img
           src={`${IMG}/wf-home.svg`}
+          loading="lazy"
+          decoding="async"
           style={{ top: `${(-active.top / active.height) * 100}%` }}
           alt={`${active.label} section as a low-fidelity wireframe`}
         />
         <div className="ss-wipe-final">
           <img
             src={`${IMG}/final-photos.webp`}
+            loading="lazy"
+            decoding="async"
             style={{ top: `${(-(active.top - active.shift) / active.height) * 100}%` }}
             alt={`${active.label} section as the finished design`}
           />
-          <img src={`${IMG}/final-text.svg`} style={{ top: `${(-(active.top - active.shift) / active.height) * 100}%` }} alt="" />
+          <img src={`${IMG}/final-text.svg`} loading="lazy" decoding="async" style={{ top: `${(-(active.top - active.shift) / active.height) * 100}%` }} alt="" />
         </div>
         <span className="ss-wipe-tag left">Final</span>
         <span className="ss-wipe-tag right">Wireframe</span>
@@ -387,10 +391,14 @@ function Lightbox({ frames, index, setIndex }) {
   }
   const frame = open ? frames[index] : null
   return (
+    // Clicking the backdrop closes it; keyboard users have Escape (native dialog).
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <dialog ref={ref} className="ss-box" aria-label="Enlarged frame" onClose={close} onKeyDown={onKey} onClick={(e) => e.target === ref.current && close()}>
       {frame && (
         <>
           <div className="ss-box-view">
+            {/* Click-to-zoom is a mouse nicety; the full frame is already shown. */}
+            {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
             <img
               className={zoom ? 'zoomed' : ''}
               src={frame.src}

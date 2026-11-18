@@ -105,11 +105,20 @@ const TOKEN = QUEUE_SIZE + 1
 let nextPatient = 0
 
 // A consultation takes 4 to 7 minutes, so 6 people ahead means roughly 25 to 40.
-const newQueue = () =>
+const newQueue = (random = Math.random) =>
   Array.from({ length: QUEUE_SIZE }, () => ({
     id: nextPatient++,
-    minutes: 4 + Math.floor(Math.random() * 4),
+    minutes: 4 + Math.floor(random() * 4),
   }))
+
+// The first queue is the same on every load, so the pre-rendered HTML and the
+// first client render agree; later queues are random.
+const FIRST_MINUTES = [5, 7, 4, 6, 6, 4, 7, 5, 4, 6, 5]
+const firstQueue = () => {
+  let i = 0
+  nextPatient = 0
+  return newQueue(() => (FIRST_MINUTES[i++ % FIRST_MINUTES.length] - 4) / 4 + 0.01)
+}
 
 const formatWait = (minutes) => {
   const h = Math.floor(minutes / 60)
@@ -119,7 +128,7 @@ const formatWait = (minutes) => {
 // The whole pitch in one switch: where you stand, with and without NestCare.
 function QueueToggle() {
   const [booked, setBooked] = useState(false)
-  const [queue, setQueue] = useState(newQueue)
+  const [queue, setQueue] = useState(firstQueue)
   const current = useRef(queue)
   const ref = useRef(null)
 
