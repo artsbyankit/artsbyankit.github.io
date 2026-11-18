@@ -6,8 +6,12 @@
 // glyph for glyph, and because it is generated procedurally it never ends — the
 // page can be any length and there is no tile or seam.
 //
+// Interaction: the field swells under the mouse, a click sends a ripple through
+// it, and scrolling makes it flow a little faster. On load the glyphs "decode"
+// in, top first. Reduced motion keeps only the scroll-following.
+//
 // The whole layer is one fragment shader, so the CPU computes nothing per
-// frame. A canvas-2D renderer (glyphs only) is kept for browsers without WebGL.
+// pixel. A canvas-2D renderer (glyphs only) is kept for browsers without WebGL.
 //
 // In-house and dependency-free: no third-party animation runtime, no network
 // requests, nothing for the CSP in vite.config.js to allow.
@@ -23,8 +27,13 @@ const RAMP = ' .,:-=+*#%'
 // Roughly how many characters fit across the viewport. Fewer = bigger glyphs.
 const MAX_COLS = 150
 
-// Overall strength of the glyph layer (was the canvas's CSS opacity).
+// Overall strength of the glyph layer.
 const GLYPH_OPACITY = 0.85
+
+const MAX_INKS = 8
+const MAX_RIPPLES = 3
+const RIPPLE_LIFE = 1.8 // seconds
+const REVEAL_TIME = 1.1 // seconds
 
 const VERT = `
 attribute vec2 a_pos;
@@ -47,30 +56,21 @@ uniform vec2 u_res;      // canvas size, device px
 uniform vec2 u_cell;     // glyph cell, device px
 uniform float u_dpr;
 uniform float u_scroll;  // page scroll, device px
-uniform float u_time;
-uniform float u_fade;    // 0 → 1 on first paint
-uniform vec3 u_pointer;  // xy: viewport device px (y down), z: strength 0..1
+uniform float u_time;    // field clock (speeds up while scrolling)
+uniform float u_reveal;  // 0 → 1 load-in progress
+uniform float u_lane;    // how much to calm the centre reading column
+uniform vec3 u_pointer;  // xy: page device px, z: strength 0..1
+uniform vec4 u_ripples[${MAX_RIPPLES}]; // xy: page device px, z: age 0..1, w: on
 uniform float u_chars;
 uniform float u_inkCount;
+uniform vec4 u_tints[${MAX_INKS}];
 uniform sampler2D u_atlas;
-uniform vec4 u_tint0;
-uniform vec4 u_tint1;
-uniform vec4 u_tint2;
-uniform vec4 u_tint3;
-uniform vec4 u_tint4;
-uniform vec4 u_tint5;
-uniform vec4 u_tint6;
-uniform vec4 u_tint7;
 
 vec4 tintAt(float i) {
-  vec4 c = u_tint0;
-  if (i >= 0.5) c = u_tint1;
-  if (i >= 1.5) c = u_tint2;
-  if (i >= 2.5) c = u_tint3;
-  if (i >= 3.5) c = u_tint4;
-  if (i >= 4.5) c = u_tint5;
-  if (i >= 5.5) c = u_tint6;
-  if (i >= 6.5) c = u_tint7;
+  vec4 c = u_tints[0];
+  for (int k = 1; k < ${MAX_INKS}; k++) {
+    if (float(k) <= i + 0.5) c = u_tints[k];
+  }
   return c;
 }
 
@@ -105,10 +105,11 @@ float fbm(vec2 p) {
   return v / 0.875;
 }
 
-// Plasma: interfering waves on a gently warped domain. Every term is bounded
+// Plasma: interfering waves on a doubly warped domain. Every term is bounded
 // and position-independent, so the field looks the same a mile down the page.
 float plasma(vec2 p, float t) {
   vec2 q = p + 0.18 * vec2(sin(p.y * 3.3 + t * 0.6), sin(p.x * 2.9 - t * 0.5));
+  q += 0.06 * vec2(sin(q.y * 7.1 - t * 0.8), sin(q.x * 6.3 + t * 0.7));
   vec2 r = vec2(sin(q.x * 1.7 + t * 0.3), sin(q.y * 1.9 - t * 0.25));
   float v = sin(q.x * 8.0 + t * 1.1)
           + sin(q.y * 7.0 - t * 0.9)
@@ -129,19 +130,20 @@ void main() {
   vec2 page = view + vec2(0.0, u_scroll);
   // Normalised to the viewport height: same shapes at any window size.
   vec2 p = page / u_res.y;
+  float layerIn = smoothstep(0.0, 0.6, u_reveal);
 
   vec4 col = vec4(0.0);
 
   // Soft clouds: white highlights and deeper-blue pools, drifting very slowly.
   float cloud = fbm(p * 1.3 + vec2(u_time * 0.015, 0.0));
-  over(col, vec3(1.0), smoothstep(0.52, 0.82, cloud) * 0.5);
-  over(col, vec3(0.51, 0.655, 0.804), smoothstep(0.42, 0.12, cloud) * 0.45);
+  over(col, vec3(1.0), smoothstep(0.52, 0.82, cloud) * 0.5 * layerIn);
+  over(col, vec3(0.51, 0.655, 0.804), smoothstep(0.42, 0.12, cloud) * 0.45 * layerIn);
 
   // Fine dither dot grid (7 CSS px), appearing in patches.
   vec2 css = page / u_dpr;
   float dots = 1.0 - smoothstep(0.9, 1.3, length(mod(css, 7.0) - 3.5));
   float patches = smoothstep(0.5, 0.78, vnoise(p * 1.6 + 7.0));
-  over(col, vec3(0.275, 0.431, 0.686), dots * patches * 0.1);
+  over(col, vec3(0.275, 0.431, 0.686), dots * patches * 0.1 * layerIn);
 
   // ASCII glyphs, locked to a page-space grid.
   vec2 cellPos = page / u_cell;
@@ -150,26 +152,59 @@ void main() {
   vec2 cp = (cell + 0.5) * u_cell / u_res.y;
 
   float v = plasma(cp, u_time);
+  // Large, slow "weather": some stretches of the page are calmer than others.
+  float weather = smoothstep(0.2, 0.8, vnoise(cp * 0.45 + vec2(0.0, u_time * 0.03)));
   float shade = clamp(v * 0.5 + 0.5, 0.0, 1.0);
-  shade = clamp((shade - 0.5) * 1.75 + 0.46, 0.0, 1.0);
+  shade = clamp((shade - 0.5) * 1.75 + 0.46 - (1.0 - weather) * 0.12, 0.0, 1.0);
+
+  // Calmer centre column where the text sits (wide screens only).
+  float cx = (cell.x + 0.5) * u_cell.x / u_res.x - 0.5;
+  shade -= u_lane * exp(-cx * cx / 0.06);
 
   // Pointer: a soft swell of denser glyphs that follows the mouse.
-  vec2 pc = (vec2(u_pointer.x, u_pointer.y + u_scroll)) / u_res.y;
+  vec2 pc = u_pointer.xy / u_res.y;
   float dist = length(cp - pc);
-  shade += u_pointer.z * 0.38 * exp(-dist * dist / 0.012);
+  float near = u_pointer.z * exp(-dist * dist / 0.012);
+  shade += near * 0.4;
+
+  // Click ripples: a ring of dense glyphs travelling outward.
+  for (int i = 0; i < ${MAX_RIPPLES}; i++) {
+    vec4 rp = u_ripples[i];
+    if (rp.w > 0.5) {
+      float age = rp.z;
+      float d = length(cp - rp.xy / u_res.y);
+      float ring = d - age * 0.75;
+      shade += (1.0 - age) * (1.0 - age) * 0.55 * exp(-ring * ring / 0.0016);
+    }
+  }
 
   shade = clamp(shade + (bayer4(cell) - 0.5) * 0.11, 0.0, 1.0);
 
-  float ci = min(floor(shade * u_chars), u_chars - 1.0);
+  // Decode-in: each cell appears at its own moment, top of the screen first.
+  float cellHash = hash(cell);
+  float delay = 0.55 * cellHash + 0.35 * clamp(view.y / u_res.y, 0.0, 1.0);
+  float shown = smoothstep(delay, delay + 0.1, u_reveal);
+  // Before it settles, a cell flickers through random glyphs.
+  float scramble = (1.0 - shown) * step(0.001, u_reveal);
+  if (scramble > 0.0) {
+    shade = mix(shade, hash(cell + floor(u_reveal * 24.0)), scramble);
+  }
+
+  float level = shade * u_chars;
+  float ci = min(floor(level), u_chars - 1.0);
   if (ci > 0.5) {
     vec2 uv = vec2((ci + clamp(f.x, 0.0, 0.999)) / u_chars, clamp(f.y, 0.0, 0.999));
     float a = texture2D(u_atlas, uv).a;
-    float idx = min(u_inkCount - 1.0, floor((ci / (u_chars - 1.0)) * u_inkCount));
-    vec4 tint = tintAt(idx);
-    over(col, tint.rgb, tint.a * a * ${GLYPH_OPACITY.toFixed(2)});
+    // Between ramp steps, glyph opacity carries the remainder: smoother tone.
+    a *= 0.72 + 0.28 * fract(level);
+    // Ink blends continuously along the palette instead of stepping.
+    float t = (ci / (u_chars - 1.0)) * (u_inkCount - 1.0);
+    vec4 tint = mix(tintAt(floor(t)), tintAt(min(floor(t) + 1.0, u_inkCount - 1.0)), fract(t));
+    // Near the pointer, ink leans toward the palette's deepest blue.
+    tint = mix(tint, tintAt(u_inkCount - 1.0), near * 0.6);
+    over(col, tint.rgb, tint.a * a * ${GLYPH_OPACITY.toFixed(2)} * max(shown, scramble * 0.6));
   }
 
-  col *= u_fade;
   gl_FragColor = col.a > 0.0 ? vec4(col.rgb / col.a, col.a) : vec4(0.0);
 }
 `
@@ -194,7 +229,7 @@ function inkRamp() {
     .filter((hex) => !seen.has(hex.toLowerCase()) && seen.add(hex.toLowerCase()))
     .map((hex) => ({ hex, lum: luminance(hexToRgb(hex)) }))
     .sort((a, b) => b.lum - a.lum)
-    .slice(0, 8)
+    .slice(0, MAX_INKS)
     .map((tone, i, list) => ({ hex: tone.hex, alpha: 0.55 + (0.4 * i) / Math.max(1, list.length - 1) }))
 }
 
@@ -224,6 +259,7 @@ function compile(gl, type, source) {
   gl.shaderSource(shader, source)
   gl.compileShader(shader)
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    if (import.meta.env.DEV) console.warn('Background shader:', gl.getShaderInfoLog(shader))
     gl.deleteShader(shader)
     return null
   }
@@ -248,6 +284,14 @@ function buildProgram(gl) {
   return program
 }
 
+// Slower devices and data-saver users get a lower frame rate for the drift.
+// Scrolling and the pointer always repaint at full rate.
+function driftFps() {
+  const saveData = navigator.connection?.saveData
+  const cores = navigator.hardwareConcurrency || 8
+  return saveData || cores <= 4 ? 20 : 30
+}
+
 function startWebGL(canvas, gl, reduceMotion) {
   const program = buildProgram(gl)
   const buffer = gl.createBuffer()
@@ -262,11 +306,13 @@ function startWebGL(canvas, gl, reduceMotion) {
     dpr: u('u_dpr'),
     scroll: u('u_scroll'),
     time: u('u_time'),
-    fade: u('u_fade'),
+    reveal: u('u_reveal'),
+    lane: u('u_lane'),
     pointer: u('u_pointer'),
+    ripples: u('u_ripples'),
     chars: u('u_chars'),
     inkCount: u('u_inkCount'),
-    tints: Array.from({ length: 8 }, (_, i) => u(`u_tint${i}`)),
+    tints: u('u_tints'),
   }
 
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
@@ -287,24 +333,31 @@ function startWebGL(canvas, gl, reduceMotion) {
   gl.uniform1f(loc.chars, RAMP.length)
 
   const ramp = inkRamp()
+  const tints = new Float32Array(MAX_INKS * 4)
   ramp.forEach((tone, i) => {
     const [r, g, b] = hexToRgb(tone.hex)
-    gl.uniform4f(loc.tints[i], r / 255, g / 255, b / 255, tone.alpha)
+    tints.set([r / 255, g / 255, b / 255, tone.alpha], i * 4)
   })
-  for (let i = ramp.length; i < 8; i++) gl.uniform4f(loc.tints[i], 0, 0, 0, 0)
+  gl.uniform4fv(loc.tints, tints)
   gl.uniform1f(loc.inkCount, ramp.length)
+
+  const frameMs = 1000 / driftFps()
+  const ripples = []
+  const rippleData = new Float32Array(MAX_RIPPLES * 4)
+  // Pointer target (viewport CSS px), the smoothed position actually drawn,
+  // and its eased strength.
+  const pointer = { x: 0, y: 0, sx: 0, sy: 0, on: false, strength: 0 }
 
   let dpr = 1
   let clock = 0.8
-  let fade = reduceMotion.matches ? 1 : 0
+  let reveal = reduceMotion.matches ? 1 : 0
   let raf = 0
   let lastNow = 0
   let lastPaint = 0
-  let lastScroll = -1
+  let lastScroll = window.scrollY
+  let flow = 0 // extra field speed from scrolling, decays to 0
   let resizeTimer = 0
   let dead = false
-  // Pointer target (viewport CSS px) and the eased strength actually drawn.
-  const pointer = { x: 0, y: 0, on: false, strength: 0 }
 
   const size = () => {
     const w = Math.max(1, Math.round(window.innerWidth))
@@ -320,39 +373,54 @@ function startWebGL(canvas, gl, reduceMotion) {
     gl.uniform2f(loc.res, canvas.width, canvas.height)
     gl.uniform2f(loc.cell, cellW * dpr, cellH * dpr)
     gl.uniform1f(loc.dpr, dpr)
+    gl.uniform1f(loc.lane, w >= 900 ? 0.14 : 0)
     gl.bindTexture(gl.TEXTURE_2D, atlasTexture)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, buildAtlas(cellW, cellH, dpr))
   }
 
-  const paint = () => {
+  const paint = (now = performance.now()) => {
     if (dead) return
-    lastScroll = window.scrollY
-    gl.uniform1f(loc.scroll, lastScroll * dpr)
+    const scroll = window.scrollY
+    lastScroll = scroll
+    gl.uniform1f(loc.scroll, scroll * dpr)
     gl.uniform1f(loc.time, clock)
-    gl.uniform1f(loc.fade, fade)
-    gl.uniform3f(loc.pointer, pointer.x * dpr, pointer.y * dpr, pointer.strength)
+    gl.uniform1f(loc.reveal, reveal)
+    gl.uniform3f(loc.pointer, pointer.sx * dpr, (pointer.sy + scroll) * dpr, pointer.strength)
+    rippleData.fill(0)
+    ripples.forEach((r, i) => {
+      rippleData.set([r.x * dpr, r.y * dpr, Math.min(1, (now - r.born) / 1000 / RIPPLE_LIFE), 1], i * 4)
+    })
+    gl.uniform4fv(loc.ripples, rippleData)
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
   }
 
-  // One loop for everything. The plasma itself only needs ~30 fps, but a
-  // scroll must repaint on the very next frame or the field lags the page.
+  // One loop for everything. The drift itself only needs 20–30 fps, but
+  // scrolling, the pointer, ripples and the load-in repaint every frame.
   const frame = (now) => {
     raf = requestAnimationFrame(frame)
     const dt = lastNow ? Math.min(0.1, (now - lastNow) / 1000) : 0
     lastNow = now
 
+    const scrollDelta = window.scrollY - lastScroll
+    if (scrollDelta) flow = Math.min(3, flow + Math.abs(scrollDelta) / 400)
+    flow *= Math.exp(-dt * 2.5)
+
+    pointer.sx += (pointer.x - pointer.sx) * Math.min(1, dt * 10)
+    pointer.sy += (pointer.y - pointer.sy) * Math.min(1, dt * 10)
     const target = pointer.on ? 1 : 0
-    const easing = pointer.strength !== target
     pointer.strength += (target - pointer.strength) * Math.min(1, dt * 6)
     if (Math.abs(target - pointer.strength) < 0.005) pointer.strength = target
 
-    if (fade < 1) fade = Math.min(1, fade + dt / 0.6)
-    const scrolled = window.scrollY !== lastScroll
-    if (!scrolled && !easing && !pointer.on && fade >= 1 && now - lastPaint < 1000 / 30) return
+    while (ripples.length && now - ripples[0].born > RIPPLE_LIFE * 1000) ripples.shift()
+    if (reveal < 1) reveal = Math.min(1, reveal + dt / REVEAL_TIME)
 
-    clock += (now - (lastPaint || now)) / 1000 * 0.5
+    const busy =
+      scrollDelta !== 0 || pointer.strength > 0 || ripples.length > 0 || reveal < 1 || flow > 0.01
+    if (!busy && now - lastPaint < frameMs) return
+
+    clock += (lastPaint ? (now - lastPaint) / 1000 : 0) * (0.5 + flow * 0.6)
     lastPaint = now
-    paint()
+    paint(now)
   }
 
   const start = () => {
@@ -381,13 +449,22 @@ function startWebGL(canvas, gl, reduceMotion) {
   }
 
   const onPointerMove = (e) => {
-    if (e.pointerType !== 'mouse') return
+    if (e.pointerType !== 'mouse' || reduceMotion.matches) return
+    if (!pointer.on && pointer.strength === 0) {
+      pointer.sx = e.clientX
+      pointer.sy = e.clientY
+    }
     pointer.x = e.clientX
     pointer.y = e.clientY
     pointer.on = true
   }
   const onPointerOut = (e) => {
     if (!e.relatedTarget) pointer.on = false
+  }
+  const onPointerDown = (e) => {
+    if (reduceMotion.matches || !e.isPrimary) return
+    if (ripples.length >= MAX_RIPPLES) ripples.shift()
+    ripples.push({ x: e.clientX, y: e.clientY + window.scrollY, born: performance.now() })
   }
 
   const onResize = () => {
@@ -403,7 +480,8 @@ function startWebGL(canvas, gl, reduceMotion) {
   const onMotion = () => {
     if (reduceMotion.matches) {
       stop()
-      fade = 1
+      reveal = 1
+      ripples.length = 0
       pointer.on = false
       pointer.strength = 0
       paint()
@@ -426,6 +504,7 @@ function startWebGL(canvas, gl, reduceMotion) {
   window.addEventListener('resize', onResize)
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('pointermove', onPointerMove, { passive: true })
+  window.addEventListener('pointerdown', onPointerDown, { passive: true })
   document.addEventListener('pointerout', onPointerOut)
   document.addEventListener('visibilitychange', onVisibility)
   reduceMotion.addEventListener('change', onMotion)
@@ -438,6 +517,7 @@ function startWebGL(canvas, gl, reduceMotion) {
     window.removeEventListener('resize', onResize)
     window.removeEventListener('scroll', onScroll)
     window.removeEventListener('pointermove', onPointerMove)
+    window.removeEventListener('pointerdown', onPointerDown)
     document.removeEventListener('pointerout', onPointerOut)
     document.removeEventListener('visibilitychange', onVisibility)
     reduceMotion.removeEventListener('change', onMotion)
@@ -488,7 +568,7 @@ function startCanvas2D(canvas, reduceMotion) {
             Math.sin((qx + qy) * 5 + clock * 1.3) +
             Math.sin(rr * 9 - clock)) *
           0.25
-        const n = Math.min(1, Math.max(0, (v * 0.5 + 0.5 - 0.5) * 1.75 + 0.46))
+        const n = Math.min(1, Math.max(0, (v * 0.5) * 1.75 + 0.46))
         const ci = Math.min(lastChar, (n * RAMP.length) | 0)
         if (ci === 0) continue
         const ink = Math.min(lastInk, ((ci / lastChar) * atlases.length) | 0)
